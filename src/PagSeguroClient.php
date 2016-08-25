@@ -4,10 +4,12 @@ namespace PHPampa\PagSeguro;
 
 class PagSeguroClient extends PagSeguroConfig
 {
-	/**
-     * Inicia o Session do PagSeguro
-     * @return mixed
+    /**
+     * Inicia o Session do PagSeguro.
+     *
      * @throws \PHPampa\PagSeguro\PagSeguroException
+     *
+     * @return mixed
      */
     public function startSession()
     {
@@ -18,17 +20,18 @@ class PagSeguroClient extends PagSeguroConfig
         curl_setopt($ch, CURLOPT_POST, 2);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $credentials);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        if($this->sandbox) {            
+        if ($this->sandbox) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         } else {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); 
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         }
         $result = curl_exec($ch);
-        
-        if ($result === false)
-            throw new PagSeguroException(curl_error($ch), curl_errno($ch));        
+
+        if ($result === false) {
+            throw new PagSeguroException(curl_error($ch), curl_errno($ch));
+        }
         if ($result === 'Unauthorized' || $result === 'Forbidden') {
-            throw new PagSeguroException($result . ': Não foi possível estabelecer uma conexão com o PagSeguro.', 1);
+            throw new PagSeguroException($result.': Não foi possível estabelecer uma conexão com o PagSeguro.', 1);
         }
 
         $result = simplexml_load_string(curl_exec($ch));
