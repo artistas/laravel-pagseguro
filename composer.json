@@ -1,0 +1,14 @@
+{
+    "name": "phpampa/laravel-pagseguro",
+    "description": "Integracao do laravel com o pagseguro.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fernando Henrique Bandeira",
+            "email": "fernando.bandeira94@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
