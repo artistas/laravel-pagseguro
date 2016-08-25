@@ -61,27 +61,23 @@ class PagSeguroConfig
         $this->session = $session;
         $this->config = $config;
         $this->log = $log;
-        $this->setEnvironmentToken();
+        $this->setEnvironment();
         $this->setUrl();
-        $this->setEmail();
     }
 
     /**
      * define o ambiente de trabalho.
      */
-    private function setEnvironmentToken()
+    private function setEnvironment()
     {
         $this->sandbox = $this->config->get('pagseguro.sandbox');
         $this->token = $this->config->get('pagseguro.token');
-    }
-
-    private function setEmail()
-    {
         $this->email = $this->config->get('pagseguro.email');
     }
 
     private function setUrl()
     {
+        $sandbox = '';
         if ($this->sandbox) {
             $sandbox = 'sandbox.';
         }
