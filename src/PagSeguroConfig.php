@@ -1,46 +1,56 @@
 <?php
+
 namespace PHPampa\PagSeguro;
-use Illuminate\Session\SessionManager as Session;
+
 use Illuminate\Config\Repository as Config;
 use Illuminate\Log\Writer as Log;
+use Illuminate\Session\SessionManager as Session;
 
 class PagSeguroConfig
 {
     /**
-     * Session instance
+     * Session instance.
+     *
      * @var object
      */
     protected $session;
     /**
-     * Config instance
+     * Config instance.
+     *
      * @var object
      */
     protected $config;
     /**
-     * Log instance
+     * Log instance.
+     *
      * @var object
      */
     protected $log;
     /**
-     * Modo sandbox
+     * Modo sandbox.
+     *
      * @var bool
      */
     protected $sandbox;
     /**
-     * Token da conta PagSeguro
+     * Token da conta PagSeguro.
+     *
      * @var string
      */
     protected $token;
     /**
-     * Email da conta PagSeguro
+     * Email da conta PagSeguro.
+     *
      * @var string
      */
     protected $email;
     /**
-     * Armazena as url's para conexão com o PagSeguro
+     * Armazena as url's para conexão com o PagSeguro.
+     *
      * @var array
      */
     protected $url = [];
+
     /**
      * @param $session
      * @param $config
@@ -55,8 +65,9 @@ class PagSeguroConfig
         $this->setUrl();
         $this->setEmail();
     }
+
     /**
-     * define o ambiente de trabalho
+     * define o ambiente de trabalho.
      */
     private function setEnvironmentToken()
     {
@@ -64,7 +75,8 @@ class PagSeguroConfig
         $this->token = $this->config->get('pagseguro.token');
     }
 
-    private function setEmail() {
+    private function setEmail()
+    {
         $this->email = $this->config->get('pagseguro.email');
     }
 
@@ -74,10 +86,10 @@ class PagSeguroConfig
             $sandbox = 'sandbox.';
         }
         $url = [
-            'session' => 'https://ws.' . $sandbox . 'pagseguro.uol.com.br/v2/sessions',
-            'transactions' => 'https://ws.' . $sandbox . 'pagseguro.uol.com.br/v2/transactions',
-            'notifications' => 'https://ws.' . $sandbox . 'pagseguro.uol.com.br/v3/transactions/notifications/',
-            'javascript' => 'https://stc.' . $sandbox . 'pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js'
+            'session'       => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/sessions',
+            'transactions'  => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/transactions',
+            'notifications' => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v3/transactions/notifications/',
+            'javascript'    => 'https://stc.'.$sandbox.'pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js',
         ];
         $this->url = $url;
     }
