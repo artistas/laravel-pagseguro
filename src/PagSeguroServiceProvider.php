@@ -9,7 +9,7 @@ class PagSeguroServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('pagseguro', function ($app) {
-            return new Pagseguro();
+            return new PagSeguro();
         });
     }
 
