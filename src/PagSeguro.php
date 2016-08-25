@@ -6,6 +6,6 @@ class PagSeguro extends PagSeguroClient
 {
     public function teste()
     {
-        dd($this->url);
+        return view('pagseguro::js');
     }
 }
