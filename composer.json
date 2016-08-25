@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "PHPampa\\laravelPagseguro\\": "src/"
+            "PHPampa\\PagSeguro\\": "src/"
         }
     },
     "minimum-stability": "dev",
