@@ -12,4 +12,10 @@ class LaravelPagseguroServiceProvider extends ServiceProvider
             return new Pagseguro();
         });
     }
+
+    public function boot()
+    {
+    	//loading the routes file
+    	require __DIR__ . '/Http/routes.php';
+    }
 }

@@ -9,6 +9,13 @@
             "email": "fernando.bandeira94@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "PHPampa\\laravelPagseguro\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "illuminate/support": "~5"
+    }
 }
