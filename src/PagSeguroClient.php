@@ -5,7 +5,7 @@ namespace PHPampa\PagSeguro;
 class PagSeguroClient extends PagSeguroConfig
 {
     /**
-     * Inicia o Session do PagSeguro.
+     * Inicia a Session do PagSeguro.
      *
      * @throws \PHPampa\PagSeguro\PagSeguroException
      *

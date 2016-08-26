@@ -1,6 +1,6 @@
 {
     "name": "phpampa/laravel-pagseguro",
-    "description": "Integracao do laravel com o pagseguro.",
+    "description": "Integracao do Laravel 5 com o PagSeguro.",
     "type": "library",
     "license": "MIT",
     "authors": [
