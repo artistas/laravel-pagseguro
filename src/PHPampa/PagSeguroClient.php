@@ -7,8 +7,8 @@ class PagSeguroClient extends PagSeguroConfig
     /**
      * Executa as transações curl.
      *
-     * @param array $parameters
-     * @param string $url Padrão $this->url['transactions']
+     * @param array  $parameters
+     * @param string $url        Padrão $this->url['transactions']
      *
      * @throws \PHPampa\PagSeguro\PagSeguroException
      *
