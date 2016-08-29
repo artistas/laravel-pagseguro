@@ -3,18 +3,18 @@
 <ul class="nav nav-tabs nav-justified" id="paymentMethods" role="tablist">
   <li role="presentation" id="presBoleto"><a href="#tabBoleto" aria-controls="tabBoleto" role="tab" data-toggle="tab">Boleto</a></li>
   <li role="presentation" id="presOnline_debit"><a href="#tabOnline_debit" aria-controls="tabOnline_debit" role="tab" data-toggle="tab">Débito Online</a></li>
-  <li role="presentation" id="presCredit_card"><a href="#tabCredit_card" aria-controls="tabCredit_card" role="tab" data-toggle="tab">Cartão de Crédito</a></li>
+  <li role="presentation" id="presCredit_card" class="active"><a href="#tabCredit_card" aria-controls="tabCredit_card" role="tab" data-toggle="tab">Cartão de Crédito</a></li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
-  <div role="tabpanel" class="tab-pane active" id="tabBoleto">
+  <div role="tabpanel" class="tab-pane" id="tabBoleto">
     Boleto
   </div>
   <div role="tabpanel" class="tab-pane" id="tabOnline_debit">
     Debito
   </div>
-  <div role="tabpanel" class="tab-pane" id="tabCredit_card">
+  <div role="tabpanel" class="tab-pane active" id="tabCredit_card">
     <h3>Cartões disponíveis:</h3>
 
     <div id="credit_card"></div>
@@ -48,7 +48,23 @@
         </div>
       </div>
       <div class="col-sm-6">
-        {!! Form::text('card_number', null, ['class' => 'form-control', 'placeholder' => 'Número do cartão']) !!}
+        <div class="form-group">
+          {!! Form::text('card_number', null, ['class' => 'form-control', 'placeholder' => 'Número do cartão', 'id' => 'cartao']) !!}
+        </div>
+        <div class="row">
+          <div class="col-sm-2 col-xs-4" id="chosenCard">
+          </div>
+          <div class="col-sm-4">
+            {!! Form::text('cvv', null, ['class' => 'form-control', 'placeholder' => 'CVV', 'id' => 'cvv']) !!}
+          </div>
+          <div class="col-sm-3 col-xs-6">
+            {!! Form::text('expiration_month', null, ['class' => 'form-control', 'placeholder' => 'mm', 'id' => 'validadeMes']) !!}
+          </div>
+          <div class="col-sm-3 col-xs-6">
+            {!! Form::text('expiration_year', null, ['class' => 'form-control', 'placeholder' => 'AA', 'id' => 'validadeAno']) !!}
+          </div>
+        </div>
+        {!! Form::select('installments', ['Informe o número do cartão'], null, ['class' => 'form-control', 'id' => 'installments']) !!}
       </div>
     </div>
   </div>
