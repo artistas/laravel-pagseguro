@@ -6,20 +6,22 @@ class PagSeguroClient extends PagSeguroConfig
 {
     /**
      * Executa as transações curl.
+     *
      * @param array $settings
+     *
      * @throws \PHPampa\PagSeguro\PagSeguroException
+     *
      * @return bool|mixed|\SimpleXMLElement
      */
     public function sendTransaction(array $parameters, $url = null)
     {
-
         if ($url === null) {
-          $url = $this->url['transactions'];
+            $url = $this->url['transactions'];
         }
 
         $data = '';
         foreach ($parameters as $key => $value) {
-            $data .= $key . '=' . $value . '&';
+            $data .= $key.'='.$value.'&';
         }
         $data = rtrim($data, '&');
 
@@ -62,7 +64,7 @@ class PagSeguroClient extends PagSeguroConfig
     {
         $result = $this->sendTransaction([
           'email' => $this->email,
-          'token' => $this->token
+          'token' => $this->token,
         ], $this->url['session']);
 
         $this->session->put('pagseguro.session', $result->id);
