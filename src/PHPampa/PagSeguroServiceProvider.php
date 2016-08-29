@@ -16,9 +16,9 @@ class PagSeguroServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/pagseguro.php' => config_path('pagseguro.php'),
+            __DIR__.'/config/pagseguro.php' => config_path('pagseguro.php'),
         ]);
 
-        $this->loadViewsFrom(__DIR__.'/../views', 'pagseguro');
+        $this->loadViewsFrom(__DIR__.'/views', 'pagseguro');
     }
 }

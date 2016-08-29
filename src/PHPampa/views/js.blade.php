@@ -6,7 +6,7 @@ var token;
 var installments;
 $('#outroTitular').hide();
 
-PagSeguroDirectPayment.setSessionId('{{ PagSeguro::getSessionId() }}');
+PagSeguroDirectPayment.setSessionId('{{ PagSeguro::getSession() }}');
 
 PagSeguroDirectPayment.getPaymentMethods({
   amount: 500.00,

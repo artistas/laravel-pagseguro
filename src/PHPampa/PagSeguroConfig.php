@@ -66,7 +66,7 @@ class PagSeguroConfig
     }
 
     /**
-     * define o ambiente de trabalho.
+     * Define o ambiente de trabalho.
      */
     private function setEnvironment()
     {
@@ -75,6 +75,9 @@ class PagSeguroConfig
         $this->email = $this->config->get('pagseguro.email');
     }
 
+    /**
+     * Define as Urls que serão utilizadas de acordo com o ambiente.
+     */
     private function setUrl()
     {
         $sandbox = '';
@@ -90,6 +93,9 @@ class PagSeguroConfig
         $this->url = $url;
     }
 
+    /**
+     * Retorna o array de url's.
+     */
     public function getUrl()
     {
         return $this->url;

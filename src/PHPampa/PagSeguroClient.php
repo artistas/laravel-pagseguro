@@ -7,7 +7,8 @@ class PagSeguroClient extends PagSeguroConfig
     /**
      * Executa as transações curl.
      *
-     * @param array $settings
+     * @param array $parameters
+     * @param string $url Padrão $this->url['transactions']
      *
      * @throws \PHPampa\PagSeguro\PagSeguroException
      *
@@ -58,7 +59,7 @@ class PagSeguroClient extends PagSeguroConfig
     /**
      * Inicia a Session do PagSeguro.
      *
-     * @return mixed
+     * @return string
      */
     public function startSession()
     {
@@ -72,7 +73,12 @@ class PagSeguroClient extends PagSeguroConfig
         return $result->id;
     }
 
-    public function getSessionId()
+    /**
+     * Pega a sessão ou gera uma nova.
+     *
+     * @return string
+     */
+    public function getSession()
     {
         if ($this->session->has('pagseguro.session')) {
             return $this->session->get('pagseguro.session');
