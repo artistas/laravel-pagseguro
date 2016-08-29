@@ -1,9 +1,24 @@
 <h2>Escolha a forma de Pagamento:</h2>
+
+{!! Form::open(['url' => '/loja-virtual/gerar-pedido', 'id' => 'formPayment']) !!}
+
 <!-- Nav tabs -->
 <ul class="nav nav-tabs nav-justified" id="paymentMethods" role="tablist">
-  <li role="presentation" id="presBoleto"><a href="#tabBoleto" aria-controls="tabBoleto" role="tab" data-toggle="tab">Boleto</a></li>
-  <li role="presentation" id="presOnline_debit"><a href="#tabOnline_debit" aria-controls="tabOnline_debit" role="tab" data-toggle="tab">Débito Online</a></li>
-  <li role="presentation" id="presCredit_card" class="active"><a href="#tabCredit_card" aria-controls="tabCredit_card" role="tab" data-toggle="tab">Cartão de Crédito</a></li>
+  <li role="presentation" id="presBoleto">
+    <a href="#tabBoleto" aria-controls="tabBoleto" role="tab" data-toggle="tab">
+      Boleto
+    </a>
+  </li>
+  <li role="presentation" id="presOnline_debit">
+    <a href="#tabOnline_debit" aria-controls="tabOnline_debit" role="tab" data-toggle="tab">
+      Débito Online
+    </a>
+  </li>
+  <li role="presentation" id="presCredit_card" class="active">
+    <a href="#tabCredit_card" aria-controls="tabCredit_card" role="tab" data-toggle="tab">
+      Cartão de Crédito
+    </a>
+  </li>
 </ul>
 
 <!-- Tab panes -->
@@ -69,3 +84,12 @@
     </div>
   </div>
 </div>
+
+
+  {!! Form::hidden('paymentMethod', 3, ['id' => 'paymentMethod']) !!}
+  {!! Form::hidden('brand', null, ['id' => 'brand']) !!}
+  {!! Form::hidden('token', null, ['id' => 'token']) !!}
+
+  <button type="submit" class="btn" id="btnParcels">Finalizar Compra</button>
+
+  {!! Form::close() !!}

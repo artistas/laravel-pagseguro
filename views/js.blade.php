@@ -80,9 +80,12 @@ function getCardBrand(bin) {
   PagSeguroDirectPayment.getBrand({
     cardBin: bin,
     success: function(response) {
-      brand = response;
-      constructCreditCardForm();
-      getInstallments();
+      if (brand === undefined || brand['name'] !== response['brand']['name']) {
+        brand = response['brand'];
+        $('#brand').val(brand['name']);
+        constructCreditCardForm();
+        getInstallments();
+      }
     },
     error: function(response) {
       //tratamento do erro
@@ -96,10 +99,10 @@ function getCardBrand(bin) {
 function constructInstallmentsForm() {
   var html;
 
-  $('#installments').empty().append('<option>Escolha uma forma de parcelamento</option>');
+  $('#installments').empty().append('<option>Escolha a forma de parcelamento</option>');
 
   $.each(installments, function(index, installment) {
-    html = '<option>';
+    html = '<option value="'+installment['quantity']+'">';
     html += installment['quantity']+'x de ';
     html += formatReal(installment['installmentAmount']);
     if (installment['interestFree'])
@@ -113,9 +116,9 @@ function constructInstallmentsForm() {
 function getInstallments() {
   PagSeguroDirectPayment.getInstallments({
     amount: 500.00,
-    brand: brand['brand']['name'],
+    brand: brand['name'],
     success: function(response) {
-      installments = response['installments'][brand['brand']['name']];
+      installments = response['installments'][brand['name']];
       constructInstallmentsForm();
     },
     error: function(response) {
@@ -128,7 +131,7 @@ function getInstallments() {
 }
 
 function constructCreditCardForm() {
-  $('#chosenCard').html('<img src="https://stc.pagseguro.uol.com.br'+paymentMethods['CREDIT_CARD']['options'][brand['brand']['name'].toUpperCase()]['images']['MEDIUM']['path']+'">');
+  $('#chosenCard').html('<img src="https://stc.pagseguro.uol.com.br'+paymentMethods['CREDIT_CARD']['options'][brand['name'].toUpperCase()]['images']['MEDIUM']['path']+'">');
 }
 
 function getCreditCardToken() {
@@ -137,9 +140,11 @@ function getCreditCardToken() {
     cvv: $("#cvv").val(),
     expirationMonth: $("#validadeMes").val(),
     expirationYear: $("#validadeAno").val(),
-    brand: brand['brand']['name'],
+    brand: brand['name'],
     success: function(response) {
       token = response['card']['token'];
+      $('#token').val(token);
+      $('#formPayment').submit();
     },
     error: function(response) {
       //tratamento do erro
@@ -150,15 +155,12 @@ function getCreditCardToken() {
   });
 }
 
-$('#btnParcels').click(function() {
+$('#btnParcels').click(function(e) {
+  e.preventDefault();
   getCreditCardToken();
 });
 
 function formatReal(mixed) {
-    if(mixed == 0) {
-        return 'GRÁTIS';
-    }
-
     mixed = parseFloat(mixed);
     var int = parseInt(mixed.toFixed(2).toString().replace(/[^\d]+/g, ''));
     var tmp = int + '';
@@ -168,4 +170,16 @@ function formatReal(mixed) {
 
     return 'R$ '+tmp;
 }
+
+$('#paymentMethods a').on('shown.bs.tab', function (e) {
+  if ($(this).parent().prop('id') == 'presCredit_card') {
+        $('#paymentMethod').val(3);
+  }
+  else if ($(this).parent().prop('id') == 'presOnline_debit') {
+        $('#paymentMethod').val(2);
+  }
+  else {
+        $('#paymentMethod').val(1);
+  }
+});
 </script>
