@@ -453,27 +453,27 @@ class PagSeguro extends PagSeguroClient
      *
      * @return mixed
      */
-    public function send(array $paymentSettings) {
-
-      $formattedPaymentSettings = [
-        'paymentMethod' => $paymentSettings['paymentMethod'],
-        'bankName' => $paymentSettings['bankName'],
-        'creditCardToken' => $paymentSettings['creditCardToken'],
-        'installmentQuantity' => preg_replace('/\D/', '', $paymentSettings['installmentQuantity']),
-        'installmentValue' => number_format($paymentSettings['installmentValue'], 2, '.', ''),
+    public function send(array $paymentSettings)
+    {
+        $formattedPaymentSettings = [
+        'paymentMethod'                 => $paymentSettings['paymentMethod'],
+        'bankName'                      => $paymentSettings['bankName'],
+        'creditCardToken'               => $paymentSettings['creditCardToken'],
+        'installmentQuantity'           => preg_replace('/\D/', '', $paymentSettings['installmentQuantity']),
+        'installmentValue'              => number_format($paymentSettings['installmentValue'], 2, '.', ''),
         'noInterestInstallmentQuantity' => preg_replace('/\D/', '', $paymentSettings['noInterestInstallmentQuantity']),
       ];
 
-      $this->validatePaymentSettings($formattedPaymentSettings);
+        $this->validatePaymentSettings($formattedPaymentSettings);
 
         $config = [
-            'email' => $this->email,
-            'token' => $this->token,
-            'paymentMode' => 'default',
+            'email'         => $this->email,
+            'token'         => $this->token,
+            'paymentMode'   => 'default',
             'receiverEmail' => $this->email,
-            'currency' => 'BRL',
-            'reference' => $this->reference,
-            'extraAmount' => $this->extraAmount,
+            'currency'      => 'BRL',
+            'reference'     => $this->reference,
+            'extraAmount'   => $this->extraAmount,
         ];
 
         $data = array_filter(array_merge($config, $formattedPaymentSettings, $this->senderInfo, $this->shippingAddress, $this->items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
@@ -491,11 +491,11 @@ class PagSeguro extends PagSeguroClient
     private function validatePaymentSettings($formattedPaymentSettings)
     {
         $rules = [
-          'paymentMethod' => 'required',
-          'bankName' => 'requried_if:paymentMethod,eft',
-          'creditCardToken' => 'requried_if:paymentMethod,creditCard',
-          'installmentQuantity'          => 'requried_if:paymentMethod,creditCard|integer|between:1,3',
-          'installmentValue'          => 'requried_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
+          'paymentMethod'                          => 'required',
+          'bankName'                               => 'requried_if:paymentMethod,eft',
+          'creditCardToken'                        => 'requried_if:paymentMethod,creditCard',
+          'installmentQuantity'                    => 'requried_if:paymentMethod,creditCard|integer|between:1,3',
+          'installmentValue'                       => 'requried_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
           'noInterestInstallmentQuantity'          => 'integer|between:1,3',
         ];
 
@@ -510,8 +510,8 @@ class PagSeguro extends PagSeguroClient
         $this->validateItems($this->items);
 
         if ($formattedPaymentSettings['paymentMethod'] === 'creditCard') {
-          $this->validateCreditCardHolder($this->creditCardHolder);
-          $this->validateBillingAddress($this->billingAddress);
+            $this->validateCreditCardHolder($this->creditCardHolder);
+            $this->validateBillingAddress($this->billingAddress);
         }
 
         if ($this->shippingInfo !== null) {
