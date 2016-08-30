@@ -16,35 +16,35 @@ class PagSeguro extends PagSeguroClient
      *
      * @var array
      */
-    private $senderInfo;
+    private $senderInfo = [];
 
     /**
      * Informações do portador do cartão de crédito.
      *
      * @var array
      */
-    private $creditCardHolder;
+    private $creditCardHolder = [];
 
     /**
      * Endereço do comprador.
      *
      * @var array
      */
-    private $shippingAddress;
+    private $shippingAddress = [];
 
     /**
      * Endereço de cobrança do comprador.
      *
      * @var array
      */
-    private $billingAddress;
+    private $billingAddress = [];
 
     /**
      * Itens da compra.
      *
      * @var array
      */
-    private $items;
+    private $items = [];
 
     /**
      * Valor adicional para a compra.
@@ -65,7 +65,7 @@ class PagSeguro extends PagSeguroClient
      *
      * @var array
      */
-    private $shippingInfo;
+    private $shippingInfo = [];
 
     /**
      * Define o tipo do comprador.
@@ -98,7 +98,7 @@ class PagSeguro extends PagSeguroClient
 
         $formattedSenderPhone = preg_replace('/\D/', '', $senderInfo['senderPhone']);
 
-        $formattedSenderInfo = [
+        @$formattedSenderInfo = [
           'senderName'     => trim(preg_replace('/\s+/', ' ', $senderInfo['senderName'])),
           'senderAreaCode' => substr($formattedSenderPhone, 0, 2),
           'senderPhone'    => substr($formattedSenderPhone, 2),
@@ -160,7 +160,7 @@ class PagSeguro extends PagSeguroClient
             $formattedcreditCardHolderPhone = preg_replace('/\D/', '', $creditCardHolder['creditCardHolderPhone']);
         }
 
-        $formattedcreditCardHolder = [
+        @$formattedcreditCardHolder = [
           'creditCardHolderName'          => $creditCardHolder['creditCardHolderName'] ? trim(preg_replace('/\s+/', ' ', $creditCardHolder['creditCardHolderName'])) : $this->senderInfo['senderName'],
           'creditCardHolderAreaCode'      => $formattedcreditCardHolderPhone ? substr($formattedcreditCardHolderPhone, 0, 2) : $this->senderInfo['senderAreaCode'],
           'creditCardHolderPhone'         => $formattedcreditCardHolderPhone ? substr($formattedcreditCardHolderPhone, 2) : $this->senderInfo['senderPhone'],
@@ -206,7 +206,7 @@ class PagSeguro extends PagSeguroClient
      */
     public function setShippingAddress(array $shippingAddress)
     {
-        $formattedShippingAddress = [
+        @$formattedShippingAddress = [
           'shippingAddressStreet'     => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressStreet'])),
           'shippingAddressNumber'     => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressNumber'])),
           'shippingAddressComplement' => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressComplement'])),
@@ -258,7 +258,7 @@ class PagSeguro extends PagSeguroClient
      */
     public function setBillingAddress(array $billingAddress)
     {
-        $formattedBillingAddress = [
+        @$formattedBillingAddress = [
           'billingAddressStreet'     => $billingAddress['billingAddressStreet'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressStreet'])) : $this->shippingAddress['shippingAddressStreet'],
           'billingAddressNumber'     => $billingAddress['billingAddressNumber'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressNumber'])) : $this->shippingAddress['shippingAddressNumber'],
           'billingAddressComplement' => $billingAddress['billingAddressComplement'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressComplement'])) : $this->shippingAddress['shippingAddressComplement'],
@@ -312,7 +312,7 @@ class PagSeguro extends PagSeguroClient
     {
         $i = 1;
         foreach ($items as $item) {
-            $formattedItems['items'][$i++] = [
+            @$formattedItems['items'][$i++] = [
               'itemId'          => trim(preg_replace('/\s+/', ' ', $item['itemId'])),
               'itemDescription' => trim(preg_replace('/\s+/', ' ', $item['itemDescription'])),
               'itemAmount'      => number_format($item['itemAmount'], 2, '.', ''),
@@ -321,20 +321,7 @@ class PagSeguro extends PagSeguroClient
         }
 
         $this->validateItems($formattedItems);
-        $this->items = collect($formattedItems['items'])->flatMap(function ($values, $parentKey) {
-            $laravel = app();
-            $version = $laravel::VERSION;
-
-            if (substr($version, 0, 3) >= '5.3') {
-                return collect($values)->mapWithKeys(function ($value, $key) use ($parentKey) {
-                    return [$key.$parentKey => $value];
-                });
-            }
-
-            return collect($values)->flatMap(function ($value, $key) use ($parentKey) {
-                return [$key.$parentKey => $value];
-            });
-        })->toArray();
+        $this->items = $formattedItems;
 
         return $this;
     }
@@ -414,7 +401,7 @@ class PagSeguro extends PagSeguroClient
      */
     public function setShippingInfo(array $shippingInfo)
     {
-        $formattedShippingInfo = [
+        @$formattedShippingInfo = [
           'shippingType'     => preg_replace('/\D/', '', $shippingInfo['shippingType']),
           'shippingCost'     => number_format($shippingInfo['shippingCost'], 2, '.', ''),
         ];
@@ -455,29 +442,44 @@ class PagSeguro extends PagSeguroClient
      */
     public function send(array $paymentSettings)
     {
-        $formattedPaymentSettings = [
-        'paymentMethod'                 => $paymentSettings['paymentMethod'],
-        'bankName'                      => $paymentSettings['bankName'],
-        'creditCardToken'               => $paymentSettings['creditCardToken'],
-        'installmentQuantity'           => preg_replace('/\D/', '', $paymentSettings['installmentQuantity']),
-        'installmentValue'              => number_format($paymentSettings['installmentValue'], 2, '.', ''),
-        'noInterestInstallmentQuantity' => preg_replace('/\D/', '', $paymentSettings['noInterestInstallmentQuantity']),
-      ];
+        @$formattedPaymentSettings = [
+          'paymentMethod'                 => $paymentSettings['paymentMethod'],
+          'bankName'                      => $paymentSettings['bankName'],
+          'creditCardToken'               => $paymentSettings['creditCardToken'],
+          'installmentQuantity'           => preg_replace('/\D/', '', $paymentSettings['installmentQuantity']),
+          'installmentValue'              => number_format($paymentSettings['installmentValue'], 2, '.', ''),
+          'noInterestInstallmentQuantity' => preg_replace('/\D/', '', $paymentSettings['noInterestInstallmentQuantity']),
+        ];
 
         $this->validatePaymentSettings($formattedPaymentSettings);
 
+        $items = collect($this->items['items'])->flatMap(function ($values, $parentKey) {
+            $laravel = app();
+            $version = $laravel::VERSION;
+
+            if (substr($version, 0, 3) >= '5.3') {
+                return collect($values)->mapWithKeys(function ($value, $key) use ($parentKey) {
+                    return [$key.$parentKey => $value];
+                });
+            }
+
+            return collect($values)->flatMap(function ($value, $key) use ($parentKey) {
+                return [$key.$parentKey => $value];
+            });
+        })->toArray();
+
         $config = [
-            'email'         => $this->email,
-            'token'         => $this->token,
-            'paymentMode'   => 'default',
-            'receiverEmail' => $this->email,
-            'currency'      => 'BRL',
-            'reference'     => $this->reference,
-            'extraAmount'   => $this->extraAmount,
+          'email'         => $this->email,
+          'token'         => $this->token,
+          'paymentMode'   => 'default',
+          'receiverEmail' => $this->email,
+          'currency'      => 'BRL',
+          'reference'     => $this->reference,
+          'extraAmount'   => $this->extraAmount,
         ];
 
-        $data = array_filter(array_merge($config, $formattedPaymentSettings, $this->senderInfo, $this->shippingAddress, $this->items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
-
+        $data = array_filter(array_merge($config, $formattedPaymentSettings, $this->senderInfo, $this->shippingAddress, $items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
+        
         return $this->sendTransaction($data);
     }
 
@@ -492,10 +494,10 @@ class PagSeguro extends PagSeguroClient
     {
         $rules = [
           'paymentMethod'                          => 'required',
-          'bankName'                               => 'requried_if:paymentMethod,eft',
-          'creditCardToken'                        => 'requried_if:paymentMethod,creditCard',
-          'installmentQuantity'                    => 'requried_if:paymentMethod,creditCard|integer|between:1,3',
-          'installmentValue'                       => 'requried_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
+          'bankName'                               => 'required_if:paymentMethod,eft',
+          'creditCardToken'                        => 'required_if:paymentMethod,creditCard',
+          'installmentQuantity'                    => 'required_if:paymentMethod,creditCard|integer|between:1,3',
+          'installmentValue'                       => 'required_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
           'noInterestInstallmentQuantity'          => 'integer|between:1,3',
         ];
 
@@ -514,7 +516,7 @@ class PagSeguro extends PagSeguroClient
             $this->validateBillingAddress($this->billingAddress);
         }
 
-        if ($this->shippingInfo !== null) {
+        if (!empty($this->shippingInfo)) {
             $this->validateShippingInfo($this->shippingInfo);
         }
     }
