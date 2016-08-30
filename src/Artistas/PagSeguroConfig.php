@@ -5,6 +5,7 @@ namespace Artistas\PagSeguro;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Log\Writer as Log;
 use Illuminate\Session\SessionManager as Session;
+use Illuminate\Validation\Factory as Validator;
 
 class PagSeguroConfig
 {
@@ -26,6 +27,12 @@ class PagSeguroConfig
      * @var object
      */
     protected $log;
+    /**
+     * Validator instance.
+     *
+     * @var object
+     */
+    protected $validator;
     /**
      * Modo sandbox.
      *
@@ -56,11 +63,12 @@ class PagSeguroConfig
      * @param $config
      * @param $log
      */
-    public function __construct(Session $session, Config $config, Log $log)
+    public function __construct(Session $session, Config $config, Log $log, Validator $validator)
     {
         $this->session = $session;
         $this->config = $config;
         $this->log = $log;
+        $this->validator = $validator;
         $this->setEnvironment();
         $this->setUrl();
     }
