@@ -23,8 +23,9 @@ class PagSeguro extends PagSeguroClient
    */
   private $senderAddress;
 
-  /**
-     * itens da compra
+    /**
+     * itens da compra.
+     *
      * @var array
      */
     protected $items;
@@ -169,9 +170,11 @@ class PagSeguro extends PagSeguroClient
       return true;
   }
 
-  /**
-     * Define os itens da compra
+    /**
+     * Define os itens da compra.
+     *
      * @param array $items
+     *
      * @return $this
      */
     public function setItems(array $items)
@@ -179,18 +182,18 @@ class PagSeguro extends PagSeguroClient
         $i = 1;
         foreach ($items as $item) {
             $formattedItems['items'][$i++] = [
-              'itemId' => trim(preg_replace('/\s+/', ' ', $item['itemId'])),
+              'itemId'          => trim(preg_replace('/\s+/', ' ', $item['itemId'])),
               'itemDescription' => trim(preg_replace('/\s+/', ' ', $item['itemDescription'])),
-              'itemAmount' => number_format($item['itemAmount'], 2, '.', ''),
-              'itemQuantity' => preg_replace('/\D/', '', $item['itemQuantity']),
+              'itemAmount'      => number_format($item['itemAmount'], 2, '.', ''),
+              'itemQuantity'    => preg_replace('/\D/', '', $item['itemQuantity']),
             ];
         }
 
         if ($this->validateItems($formattedItems)) {
-            $this->items = collect($formattedItems['items'])->flatMap(function($values, $parentKey) {
-              return collect($values)->flatMap(function($value, $key) use($parentKey) {
-                return [$key.$parentKey => $value];
-              });
+            $this->items = collect($formattedItems['items'])->flatMap(function ($values, $parentKey) {
+                return collect($values)->flatMap(function ($value, $key) use ($parentKey) {
+                    return [$key.$parentKey => $value];
+                });
             })->toArray();
         }
 
@@ -200,7 +203,7 @@ class PagSeguro extends PagSeguroClient
     /**
      * Valida os dados contidos na array de itens.
      *
-     * @param  array $formattedItems
+     * @param array $formattedItems
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
      *
@@ -211,23 +214,23 @@ class PagSeguro extends PagSeguroClient
         $laravel = app();
         $version = $laravel::VERSION;
 
-        if (substr($version,0,3) >= '5.2') {
-          $rules = [
-            'items.*.itemId'     => 'required|max:100',
+        if (substr($version, 0, 3) >= '5.2') {
+            $rules = [
+            'items.*.itemId'              => 'required|max:100',
             'items.*.itemDescription'     => 'required|max:100',
-            'items.*.itemAmount' => 'required|numeric|between:0.00,9999999.00',
-            'items.*.itemQuantity'   => 'required|integer|between:1,999',
+            'items.*.itemAmount'          => 'required|numeric|between:0.00,9999999.00',
+            'items.*.itemQuantity'        => 'required|integer|between:1,999',
           ];
         } else {
-          $rules = [];
-          foreach($formattedItems['items'] as $key => $item) {
-            $rules = array_merge($rules, [
-              'items.'.$key.'.itemId'     => 'required|max:100',
+            $rules = [];
+            foreach ($formattedItems['items'] as $key => $item) {
+                $rules = array_merge($rules, [
+              'items.'.$key.'.itemId'              => 'required|max:100',
               'items.'.$key.'.itemDescription'     => 'required|max:100',
-              'items.'.$key.'.itemAmount' => 'required|numeric|between:0.00,9999999.00',
-              'items.'.$key.'.itemQuantity'   => 'required|integer|between:1,999',
+              'items.'.$key.'.itemAmount'          => 'required|numeric|between:0.00,9999999.00',
+              'items.'.$key.'.itemQuantity'        => 'required|integer|between:1,999',
             ]);
-          }
+            }
         }
 
         $validator = $this->validator->make($formattedItems, $rules);
