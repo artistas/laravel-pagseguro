@@ -15,42 +15,49 @@ class PagSeguroConfig
      * @var object
      */
     protected $session;
+
     /**
      * Config instance.
      *
      * @var object
      */
     protected $config;
+
     /**
      * Log instance.
      *
      * @var object
      */
     protected $log;
+
     /**
      * Validator instance.
      *
      * @var object
      */
     protected $validator;
+
     /**
      * Modo sandbox.
      *
      * @var bool
      */
     protected $sandbox;
+
     /**
      * Token da conta PagSeguro.
      *
      * @var string
      */
     protected $token;
+
     /**
      * Email da conta PagSeguro.
      *
      * @var string
      */
     protected $email;
+    
     /**
      * Armazena as url's para conexão com o PagSeguro.
      *
