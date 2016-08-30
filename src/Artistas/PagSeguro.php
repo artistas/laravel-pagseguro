@@ -99,12 +99,12 @@ class PagSeguro extends PagSeguroClient
         $formattedSenderPhone = preg_replace('/\D/', '', $senderInfo['senderPhone']);
 
         $formattedSenderInfo = [
-        'senderName'     => trim(preg_replace('/\s+/', ' ', $senderInfo['senderName'])),
-        'senderAreaCode' => substr($formattedSenderPhone, 0, 2),
-        'senderPhone'    => substr($formattedSenderPhone, 2),
-        'senderEmail'    => $formattedSenderEmail,
-        'senderHash'     => $senderInfo['senderHash'],
-      ];
+          'senderName'     => trim(preg_replace('/\s+/', ' ', $senderInfo['senderName'])),
+          'senderAreaCode' => substr($formattedSenderPhone, 0, 2),
+          'senderPhone'    => substr($formattedSenderPhone, 2),
+          'senderEmail'    => $formattedSenderEmail,
+          'senderHash'     => $senderInfo['senderHash'],
+        ];
 
         if ($this->senderType === 'J') {
             $formattedSenderInfo['senderCNPJ'] = preg_replace('/\D/', '', $senderInfo['senderCNPJ']);
@@ -112,9 +112,8 @@ class PagSeguro extends PagSeguroClient
             $formattedSenderInfo['senderCPF'] = preg_replace('/\D/', '', $senderInfo['senderCPF']);
         }
 
-        if ($this->validateSenderInfo($formattedSenderInfo)) {
-            $this->senderInfo = $formattedSenderInfo;
-        }
+        $this->validateSenderInfo($formattedSenderInfo);
+        $this->senderInfo = $formattedSenderInfo;
 
         return $this;
     }
@@ -125,18 +124,16 @@ class PagSeguro extends PagSeguroClient
      * @param array $formattedSenderInfo
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
-     *
-     * @return bool
      */
     private function validateSenderInfo($formattedSenderInfo)
     {
         $rules = [
-        'senderName'     => 'required|max:50',
-        'senderAreaCode' => 'required|digits:2',
-        'senderPhone'    => 'required|digits_between:8,9',
-        'senderEmail'    => 'required|email|max:60',
-        'senderHash'     => 'required',
-      ];
+          'senderName'     => 'required|max:50',
+          'senderAreaCode' => 'required|digits:2',
+          'senderPhone'    => 'required|digits_between:8,9',
+          'senderEmail'    => 'required|email|max:60',
+          'senderHash'     => 'required',
+        ];
 
         if ($this->senderType === 'J') {
             $rules['senderCNPJ'] = 'required|digits:14';
@@ -148,8 +145,6 @@ class PagSeguro extends PagSeguroClient
         if ($validator->fails()) {
             throw new PagSeguroException($validator->messages()->first());
         }
-
-        return true;
     }
 
     /**
@@ -166,16 +161,15 @@ class PagSeguro extends PagSeguroClient
         }
 
         $formattedcreditCardHolder = [
-        'creditCardHolderName'          => $creditCardHolder['creditCardHolderName'] ? trim(preg_replace('/\s+/', ' ', $creditCardHolder['creditCardHolderName'])) : $this->senderInfo['senderName'],
-        'creditCardHolderAreaCode'      => $formattedcreditCardHolderPhone ? substr($formattedcreditCardHolderPhone, 0, 2) : $this->senderInfo['senderAreaCode'],
-        'creditCardHolderPhone'         => $formattedcreditCardHolderPhone ? substr($formattedcreditCardHolderPhone, 2) : $this->senderInfo['senderPhone'],
-        'creditCardHolderCPF'           => $creditCardHolder['creditCardHolderCPF'] ? preg_replace('/\D/', '', $creditCardHolder['creditCardHolderCPF']) : $this->senderInfo['senderCPF'],
-        'creditCardHolderBirthDate'     => trim(preg_replace('/\s+/', ' ', $creditCardHolder['creditCardHolderBirthDate'])),
-      ];
+          'creditCardHolderName'          => $creditCardHolder['creditCardHolderName'] ? trim(preg_replace('/\s+/', ' ', $creditCardHolder['creditCardHolderName'])) : $this->senderInfo['senderName'],
+          'creditCardHolderAreaCode'      => $formattedcreditCardHolderPhone ? substr($formattedcreditCardHolderPhone, 0, 2) : $this->senderInfo['senderAreaCode'],
+          'creditCardHolderPhone'         => $formattedcreditCardHolderPhone ? substr($formattedcreditCardHolderPhone, 2) : $this->senderInfo['senderPhone'],
+          'creditCardHolderCPF'           => $creditCardHolder['creditCardHolderCPF'] ? preg_replace('/\D/', '', $creditCardHolder['creditCardHolderCPF']) : $this->senderInfo['senderCPF'],
+          'creditCardHolderBirthDate'     => trim(preg_replace('/\s+/', ' ', $creditCardHolder['creditCardHolderBirthDate'])),
+        ];
 
-        if ($this->validateCreditCardHolder($formattedcreditCardHolder)) {
-            $this->creditCardHolder = $formattedcreditCardHolder;
-        }
+        $this->validateCreditCardHolder($formattedcreditCardHolder);
+        $this->creditCardHolder = $formattedcreditCardHolder;
 
         return $this;
     }
@@ -186,25 +180,21 @@ class PagSeguro extends PagSeguroClient
      * @param array $formattedcreditCardHolder
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
-     *
-     * @return bool
      */
     private function validateCreditCardHolder($formattedcreditCardHolder)
     {
         $rules = [
-        'creditCardHolderName'         => 'required|max:50',
-        'creditCardHolderAreaCode'     => 'required|digits:2',
-        'creditCardHolderPhone'        => 'required|digits_between:8,9',
-        'creditCardHolderCPF'          => 'required|digits:11',
-        'creditCardHolderBirthDate'    => 'required',
-      ];
+          'creditCardHolderName'         => 'required|max:50',
+          'creditCardHolderAreaCode'     => 'required|digits:2',
+          'creditCardHolderPhone'        => 'required|digits_between:8,9',
+          'creditCardHolderCPF'          => 'required|digits:11',
+          'creditCardHolderBirthDate'    => 'required',
+        ];
 
         $validator = $this->validator->make($formattedcreditCardHolder, $rules);
         if ($validator->fails()) {
             throw new PagSeguroException($validator->messages()->first());
         }
-
-        return true;
     }
 
     /**
@@ -217,19 +207,18 @@ class PagSeguro extends PagSeguroClient
     public function setShippingAddress(array $shippingAddress)
     {
         $formattedShippingAddress = [
-        'shippingAddressStreet'     => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressStreet'])),
-        'shippingAddressNumber'     => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressNumber'])),
-        'shippingAddressComplement' => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressComplement'])),
-        'shippingAddressDistrict'   => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressDistrict'])),
-        'shippingAddressPostalCode' => preg_replace('/\D/', '', $shippingAddress['shippingAddressPostalCode']),
-        'shippingAddressCity'       => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressCity'])),
-        'shippingAddressState'      => strtoupper($shippingAddress['shippingAddressState']),
-        'shippingAddressCountry'    => 'BRA',
-      ];
+          'shippingAddressStreet'     => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressStreet'])),
+          'shippingAddressNumber'     => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressNumber'])),
+          'shippingAddressComplement' => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressComplement'])),
+          'shippingAddressDistrict'   => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressDistrict'])),
+          'shippingAddressPostalCode' => preg_replace('/\D/', '', $shippingAddress['shippingAddressPostalCode']),
+          'shippingAddressCity'       => trim(preg_replace('/\s+/', ' ', $shippingAddress['shippingAddressCity'])),
+          'shippingAddressState'      => strtoupper($shippingAddress['shippingAddressState']),
+          'shippingAddressCountry'    => 'BRA',
+        ];
 
-        if ($this->validateShippingAddress($formattedShippingAddress)) {
-            $this->shippingAddress = $formattedShippingAddress;
-        }
+        $this->validateShippingAddress($formattedShippingAddress);
+        $this->shippingAddress = $formattedShippingAddress;
 
         return $this;
     }
@@ -240,28 +229,24 @@ class PagSeguro extends PagSeguroClient
      * @param array $formattedShippingAddress
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
-     *
-     * @return bool
      */
     private function validateShippingAddress($formattedShippingAddress)
     {
         $rules = [
-        'shippingAddressStreet'     => 'required|max:80',
-        'shippingAddressNumber'     => 'required|max:20',
-        'shippingAddressComplement' => 'max:40',
-        'shippingAddressDistrict'   => 'required|max:60',
-        'shippingAddressPostalCode' => 'required|digits:8',
-        'shippingAddressCity'       => 'required|min:2|max:60',
-        'shippingAddressState'      => 'required|min:2|max:2',
-      ];
+          'shippingAddressStreet'     => 'required|max:80',
+          'shippingAddressNumber'     => 'required|max:20',
+          'shippingAddressComplement' => 'max:40',
+          'shippingAddressDistrict'   => 'required|max:60',
+          'shippingAddressPostalCode' => 'required|digits:8',
+          'shippingAddressCity'       => 'required|min:2|max:60',
+          'shippingAddressState'      => 'required|min:2|max:2',
+        ];
 
         $validator = $this->validator->make($formattedShippingAddress, $rules);
 
         if ($validator->fails()) {
             throw new PagSeguroException($validator->messages()->first());
         }
-
-        return true;
     }
 
     /**
@@ -274,19 +259,18 @@ class PagSeguro extends PagSeguroClient
     public function setBillingAddress(array $billingAddress)
     {
         $formattedBillingAddress = [
-        'billingAddressStreet'     => $billingAddress['billingAddressStreet'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressStreet'])) : $this->shippingAddress['shippingAddressStreet'],
-        'billingAddressNumber'     => $billingAddress['billingAddressNumber'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressNumber'])) : $this->shippingAddress['shippingAddressNumber'],
-        'billingAddressComplement' => $billingAddress['billingAddressComplement'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressComplement'])) : $this->shippingAddress['shippingAddressComplement'],
-        'billingAddressDistrict'   => $billingAddress['billingAddressDistrict'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressDistrict'])) : $this->shippingAddress['shippingAddressDistrict'],
-        'billingAddressPostalCode' => $billingAddress['billingAddressPostalCode'] ? preg_replace('/\D/', '', $billingAddress['billingAddressPostalCode']) : $this->shippingAddress['shippingAddressPostalCode'],
-        'billingAddressCity'       => $billingAddress['billingAddressCity'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressCity'])) : $this->shippingAddress['shippingAddressCity'],
-        'billingAddressState'      => $billingAddress['billingAddressState'] ? strtoupper($billingAddress['billingAddressState']) : $this->shippingAddress['shippingAddressState'],
-        'billingAddressCountry'    => 'BRA',
-      ];
+          'billingAddressStreet'     => $billingAddress['billingAddressStreet'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressStreet'])) : $this->shippingAddress['shippingAddressStreet'],
+          'billingAddressNumber'     => $billingAddress['billingAddressNumber'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressNumber'])) : $this->shippingAddress['shippingAddressNumber'],
+          'billingAddressComplement' => $billingAddress['billingAddressComplement'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressComplement'])) : $this->shippingAddress['shippingAddressComplement'],
+          'billingAddressDistrict'   => $billingAddress['billingAddressDistrict'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressDistrict'])) : $this->shippingAddress['shippingAddressDistrict'],
+          'billingAddressPostalCode' => $billingAddress['billingAddressPostalCode'] ? preg_replace('/\D/', '', $billingAddress['billingAddressPostalCode']) : $this->shippingAddress['shippingAddressPostalCode'],
+          'billingAddressCity'       => $billingAddress['billingAddressCity'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressCity'])) : $this->shippingAddress['shippingAddressCity'],
+          'billingAddressState'      => $billingAddress['billingAddressState'] ? strtoupper($billingAddress['billingAddressState']) : $this->shippingAddress['shippingAddressState'],
+          'billingAddressCountry'    => 'BRA',
+        ];
 
-        if ($this->validateBillingAddress($formattedBillingAddress)) {
-            $this->billingAddress = $formattedBillingAddress;
-        }
+        $this->validateBillingAddress($formattedBillingAddress);
+        $this->billingAddress = $formattedBillingAddress;
 
         return $this;
     }
@@ -297,28 +281,24 @@ class PagSeguro extends PagSeguroClient
      * @param array $formattedBillingAddress
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
-     *
-     * @return bool
      */
     private function validateBillingAddress($formattedBillingAddress)
     {
         $rules = [
-        'billingAddressStreet'     => 'required|max:80',
-        'billingAddressNumber'     => 'required|max:20',
-        'billingAddressComplement' => 'max:40',
-        'billingAddressDistrict'   => 'required|max:60',
-        'billingAddressPostalCode' => 'required|digits:8',
-        'billingAddressCity'       => 'required|min:2|max:60',
-        'billingAddressState'      => 'required|min:2|max:2',
-      ];
+          'billingAddressStreet'     => 'required|max:80',
+          'billingAddressNumber'     => 'required|max:20',
+          'billingAddressComplement' => 'max:40',
+          'billingAddressDistrict'   => 'required|max:60',
+          'billingAddressPostalCode' => 'required|digits:8',
+          'billingAddressCity'       => 'required|min:2|max:60',
+          'billingAddressState'      => 'required|min:2|max:2',
+        ];
 
         $validator = $this->validator->make($formattedBillingAddress, $rules);
 
         if ($validator->fails()) {
             throw new PagSeguroException($validator->messages()->first());
         }
-
-        return true;
     }
 
     /**
@@ -333,29 +313,28 @@ class PagSeguro extends PagSeguroClient
         $i = 1;
         foreach ($items as $item) {
             $formattedItems['items'][$i++] = [
-          'itemId'          => trim(preg_replace('/\s+/', ' ', $item['itemId'])),
-          'itemDescription' => trim(preg_replace('/\s+/', ' ', $item['itemDescription'])),
-          'itemAmount'      => number_format($item['itemAmount'], 2, '.', ''),
-          'itemQuantity'    => preg_replace('/\D/', '', $item['itemQuantity']),
-        ];
+              'itemId'          => trim(preg_replace('/\s+/', ' ', $item['itemId'])),
+              'itemDescription' => trim(preg_replace('/\s+/', ' ', $item['itemDescription'])),
+              'itemAmount'      => number_format($item['itemAmount'], 2, '.', ''),
+              'itemQuantity'    => preg_replace('/\D/', '', $item['itemQuantity']),
+            ];
         }
 
-        if ($this->validateItems($formattedItems)) {
-            $this->items = collect($formattedItems['items'])->flatMap(function ($values, $parentKey) {
-                $laravel = app();
-                $version = $laravel::VERSION;
+        $this->validateItems($formattedItems);
+        $this->items = collect($formattedItems['items'])->flatMap(function ($values, $parentKey) {
+            $laravel = app();
+            $version = $laravel::VERSION;
 
-                if (substr($version, 0, 3) >= '5.3') {
-                    return collect($values)->mapWithKeys(function ($value, $key) use ($parentKey) {
-                        return [$key.$parentKey => $value];
-                    });
-                }
-
-                return collect($values)->flatMap(function ($value, $key) use ($parentKey) {
+            if (substr($version, 0, 3) >= '5.3') {
+                return collect($values)->mapWithKeys(function ($value, $key) use ($parentKey) {
                     return [$key.$parentKey => $value];
                 });
-            })->toArray();
-        }
+            }
+
+            return collect($values)->flatMap(function ($value, $key) use ($parentKey) {
+                return [$key.$parentKey => $value];
+            });
+        })->toArray();
 
         return $this;
     }
@@ -366,8 +345,6 @@ class PagSeguro extends PagSeguroClient
      * @param array $formattedItems
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
-     *
-     * @return bool
      */
     private function validateItems($formattedItems)
     {
@@ -376,20 +353,20 @@ class PagSeguro extends PagSeguroClient
 
         if (substr($version, 0, 3) >= '5.2') {
             $rules = [
-          'items.*.itemId'              => 'required|max:100',
-          'items.*.itemDescription'     => 'required|max:100',
-          'items.*.itemAmount'          => 'required|numeric|between:0.00,9999999.00',
-          'items.*.itemQuantity'        => 'required|integer|between:1,999',
-        ];
+              'items.*.itemId'              => 'required|max:100',
+              'items.*.itemDescription'     => 'required|max:100',
+              'items.*.itemAmount'          => 'required|numeric|between:0.00,9999999.00',
+              'items.*.itemQuantity'        => 'required|integer|between:1,999',
+            ];
         } else {
             $rules = [];
             foreach ($formattedItems['items'] as $key => $item) {
                 $rules = array_merge($rules, [
-            'items.'.$key.'.itemId'              => 'required|max:100',
-            'items.'.$key.'.itemDescription'     => 'required|max:100',
-            'items.'.$key.'.itemAmount'          => 'required|numeric|between:0.00,9999999.00',
-            'items.'.$key.'.itemQuantity'        => 'required|integer|between:1,999',
-          ]);
+                  'items.'.$key.'.itemId'              => 'required|max:100',
+                  'items.'.$key.'.itemDescription'     => 'required|max:100',
+                  'items.'.$key.'.itemAmount'          => 'required|numeric|between:0.00,9999999.00',
+                  'items.'.$key.'.itemQuantity'        => 'required|integer|between:1,999',
+                ]);
             }
         }
 
@@ -398,8 +375,6 @@ class PagSeguro extends PagSeguroClient
         if ($validator->fails()) {
             throw new PagSeguroException($validator->messages()->first());
         }
-
-        return true;
     }
 
     /**
@@ -440,13 +415,12 @@ class PagSeguro extends PagSeguroClient
     public function setShippingInfo(array $shippingInfo)
     {
         $formattedShippingInfo = [
-        'shippingType'     => preg_replace('/\D/', '', $shippingInfo['shippingType']),
-        'shippingCost'     => number_format($shippingInfo['shippingCost'], 2, '.', ''),
-      ];
+          'shippingType'     => preg_replace('/\D/', '', $shippingInfo['shippingType']),
+          'shippingCost'     => number_format($shippingInfo['shippingCost'], 2, '.', ''),
+        ];
 
-        if ($this->validateShippingInfo($formattedShippingInfo)) {
-            $this->shippingInfo = $formattedShippingInfo;
-        }
+        $this->validateShippingInfo($formattedShippingInfo);
+        $this->shippingInfo = $formattedShippingInfo;
 
         return $this;
     }
@@ -457,22 +431,91 @@ class PagSeguro extends PagSeguroClient
      * @param array $formattedShippingInfo
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
-     *
-     * @return bool
      */
     private function validateShippingInfo($formattedShippingInfo)
     {
         $rules = [
-        'shippingType'          => 'required|numeric|between:0.00,9999999.00',
-        'shippingCost'          => 'required|integer|between:1,3',
-      ];
+          'shippingType'          => 'required|numeric|between:0.00,9999999.00',
+          'shippingCost'          => 'required|integer|between:1,3',
+        ];
 
         $validator = $this->validator->make($formattedShippingInfo, $rules);
 
         if ($validator->fails()) {
             throw new PagSeguroException($validator->messages()->first());
         }
+    }
 
-        return true;
+    /**
+     * Envia a transação de checkout.
+     *
+     * @param array $paymentOptions
+     *
+     * @return mixed
+     */
+    public function send(array $paymentSettings) {
+
+      $formattedPaymentSettings = [
+        'paymentMethod' => $paymentSettings['paymentMethod'],
+        'bankName' => $paymentSettings['bankName'],
+        'creditCardToken' => $paymentSettings['creditCardToken'],
+        'installmentQuantity' => preg_replace('/\D/', '', $paymentSettings['installmentQuantity']),
+        'installmentValue' => number_format($paymentSettings['installmentValue'], 2, '.', ''),
+        'noInterestInstallmentQuantity' => preg_replace('/\D/', '', $paymentSettings['noInterestInstallmentQuantity']),
+      ];
+
+      $this->validatePaymentSettings($formattedPaymentSettings);
+
+        $config = [
+            'email' => $this->email,
+            'token' => $this->token,
+            'paymentMode' => 'default',
+            'receiverEmail' => $this->email,
+            'currency' => 'BRL',
+            'reference' => $this->reference,
+            'extraAmount' => $this->extraAmount,
+        ];
+
+        $data = array_filter(array_merge($config, $formattedPaymentSettings, $this->senderInfo, $this->shippingAddress, $this->items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
+        
+        return $this->sendTransaction($data);
+    }
+
+    /**
+     * Valida os dados de pagamento.
+     *
+     * @param array $formattedPaymentSettings
+     *
+     * @throws \Artistas\PagSeguro\PagSeguroException
+     */
+    private function validatePaymentSettings($formattedPaymentSettings)
+    {
+        $rules = [
+          'paymentMethod' => 'required',
+          'bankName' => 'requried_if:paymentMethod,eft',
+          'creditCardToken' => 'requried_if:paymentMethod,creditCard'
+          'installmentQuantity'          => 'requried_if:paymentMethod,creditCard|integer|between:1,3',
+          'installmentValue'          => 'requried_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
+          'noInterestInstallmentQuantity'          => 'integer|between:1,3',
+        ];
+
+        $validator = $this->validator->make($formattedPaymentSettings, $rules);
+
+        if ($validator->fails()) {
+            throw new PagSeguroException($validator->messages()->first());
+        }
+
+        $this->validateSenderInfo($this->senderInfo);
+        $this->validateShippingAddress($this->shippingAddress);
+        $this->validateItems($this->items);
+
+        if ($formattedPaymentSettings['paymentMethod'] === 'creditCard') {
+          $this->validateCreditCardHolder($this->creditCardHolder);
+          $this->validateBillingAddress($this->billingAddress);
+        }
+
+        if ($this->shippingInfo !== null) {
+            $this->validateShippingInfo($this->shippingInfo);
+        }
     }
 }
