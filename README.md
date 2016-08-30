@@ -17,3 +17,17 @@ E a seguinte Facade:
 ```
 'PagSeguro' => Artistas\PagSeguro\PagSeguroFacade::class
 ```
+
+Publique a configuração
+```
+php artisan vendor:publish
+```
+
+Adicione os parametros no seu arquivo .env
+```
+PAGSEGURO_SANDBOX=true
+PAGSEGURO_EMAIL=
+PAGSEGURO_TOKEN=
+```
+
+O resto da documentação virá junto com a próxima versão, que vai disponibilizar um formulário e javascript padrão (próximos dias).
