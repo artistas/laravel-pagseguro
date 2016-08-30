@@ -112,7 +112,7 @@ class PagSeguro extends PagSeguroClient
       'shippingAddressCity' => trim(preg_replace('/\s+/', ' ',$senderAddress['shippingAddressCity'])),
       'shippingAddressState' => strtoupper($senderAddress['shippingAddressState']),
       'shippingAddressCountry' => 'BRA',
-    ]
+    ];
 
     if($this->validateSenderAddress($formattedSenderAddress)) {
         $this->senderAddress = $formattedSenderAddress;
