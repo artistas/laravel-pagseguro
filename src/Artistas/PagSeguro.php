@@ -113,7 +113,7 @@ class PagSeguro extends PagSeguroClient
       'shippingAddressState' => strtoupper($senderAddress['shippingAddressState']),
       'shippingAddressCountry' => 'BRA',
     ]
-0
+
     if($this->validateSenderAddress($formattedSenderAddress)) {
         $this->senderAddress = $formattedSenderAddress;
     }
