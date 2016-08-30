@@ -4,7 +4,7 @@ namespace Artistas\PagSeguro;
 
 class PagSeguro extends PagSeguroClient
 {
-  /**
+    /**
  * Define o tipo de comprador.
  *
  * @var string
@@ -107,7 +107,7 @@ public function setSenderInfo(array $senderInfo)
 /**
  * Valida os dados contidos na array de informações do comprador.
  *
- * @param  array $formattedSenderInfo
+ * @param array $formattedSenderInfo
  *
  * @throws \Artistas\PagSeguro\PagSeguroException
  *
@@ -166,7 +166,7 @@ public function setSenderAddress(array $senderAddress)
 /**
  * Valida os dados contidos na array de endereço do comprador.
  *
- * @param  array $formattedSenderAddress
+ * @param array $formattedSenderAddress
  *
  * @throws \Artistas\PagSeguro\PagSeguroException
  *
@@ -214,18 +214,18 @@ private function validateSenderAddress($formattedSenderAddress)
 
       if ($this->validateItems($formattedItems)) {
           $this->items = collect($formattedItems['items'])->flatMap(function ($values, $parentKey) {
-            $laravel = app();
-            $version = $laravel::VERSION;
+              $laravel = app();
+              $version = $laravel::VERSION;
 
-            if (substr($version, 0, 3) >= '5.3') {
-              return collect($values)->mapWithKeys(function ($value, $key) use ($parentKey) {
+              if (substr($version, 0, 3) >= '5.3') {
+                  return collect($values)->mapWithKeys(function ($value, $key) use ($parentKey) {
+                      return [$key.$parentKey => $value];
+                  });
+              }
+
+              return collect($values)->flatMap(function ($value, $key) use ($parentKey) {
                   return [$key.$parentKey => $value];
               });
-            }
-
-            return collect($values)->flatMap(function ($value, $key) use ($parentKey) {
-                return [$key.$parentKey => $value];
-            });
           })->toArray();
       }
 
@@ -276,7 +276,9 @@ private function validateSenderAddress($formattedSenderAddress)
 
   /**
    * Define um valor adicional para a compra.
+   *
    * @param float $extraAmount
+   *
    * @return $this
    */
   public function setExtraAmount($extraAmount)
@@ -288,7 +290,9 @@ private function validateSenderAddress($formattedSenderAddress)
 
   /**
    * Define um id de referência da compra no pagseguro.
+   *
    * @param string $reference
+   *
    * @return $this
    */
   public function setReference($reference)
@@ -300,7 +304,9 @@ private function validateSenderAddress($formattedSenderAddress)
 
   /**
    * Define o valor e o tipo do frete cobrado.
+   *
    * @param array $shippingInfo
+   *
    * @return $this
    */
   public function setShippingInfo(array $shippingInfo)
@@ -330,7 +336,7 @@ private function validateSenderAddress($formattedSenderAddress)
   {
       $rules = [
         'shippingType'          => 'required|numeric|between:0.00,9999999.00',
-        'shippingCost'        => 'required|integer|between:1,3',
+        'shippingCost'          => 'required|integer|between:1,3',
       ];
 
       $validator = $this->validator->make($formattedShippingInfo, $rules);
