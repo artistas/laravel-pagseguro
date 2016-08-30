@@ -161,13 +161,15 @@ class PagSeguro extends PagSeguroClient
     */
     public function setCreditCardHolder(array $creditCardHolder)
     {
-      $formattedcreditCardHolderPhone = preg_replace('/\D/', '', $creditCardHolder['creditCardHolderPhone']);
+      if (isset($creditCardHolder['creditCardHolderPhone'])) {
+          $formattedcreditCardHolderPhone = preg_replace('/\D/', '', $creditCardHolder['creditCardHolderPhone']);
+      }
 
       $formattedcreditCardHolder = [
-        'creditCardHolderName'     => trim(preg_replace('/\s+/', ' ', $creditCardHolder['creditCardHolderName'])),
-        'creditCardHolderAreaCode' => substr($formattedcreditCardHolderPhone, 0, 2),
-        'creditCardHolderPhone'    => substr($formattedcreditCardHolderPhone, 2),
-        'creditCardHolderCPF' => preg_replace('/\D/', '', $creditCardHolder['creditCardHolderCPF']),
+        'creditCardHolderName'     => $creditCardHolder['creditCardHolderName'] ? trim(preg_replace('/\s+/', ' ', $creditCardHolder['creditCardHolderName'])) : $this->senderInfo['senderName'],
+        'creditCardHolderAreaCode' => $formattedcreditCardHolderPhone ? substr($formattedcreditCardHolderPhone, 0, 2) : $this->senderInfo['senderAreaCode'],
+        'creditCardHolderPhone'    => $formattedcreditCardHolderPhone ? substr($formattedcreditCardHolderPhone, 2) : $this->senderInfo['senderPhone'],
+        'creditCardHolderCPF' => $creditCardHolder['creditCardHolderCPF'] ? preg_replace('/\D/', '', $creditCardHolder['creditCardHolderCPF']) : $this->senderInfo['senderCPF'],
         'creditCardHolderBirthDate'     => trim(preg_replace('/\s+/', ' ', $creditCardHolder['creditCardHolderBirthDate'])),
       ];
 
@@ -273,12 +275,12 @@ class PagSeguro extends PagSeguroClient
     {
       $formattedBillingAddress = [
         'billingAddressStreet'     => $billingAddress['billingAddressStreet'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressStreet'])) : $this->shippingAddress['shippingAddressStreet'],
-        'billingAddressNumber'     => $billingAddress['billingAddressNumber'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressNumber'])) : $this->shippingAddress['shippingAddressNumber'])),
-        'billingAddressComplement' => $billingAddress['billingAddressComplement'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressComplement'])) : $this->shippingAddress['shippingAddressComplement'])),
-        'billingAddressDistrict'   => $billingAddress['billingAddressDistrict'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressDistrict'])) : $this->shippingAddress['shippingAddressDistrict'])),
-        'billingAddressPostalCode' => $billingAddress['billingAddressPostalCode']) ? preg_replace('/\D/', '', $billingAddress['billingAddressPostalCode']) : $this->shippingAddress['shippingAddressPostalCode']),
-        'billingAddressCity'       => $billingAddress['billingAddressCity'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressCity'])) : $this->shippingAddress['shippingAddressCity'])),
-        'billingAddressState'      => $billingAddress['billingAddressState']) ? strtoupper($billingAddress['billingAddressState']) : $this->shippingAddress['shippingAddressState']),
+        'billingAddressNumber'     => $billingAddress['billingAddressNumber'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressNumber'])) : $this->shippingAddress['shippingAddressNumber'],
+        'billingAddressComplement' => $billingAddress['billingAddressComplement'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressComplement'])) : $this->shippingAddress['shippingAddressComplement'],
+        'billingAddressDistrict'   => $billingAddress['billingAddressDistrict'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressDistrict'])) : $this->shippingAddress['shippingAddressDistrict'],
+        'billingAddressPostalCode' => $billingAddress['billingAddressPostalCode']) ? preg_replace('/\D/', '', $billingAddress['billingAddressPostalCode']) : $this->shippingAddress['shippingAddressPostalCode'],
+        'billingAddressCity'       => $billingAddress['billingAddressCity'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressCity'])) : $this->shippingAddress['shippingAddressCity'],
+        'billingAddressState'      => $billingAddress['billingAddressState']) ? strtoupper($billingAddress['billingAddressState']) : $this->shippingAddress['shippingAddressState'],
         'billingAddressCountry'    => 'BRA',
       ];
 
