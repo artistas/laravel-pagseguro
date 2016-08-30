@@ -275,12 +275,12 @@ class PagSeguro extends PagSeguroClient
     {
       $formattedBillingAddress = [
         'billingAddressStreet'     => $billingAddress['billingAddressStreet'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressStreet'])) : $this->shippingAddress['shippingAddressStreet'],
-        'billingAddressNumber'     => $billingAddress['billingAddressNumber'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressNumber'])) : $this->shippingAddress['shippingAddressNumber'],
-        'billingAddressComplement' => $billingAddress['billingAddressComplement'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressComplement'])) : $this->shippingAddress['shippingAddressComplement'],
-        'billingAddressDistrict'   => $billingAddress['billingAddressDistrict'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressDistrict'])) : $this->shippingAddress['shippingAddressDistrict'],
-        'billingAddressPostalCode' => $billingAddress['billingAddressPostalCode']) ? preg_replace('/\D/', '', $billingAddress['billingAddressPostalCode']) : $this->shippingAddress['shippingAddressPostalCode'],
-        'billingAddressCity'       => $billingAddress['billingAddressCity'])) ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressCity'])) : $this->shippingAddress['shippingAddressCity'],
-        'billingAddressState'      => $billingAddress['billingAddressState']) ? strtoupper($billingAddress['billingAddressState']) : $this->shippingAddress['shippingAddressState'],
+        'billingAddressNumber'     => $billingAddress['billingAddressNumber'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressNumber'])) : $this->shippingAddress['shippingAddressNumber'],
+        'billingAddressComplement' => $billingAddress['billingAddressComplement'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressComplement'])) : $this->shippingAddress['shippingAddressComplement'],
+        'billingAddressDistrict'   => $billingAddress['billingAddressDistrict'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressDistrict'])) : $this->shippingAddress['shippingAddressDistrict'],
+        'billingAddressPostalCode' => $billingAddress['billingAddressPostalCode'] ? preg_replace('/\D/', '', $billingAddress['billingAddressPostalCode']) : $this->shippingAddress['shippingAddressPostalCode'],
+        'billingAddressCity'       => $billingAddress['billingAddressCity'] ? trim(preg_replace('/\s+/', ' ', $billingAddress['billingAddressCity'])) : $this->shippingAddress['shippingAddressCity'],
+        'billingAddressState'      => $billingAddress['billingAddressState'] ? strtoupper($billingAddress['billingAddressState']) : $this->shippingAddress['shippingAddressState'],
         'billingAddressCountry'    => 'BRA',
       ];
 
