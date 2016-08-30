@@ -477,7 +477,7 @@ class PagSeguro extends PagSeguroClient
         ];
 
         $data = array_filter(array_merge($config, $formattedPaymentSettings, $this->senderInfo, $this->shippingAddress, $this->items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
-        
+
         return $this->sendTransaction($data);
     }
 
@@ -493,7 +493,7 @@ class PagSeguro extends PagSeguroClient
         $rules = [
           'paymentMethod' => 'required',
           'bankName' => 'requried_if:paymentMethod,eft',
-          'creditCardToken' => 'requried_if:paymentMethod,creditCard'
+          'creditCardToken' => 'requried_if:paymentMethod,creditCard',
           'installmentQuantity'          => 'requried_if:paymentMethod,creditCard|integer|between:1,3',
           'installmentValue'          => 'requried_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
           'noInterestInstallmentQuantity'          => 'integer|between:1,3',
