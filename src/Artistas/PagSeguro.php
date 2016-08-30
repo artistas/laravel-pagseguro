@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPampa\PagSeguro;
+namespace Artistas\PagSeguro;
 
 class PagSeguro extends PagSeguroClient
 {

@@ -1,5 +1,5 @@
 {
-    "name": "phpampa/laravel-pagseguro",
+    "name": "artistas/laravel-pagseguro",
     "description": "Integracao do Laravel 5 com o PagSeguro.",
     "type": "library",
     "license": "MIT",
@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "PHPampa\\PagSeguro\\": "src/"
+            "Artistas\\PagSeguro\\": "src/Artistas/"
         }
     },
     "minimum-stability": "dev",

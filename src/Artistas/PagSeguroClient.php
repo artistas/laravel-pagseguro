@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPampa\PagSeguro;
+namespace Artistas\PagSeguro;
 
 class PagSeguroClient extends PagSeguroConfig
 {
@@ -10,7 +10,7 @@ class PagSeguroClient extends PagSeguroConfig
      * @param array  $parameters
      * @param string $url        Padrão $this->url['transactions']
      *
-     * @throws \PHPampa\PagSeguro\PagSeguroException
+     * @throws \Artistas\PagSeguro\PagSeguroException
      *
      * @return bool|mixed|\SimpleXMLElement
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPampa\PagSeguro;
+namespace Artistas\PagSeguro;
 
 use Illuminate\Support\ServiceProvider;
 
