@@ -479,7 +479,7 @@ class PagSeguro extends PagSeguroClient
         ];
 
         $data = array_filter(array_merge($config, $formattedPaymentSettings, $this->senderInfo, $this->shippingAddress, $items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
-        
+
         return $this->sendTransaction($data);
     }
 
