@@ -57,7 +57,7 @@ class PagSeguroConfig
      * @var string
      */
     protected $email;
-    
+
     /**
      * Armazena as url's para conexão com o PagSeguro.
      *
