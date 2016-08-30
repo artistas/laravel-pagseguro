@@ -48,9 +48,9 @@ class PagSeguro extends PagSeguroClient
     $formattedSenderPhone = preg_replace('/\D/', '', $senderInfo['senderPhone']);
 
     $formattedSenderInfo = [
-      'senderName' = trim(preg_replace('/\s+/', ' ',$senderInfo['senderName'])),
-      'senderAreaCode' = substr($formattedSenderPhone, 0, 2),
-      'senderPhone' = substr($formattedSenderPhone, 2),
+      'senderName' => trim(preg_replace('/\s+/', ' ',$senderInfo['senderName'])),
+      'senderAreaCode' => substr($formattedSenderPhone, 0, 2),
+      'senderPhone' => substr($formattedSenderPhone, 2),
       'senderEmail' => $formattedSenderEmail
     ];
 
