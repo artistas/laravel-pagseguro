@@ -97,8 +97,8 @@ class PagSeguro extends PagSeguroClient
           'senderPhone'    => substr($formattedSenderPhone, 2),
           'senderEmail'    => $formattedSenderEmail,
           'senderHash'     => $senderInfo['senderHash'],
-          'senderCNPJ' => preg_replace('/\D/', '', $senderInfo['senderCNPJ']),
-          'senderCPF' => preg_replace('/\D/', '', $senderInfo['senderCPF']),
+          'senderCNPJ'     => preg_replace('/\D/', '', $senderInfo['senderCNPJ']),
+          'senderCPF'      => preg_replace('/\D/', '', $senderInfo['senderCPF']),
         ];
 
         $this->validateSenderInfo($formattedSenderInfo);
@@ -122,8 +122,8 @@ class PagSeguro extends PagSeguroClient
           'senderPhone'    => 'required|digits_between:8,9',
           'senderEmail'    => 'required|email|max:60',
           'senderHash'     => 'required',
-          'senderCNPJ' => 'required_if:senderCPF,|digits:14',
-          'senderCPF' => 'required_if:senderCNPJ,|digits:11',
+          'senderCNPJ'     => 'required_if:senderCPF,|digits:14',
+          'senderCPF'      => 'required_if:senderCNPJ,|digits:11',
         ];
 
         $validator = $this->validator->make($formattedSenderInfo, $rules);
@@ -464,7 +464,7 @@ class PagSeguro extends PagSeguroClient
         ];
 
         $data = array_filter(array_merge($config, $formattedPaymentSettings, $this->senderInfo, $this->shippingAddress, $items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
-        
+
         return $this->sendTransaction($data);
     }
 
