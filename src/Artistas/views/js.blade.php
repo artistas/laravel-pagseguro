@@ -8,7 +8,7 @@ var installments;
 PagSeguroDirectPayment.setSessionId('{{ PagSeguro::getSession() }}');
 
 PagSeguroDirectPayment.getPaymentMethods({
-  amount: 500.00,
+  amount: amount,
   success: function(response) {
     if(response['error'] === false) {
       paymentMethods = response['paymentMethods'];
@@ -62,7 +62,7 @@ function getCardBrand(bin) {
 
 function getInstallments() {
   PagSeguroDirectPayment.getInstallments({
-    amount: 500.00,
+    amount: amount,
     brand: brand['name'],
     success: function(response) {
       installments = response['installments'][brand['name']];

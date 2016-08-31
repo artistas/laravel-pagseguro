@@ -1,4 +1,6 @@
 <script type="text/javascript">
+var amount=500.00;
+
 function constructOnlineDebit(availabelOnlineDebit) {
   var html;
 
