@@ -5,6 +5,12 @@
 
 Visite a [Wiki](https://github.com/artistas/laravel-pagseguro/wiki) para verificar os detalhes de como utilizar esta Package.
 
+Esta biblioteca disponibiliza um formulário padrão para ser utilizado, o mesmo é feito utilizando o Bootstrap e não é obrigatório, podendo ser customizado para trabalhar com outros frameworks css.
+
+Verifique o [CodePen](http://codepen.io/fernandobandeira/full/QKLYzZ/) do mesmo.
+
+![Formulário padrão](https://s18.postimg.org/ozpmy6sc9/formulario.jpg "Formulário incluso na biblioteca")
+
 Uma prévia de como é simples trabalhar com esta biblioteca:
 
 ```php
@@ -26,8 +32,7 @@ $pagseguro = PagSeguro::setReference('2')
   'shippingAddressCity' => 'Cidade',
   'shippingAddressState' => 'UF'
 ])
-->setItems(
-[
+->setItems([
   [
     'itemId' => 'ID',
     'itemDescription' => 'Nome do Item',
@@ -40,8 +45,7 @@ $pagseguro = PagSeguro::setReference('2')
     'itemAmount' => 12.14,
     'itemQuantity' => '2',
   ]
-]
-)
+])
 ->send([
   'paymentMethod' => 'boleto'
 ]);
