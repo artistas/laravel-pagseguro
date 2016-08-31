@@ -102,7 +102,7 @@ function constructInstallmentsForm() {
   $('#installments').empty().append('<option>Escolha a forma de parcelamento</option>');
 
   $.each(installments, function(index, installment) {
-    html = '<option value="'+installment['quantity']+'">';
+    html = '<option value="'+installment['quantity']+'|'+installment['installmentAmount']+'">';
     html += installment['quantity']+'x de ';
     html += formatReal(installment['installmentAmount']);
     if (installment['interestFree'])
@@ -143,7 +143,7 @@ function getCreditCardToken() {
     brand: brand['name'],
     success: function(response) {
       token = response['card']['token'];
-      $('#token').val(token);
+      $('#creditCardToken').val(token);
       $('#formPayment').submit();
     },
     error: function(response) {
@@ -157,6 +157,7 @@ function getCreditCardToken() {
 
 $('#btnParcels').click(function(e) {
   e.preventDefault();
+  $('#senderHash').val(PagSeguroDirectPayment.getSenderHash());
   getCreditCardToken();
 });
 
@@ -173,13 +174,13 @@ function formatReal(mixed) {
 
 $('#paymentMethods a').on('shown.bs.tab', function (e) {
   if ($(this).parent().prop('id') == 'presCredit_card') {
-        $('#paymentMethod').val(3);
+        $('#paymentMethod').val('creditCard');
   }
   else if ($(this).parent().prop('id') == 'presOnline_debit') {
-        $('#paymentMethod').val(2);
+        $('#paymentMethod').val('eft');
   }
   else {
-        $('#paymentMethod').val(1);
+        $('#paymentMethod').val('boleto');
   }
 });
 </script>

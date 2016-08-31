@@ -86,9 +86,9 @@
 </div>
 
 
-  {!! Form::hidden('paymentMethod', 3, ['id' => 'paymentMethod']) !!}
-  {!! Form::hidden('brand', null, ['id' => 'brand']) !!}
-  {!! Form::hidden('token', null, ['id' => 'token']) !!}
+  {!! Form::hidden('paymentMethod', 'creditCard', ['id' => 'paymentMethod']) !!}
+  {!! Form::hidden('creditCardToken', null, ['id' => 'creditCardToken']) !!}
+  {!! Form::hidden('senderHash', null, ['id' => 'senderHash']) !!}
 
   <button type="submit" class="btn" id="btnParcels">Finalizar Compra</button>
 

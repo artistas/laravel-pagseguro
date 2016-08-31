@@ -5,13 +5,6 @@ namespace Artistas\PagSeguro;
 class PagSeguro extends PagSeguroClient
 {
     /**
-     * Define o tipo de comprador.
-     *
-     * @var string
-     */
-    private $senderType;
-
-    /**
      * Informações do comprador.
      *
      * @var array
@@ -104,13 +97,9 @@ class PagSeguro extends PagSeguroClient
           'senderPhone'    => substr($formattedSenderPhone, 2),
           'senderEmail'    => $formattedSenderEmail,
           'senderHash'     => $senderInfo['senderHash'],
+          'senderCNPJ' => preg_replace('/\D/', '', $senderInfo['senderCNPJ']),
+          'senderCPF' => preg_replace('/\D/', '', $senderInfo['senderCPF']),
         ];
-
-        if ($this->senderType === 'J') {
-            $formattedSenderInfo['senderCNPJ'] = preg_replace('/\D/', '', $senderInfo['senderCNPJ']);
-        } else {
-            $formattedSenderInfo['senderCPF'] = preg_replace('/\D/', '', $senderInfo['senderCPF']);
-        }
 
         $this->validateSenderInfo($formattedSenderInfo);
         $this->senderInfo = $formattedSenderInfo;
@@ -133,13 +122,9 @@ class PagSeguro extends PagSeguroClient
           'senderPhone'    => 'required|digits_between:8,9',
           'senderEmail'    => 'required|email|max:60',
           'senderHash'     => 'required',
+          'senderCNPJ' => 'required_if:senderCPF,|digits:14',
+          'senderCPF' => 'required_if:senderCNPJ,|digits:11',
         ];
-
-        if ($this->senderType === 'J') {
-            $rules['senderCNPJ'] = 'required|digits:14';
-        } else {
-            $rules['senderCPF'] = 'required|digits:11';
-        }
 
         $validator = $this->validator->make($formattedSenderInfo, $rules);
         if ($validator->fails()) {
@@ -422,8 +407,8 @@ class PagSeguro extends PagSeguroClient
     private function validateShippingInfo($formattedShippingInfo)
     {
         $rules = [
-          'shippingType'          => 'required|numeric|between:0.00,9999999.00',
-          'shippingCost'          => 'required|integer|between:1,3',
+          'shippingType'          => 'required|integer|between:1,3',
+          'shippingCost'          => 'required|numeric|between:0.00,9999999.00',
         ];
 
         $validator = $this->validator->make($formattedShippingInfo, $rules);
@@ -479,7 +464,7 @@ class PagSeguro extends PagSeguroClient
         ];
 
         $data = array_filter(array_merge($config, $formattedPaymentSettings, $this->senderInfo, $this->shippingAddress, $items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
-
+        
         return $this->sendTransaction($data);
     }
 
@@ -496,7 +481,7 @@ class PagSeguro extends PagSeguroClient
           'paymentMethod'                          => 'required',
           'bankName'                               => 'required_if:paymentMethod,eft',
           'creditCardToken'                        => 'required_if:paymentMethod,creditCard',
-          'installmentQuantity'                    => 'required_if:paymentMethod,creditCard|integer|between:1,3',
+          'installmentQuantity'                    => 'required_if:paymentMethod,creditCard|integer|between:1,18',
           'installmentValue'                       => 'required_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
           'noInterestInstallmentQuantity'          => 'integer|between:1,3',
         ];
