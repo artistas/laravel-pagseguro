@@ -20,5 +20,9 @@ class PagSeguroServiceProvider extends ServiceProvider
         ]);
 
         $this->loadViewsFrom(__DIR__.'/views', 'pagseguro');
+
+        $this->publishes([
+            __DIR__.'/views/custom' => base_path('resources/views/vendor/pagseguro'),
+        ]);
     }
 }
