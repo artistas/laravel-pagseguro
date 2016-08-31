@@ -1,6 +1,7 @@
 # laravel-pagseguro
 [![StyleCI](https://styleci.io/repos/66557385/shield)](https://styleci.io/repos/66557385)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b049d7be509420c810493c828eb943d)](https://www.codacy.com/app/fernando-bandeira/laravel-pagseguro?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=artistas/laravel-pagseguro&amp;utm_campaign=Badge_Grade)
+[![Documentation Status](https://readthedocs.org/projects/laravel-pagseguro/badge/?version=latest)](http://laravel-pagseguro.readthedocs.io/pt/latest/?badge=latest)
 
 Integração feita para o Laravel 5 com o PagSeguro, Checkout Transparente.
 
