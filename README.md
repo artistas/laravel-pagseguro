@@ -1,37 +1,10 @@
-# laravel-pagseguro
+# Laravel PagSeguro 
+### Checkout Transparente
 [![StyleCI](https://styleci.io/repos/66557385/shield)](https://styleci.io/repos/66557385)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2b049d7be509420c810493c828eb943d)](https://www.codacy.com/app/fernando-bandeira/laravel-pagseguro?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=artistas/laravel-pagseguro&amp;utm_campaign=Badge_Grade)
 
-Integração feita para o Laravel 5 com o PagSeguro, Checkout Transparente.
+Visite a [Wiki](https://github.com/artistas/laravel-pagseguro/wiki) para verificar os detalhes de como utilizar esta Package.
 
-Adicione o pacote às suas dependências:
-```php
-composer require artistas/laravel-pagseguro
-```
-
-Adicione o seguinte service provider:
-```php
-Artistas\PagSeguro\PagSeguroServiceProvider::class
-```
-
-E a seguinte Facade:
-```php
-'PagSeguro' => Artistas\PagSeguro\PagSeguroFacade::class
-```
-
-Publique a configuração
-```php
-php artisan vendor:publish
-```
-
-Adicione os parametros no seu arquivo .env
-```php
-PAGSEGURO_SANDBOX=true
-PAGSEGURO_EMAIL=
-PAGSEGURO_TOKEN=
-```
-
-O resto da documentação virá junto com a próxima versão, que vai disponibilizar um formulário e javascript padrão (próximos dias).
 
 ```php
 use PagSeguro;
