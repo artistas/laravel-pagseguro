@@ -122,8 +122,8 @@ class PagSeguro extends PagSeguroClient
           'senderPhone'    => 'required|digits_between:8,9',
           'senderEmail'    => 'required|email|max:60',
           'senderHash'     => 'required',
-          'senderCNPJ'     => 'required_if:senderCPF,|digits:14',
           'senderCPF'      => 'required_if:senderCNPJ,|digits:11',
+          'senderCNPJ'     => 'required_if:senderCPF,|digits:14',
         ];
 
         $validator = $this->validator->make($formattedSenderInfo, $rules);

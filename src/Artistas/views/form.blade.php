@@ -27,7 +27,7 @@
     Boleto
   </div>
   <div role="tabpanel" class="tab-pane" id="tabOnline_debit">
-    Debito
+    <div id="online_debit"></div>
   </div>
   <div role="tabpanel" class="tab-pane active" id="tabCredit_card">
     <h3>Cartões disponíveis:</h3>

@@ -14,6 +14,7 @@ PagSeguroDirectPayment.getPaymentMethods({
     if(response['error'] === false) {
       paymentMethods = response['paymentMethods'];
       constructCreditCard();
+      constructOnlineDebit();
     }
   },
   error: function(response) {
@@ -23,6 +24,29 @@ PagSeguroDirectPayment.getPaymentMethods({
     //tratamento comum para todas chamadas
   }
 });
+
+function constructOnlineDebit() {
+  var availabelOnlineDebit = [];
+
+  $.each(paymentMethods['ONLINE_DEBIT']['options'], function(index, bank) {
+    if (bank['status'] === 'AVAILABLE') {
+      availabelOnlineDebit.push(bank);
+    }
+  });
+
+  var html;
+
+  $.each(availabelOnlineDebit, function(index, bank) {
+    html = '<label class="radio-inline">';
+
+    html += '<input type="radio" name="bankName" value="'+bank['name']+'">';
+    html += '<img src="https://stc.pagseguro.uol.com.br'+bank['images']['SMALL']['path']+'"> '+bank['displayName'];
+
+    html += '</label>';
+
+    $('#online_debit').append(html);
+  });
+}
 
 function constructCreditCard() {
   var availableCards = [];
@@ -139,7 +163,7 @@ function getCreditCardToken() {
     cardNumber: $("#cartao").val(),
     cvv: $("#cvv").val(),
     expirationMonth: $("#validadeMes").val(),
-    expirationYear: $("#validadeAno").val(),
+    expirationYear: 20+$("#validadeAno").val(),
     brand: brand['name'],
     success: function(response) {
       token = response['card']['token'];
@@ -158,7 +182,12 @@ function getCreditCardToken() {
 $('#btnParcels').click(function(e) {
   e.preventDefault();
   $('#senderHash').val(PagSeguroDirectPayment.getSenderHash());
-  getCreditCardToken();
+  if ($(this).parent().prop('id') == 'presCredit_card') {
+        getCreditCardToken();
+  }
+  else {
+        $('#formPayment').submit();
+  }
 });
 
 function formatReal(mixed) {
