@@ -40,6 +40,7 @@ class PagSeguroClient extends PagSeguroConfig
         }
 
         $result = curl_exec($ch);
+        curl_close($ch);
 
         if ($result === false) {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
@@ -51,7 +52,10 @@ class PagSeguroClient extends PagSeguroConfig
         }
 
         $result = simplexml_load_string($result);
-        curl_close($ch);
+
+        if (isset($result->error) && isset($result->error->message)) {
+          throw new PagSeguroException($result->error->message, 1);
+        }
 
         return $result;
     }

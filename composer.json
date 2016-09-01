@@ -3,6 +3,7 @@
     "description": "Integracao do Laravel 5 com o PagSeguro.",
     "type": "library",
     "license": "MIT",
+    "keywords": ["laravel", "pagseguro", "transparente"],
     "authors": [
         {
             "name": "Fernando Henrique Bandeira",
@@ -16,6 +17,7 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "illuminate/support": "~5"
+        "php": ">=5.5.9",
+        "illuminate/support": "5.1.x|5.2.x|5.3.x",
     }
 }
