@@ -19,7 +19,7 @@ class PagSeguroServiceProvider extends ServiceProvider
             __DIR__.'/config/pagseguro.php' => config_path('pagseguro.php'),
         ]);
 
-        if (! $this->app->routesAreCached()) {
+        if (!$this->app->routesAreCached()) {
             require __DIR__.'/routes.php';
         }
 
