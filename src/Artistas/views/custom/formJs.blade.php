@@ -1,4 +1,5 @@
 <script type="text/javascript">
+/* Parametros */
 var amount=500.00;
 
 function constructOnlineDebit(availabelOnlineDebit) {
@@ -67,21 +68,48 @@ function constructInstallmentsForm() {
 }
 
 function constructCreditCardForm() {
+  $('#brand').val(brand['name']);
   $('.list-group-item.active').removeClass('active');
   $('#list'+brand['name'].toUpperCase()).addClass('active');
   $('#chosenCard').html('<img src="https://stc.pagseguro.uol.com.br'+paymentMethods['CREDIT_CARD']['options'][brand['name'].toUpperCase()]['images']['MEDIUM']['path']+'">');
 }
 
-$('#btnParcels').click(function(e) {
-  e.preventDefault();
+function handleSubmit(e) {
   $('#senderHash').val(PagSeguroDirectPayment.getSenderHash());
-  if ($(this).parent().prop('id') == 'presCredit_card') {
-        getCreditCardToken();
+
+  if ($('.nav-tabs .active').prop('id') == 'presCredit_card') {
+    e.preventDefault();
+    getCreditCardToken(
+      $('input[name=card_number]').val(),
+      $('input[name=cvv]').val(),
+      $('input[name=expiration_month]').val(),
+      20+$('input[name=expiration_year]').val()
+    );
+  } else if ($('.nav-tabs .active').prop('id') == 'presOnline_debit') {
+    if ($('input[name=bankName]:checked').val() === undefined) {
+      e.preventDefault();
+      displayError('Escolha um banco para prosseguir com a opção Débito Online.');
+      $('#formPayment').one('submit', function(e) {
+        handleSubmit(e);
+      });
+    }
   }
-  else {
-        $('#formPayment').submit();
-  }
+}
+
+$('#formPayment').one('submit', function(e) {
+  handleSubmit(e);
 });
+
+function submitCreditCard(submit) {
+  if (submit) {
+    $('#creditCardToken').val(token);
+    $('#formPayment').submit();
+  } else {
+    $('#formPayment').one('submit', function(e) {
+      handleSubmit(e);
+    });
+  }
+}
 
 function formatReal(mixed) {
     mixed = parseFloat(mixed);
@@ -92,6 +120,10 @@ function formatReal(mixed) {
         tmp = tmp.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
 
     return 'R$ '+tmp;
+}
+
+function displayError(error) {
+  $('#errors').removeClass('hidden').html(error);
 }
 
 $('#paymentMethods a').on('shown.bs.tab', function (e) {

@@ -68,13 +68,13 @@
             </div>
           </div>
           <h3>Dados do cartão:</h3>
-          <div class="form-group">
-            <div class="row">
-              <div class="col-sm-10 col-xs-8">
+          <div class="row">
+            <div class="col-sm-10 col-xs-8">
+              <div class="form-group">
                 <input type="text" placeholder="Número do cartão" class="form-control" name="card_number">
               </div>
-              <div class="col-sm-2 col-xs-4" id="chosenCard">
-              </div>
+            </div>
+            <div class="col-sm-2 col-xs-4" id="chosenCard">
             </div>
           </div>
           <div class="row">
@@ -106,11 +106,14 @@
     </div>
   </div>
 
-  <input type="hidden" name="paymentMethod" id="paymentMethod">
+  <input type="hidden" name="paymentMethod" id="paymentMethod" value="creditCard">
   <input type="hidden" name="creditCardToken" id="creditCardToken">
   <input type="hidden" name="senderHash" id="senderHash">
 
   {{ csrf_field() }}
+
+  <div class="alert alert-danger hidden" role="alert" id="errors">
+  </div>
 
   <button type="submit" class="btn btn-success pull-right" id="btnParcels">Finalizar Compra</button>
 </form>
