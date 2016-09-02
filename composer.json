@@ -1,6 +1,6 @@
 {
     "name": "artistas/laravel-pagseguro",
-    "description": "Integracao do Laravel 5 com o PagSeguro.",
+    "description": "PagSeguro Checkout Transparente no Laravel 5.1, 5.2, 5.3",
     "type": "library",
     "license": "MIT",
     "keywords": ["laravel", "pagseguro", "transparente"],
