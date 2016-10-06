@@ -483,7 +483,7 @@ class PagSeguro extends PagSeguroClient
           'creditCardToken'                        => 'required_if:paymentMethod,creditCard',
           'installmentQuantity'                    => 'required_if:paymentMethod,creditCard|integer|between:1,18',
           'installmentValue'                       => 'required_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
-          'noInterestInstallmentQuantity'          => 'integer|between:1,3',
+          'noInterestInstallmentQuantity'          => 'integer|between:1,18',
         ];
 
         $validator = $this->validator->make($formattedPaymentSettings, $rules);
