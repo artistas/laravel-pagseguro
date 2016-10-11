@@ -72,9 +72,9 @@ class PagSeguroClient extends PagSeguroConfig
           'token' => $this->token,
         ], $this->url['session']);
 
-        $this->session->put('pagseguro.session', $result->id);
+        $this->session->put('pagseguro.session', (string) $result->id);
 
-        return $result->id;
+        return (string) $result->id;
     }
 
     /**
