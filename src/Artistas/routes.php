@@ -5,5 +5,5 @@ Route::get('/pagseguro/session', function () {
 });
 
 Route::get('/pagseguro/session/reset', function () {
-    return \PagSeguro::getSession(true);
+    return \PagSeguro::startSession();
 });
