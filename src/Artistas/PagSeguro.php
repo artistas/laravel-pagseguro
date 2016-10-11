@@ -427,10 +427,10 @@ class PagSeguro extends PagSeguroClient
      */
     public function send(array $paymentSettings)
     {
-        if($paymentSettings['paymentMethod'] === 'creditCard' && empty($this->billingAddress)) {
-          $this->setBillingAddress([]);
+        if ($paymentSettings['paymentMethod'] === 'creditCard' && empty($this->billingAddress)) {
+            $this->setBillingAddress([]);
         }
-        
+
         @$formattedPaymentSettings = [
           'paymentMethod'                 => $paymentSettings['paymentMethod'],
           'bankName'                      => $paymentSettings['bankName'],
