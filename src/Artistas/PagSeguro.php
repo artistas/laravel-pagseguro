@@ -458,13 +458,13 @@ class PagSeguro extends PagSeguroClient
         })->toArray();
 
         $config = [
-          'email'         => $this->email,
-          'token'         => $this->token,
-          'paymentMode'   => 'default',
-          'receiverEmail' => $this->email,
-          'currency'      => 'BRL',
-          'reference'     => $this->reference,
-          'extraAmount'   => $this->extraAmount,
+          'email'           => $this->email,
+          'token'           => $this->token,
+          'paymentMode'     => 'default',
+          'receiverEmail'   => $this->email,
+          'currency'        => 'BRL',
+          'reference'       => $this->reference,
+          'extraAmount'     => $this->extraAmount,
           'notificationURL' => $this->notificationURL,
         ];
 
@@ -511,12 +511,13 @@ class PagSeguro extends PagSeguroClient
         }
     }
 
-    public function notification($notificationCode) {
-      $result = $this->sendTransaction([
+    public function notification($notificationCode)
+    {
+        $result = $this->sendTransaction([
         'email' => $this->email,
         'token' => $this->token,
       ], $this->url['notifications'].$notificationCode, 'GET');
-      
-      return $result;
+
+        return $result;
     }
 }

@@ -59,7 +59,7 @@ class PagSeguroConfig
     protected $email;
 
     /**
-     * Url de Notificação para o PagSeguro
+     * Url de Notificação para o PagSeguro.
      *
      * @var string
      */
