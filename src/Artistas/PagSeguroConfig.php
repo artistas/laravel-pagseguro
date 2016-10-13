@@ -59,6 +59,13 @@ class PagSeguroConfig
     protected $email;
 
     /**
+     * Url de Notificação para o PagSeguro
+     *
+     * @var string
+     */
+    protected $notificationURL;
+
+    /**
      * Armazena as url's para conexão com o PagSeguro.
      *
      * @var array
@@ -88,6 +95,7 @@ class PagSeguroConfig
         $this->sandbox = $this->config->get('pagseguro.sandbox');
         $this->token = $this->config->get('pagseguro.token');
         $this->email = $this->config->get('pagseguro.email');
+        $this->notificationURL = $this->config->get('pagseguro.notificationURL');
     }
 
     /**

@@ -14,7 +14,7 @@ class PagSeguroClient extends PagSeguroConfig
      *
      * @return bool|mixed|\SimpleXMLElement
      */
-    public function sendTransaction(array $parameters, $url = null)
+    public function sendTransaction(array $parameters, $url = null, $method = 'POST')
     {
         if ($url === null) {
             $url = $this->url['transactions'];
@@ -26,12 +26,20 @@ class PagSeguroClient extends PagSeguroConfig
         }
         $data = rtrim($data, '&');
 
+        if ($method === 'GET') {
+            $url .= '?'.$data;
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['application/x-www-form-urlencoded; charset=ISO-8859-1']);
-        curl_setopt($ch, CURLOPT_POST, count($parameters));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        if($method === 'POST') {
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        }
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 
         if ($this->sandbox) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -49,7 +57,11 @@ class PagSeguroClient extends PagSeguroConfig
         if ($result === 'Unauthorized' || $result === 'Forbidden') {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
             throw new PagSeguroException($result.': Não foi possível estabelecer uma conexão com o PagSeguro.', 1);
-        }
+        } 
+        if ($result === 'Not Found') {
+            $this->log->error('Notificação/Transação não encontrada', ['Retorno:' => $result]);
+            throw new PagSeguroException($result.': Não foi possível encontrar a notificação/transação no PagSeguro.', 1);
+        } 
 
         $result = simplexml_load_string($result);
 

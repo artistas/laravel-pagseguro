@@ -7,3 +7,4 @@ Route::get('/pagseguro/session', function () {
 Route::get('/pagseguro/session/reset', function () {
     return \PagSeguro::startSession();
 });
+

@@ -465,6 +465,7 @@ class PagSeguro extends PagSeguroClient
           'currency'      => 'BRL',
           'reference'     => $this->reference,
           'extraAmount'   => $this->extraAmount,
+          'notificationURL' => $this->notificationURL,
         ];
 
         $data = array_filter(array_merge($config, $formattedPaymentSettings, $this->senderInfo, $this->shippingAddress, $items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
@@ -508,5 +509,14 @@ class PagSeguro extends PagSeguroClient
         if (!empty($this->shippingInfo)) {
             $this->validateShippingInfo($this->shippingInfo);
         }
+    }
+
+    public function notification($notificationCode) {
+      $result = $this->sendTransaction([
+        'email' => $this->email,
+        'token' => $this->token,
+      ], $this->url['notifications'].$notificationCode, 'GET');
+      
+      return $result;
     }
 }
