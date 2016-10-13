@@ -513,11 +513,9 @@ class PagSeguro extends PagSeguroClient
 
     public function notification($notificationCode)
     {
-        $result = $this->sendTransaction([
+        return $this->sendTransaction([
         'email' => $this->email,
         'token' => $this->token,
       ], $this->url['notifications'].$notificationCode, 'GET');
-
-        return $result;
     }
 }
