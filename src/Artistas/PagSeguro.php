@@ -301,9 +301,6 @@ class PagSeguro extends PagSeguroClient
      */
     private function validateItems($items)
     {
-        $laravel = app();
-        $version = $laravel::VERSION;
-
         $rules = [];
         for ($cont = 1; $cont < $this->itemsCount; $cont++) {
             $rules = array_merge($rules, [
