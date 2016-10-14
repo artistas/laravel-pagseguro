@@ -5,32 +5,40 @@ namespace Artistas\PagSeguro;
 class PagSeguroClient extends PagSeguroConfig
 {
     /**
-     * Executa as transações curl.
+     * Envia a transação.
      *
      * @param array  $parameters
      * @param string $url        Padrão $this->url['transactions']
+     * @param bool $post
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
      *
-     * @return bool|mixed|\SimpleXMLElement
+     * @return \SimpleXMLElement
      */
-    public function sendTransaction(array $parameters, $url = null, $post = true)
+    protected function sendTransaction(array $parameters, $url = null, $post = true)
     {
         if ($url === null) {
             $url = $this->url['transactions'];
         }
 
-        $parameters = formatParameters($parameters);
+        $parameters = $this->formatParameters($parameters);
 
         if (!$post) {
             $url .= '?'.$parameters;
             $parameters = null;
         }
 
-        return executeCurl($parameters, $url);
+        return $this->executeCurl($parameters, $url);
     }
 
-    public function formatParameters($parameters)
+    /**
+     * Formata os parametros
+     *
+     * @param array  $parameters
+     *
+     * @return string
+     */
+    private function formatParameters($parameters)
     {
         $data = '';
 
@@ -41,7 +49,15 @@ class PagSeguroClient extends PagSeguroConfig
         return rtrim($data, '&');
     }
 
-    public function executeCurl($parameters, $url)
+    /**
+     * Executa o Curl.
+     *
+     * @param array  $parameters
+     * @param string $url
+     *
+     * @return \SimpleXMLElement
+     */
+    private function executeCurl($parameters, $url)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -58,10 +74,20 @@ class PagSeguroClient extends PagSeguroConfig
         $result = curl_exec($curl);
         curl_close($curl);
 
-        return formatResult($result, $curl);
+        return $this->formatResult($result, $curl);
     }
 
-    public function formatResult($result, $curl)
+    /**
+     * Formata o resultado e trata erros.
+     *
+     * @param array  $result
+     * @param object $curl
+     *
+     * @throws \Artistas\PagSeguro\PagSeguroException
+     *
+     * @return \SimpleXMLElement
+     */
+    private function formatResult($result, $curl)
     {
         if ($result === false) {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
@@ -91,7 +117,7 @@ class PagSeguroClient extends PagSeguroConfig
      * @return string
      */
     public function startSession()
-    {
+    {        
         $result = $this->sendTransaction([
           'email' => $this->email,
           'token' => $this->token,

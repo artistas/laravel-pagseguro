@@ -76,6 +76,7 @@ class PagSeguroConfig
      * @param $session
      * @param $config
      * @param $log
+     * @param $validator
      */
     public function __construct(Session $session, Config $config, Log $log, Validator $validator)
     {
@@ -103,16 +104,15 @@ class PagSeguroConfig
      */
     private function setUrl()
     {
-        $sandbox = '';
-        if ($this->sandbox) {
-            $sandbox = 'sandbox.';
-        }
+        $sandbox = $this->sandbox ? 'sandbox.' : '';
+
         $url = [
             'session'       => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/sessions',
             'transactions'  => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/transactions',
             'notifications' => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v3/transactions/notifications/',
             'javascript'    => 'https://stc.'.$sandbox.'pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js',
         ];
+
         $this->url = $url;
     }
 
@@ -122,5 +122,37 @@ class PagSeguroConfig
     public function getUrl()
     {
         return $this->url;
+    }
+
+    protected function checkValue($value, $key = null) {
+        if ($value !== null) {
+            if ($key !== null) {
+                return isset($value[$key]) ? $value[$key] : null;
+            }
+
+            return $value;
+        }        
+    
+        return null;
+    }
+
+    protected function sanitize($value, $key = null, $regex = '/\s+/', $replace = ' ') {
+        $value = $this->checkValue($value, $key);
+
+        return $value === null ? $value : trim(preg_replace($regex, $replace, $value));
+    }
+
+    protected function sanitizeNumber($value, $key = null) {
+        return $this->sanitize($value, $key, '/\D/', '');
+    }
+
+    protected function sanitizeMoney($value, $key = null) {
+        $value = $this->checkValue($value, $key);
+
+        return $value === null ? $value : number_format($value, 2, '.', '');  
+    }
+
+    protected function fallbackValue($value, $fValue, $fKey) {
+        return $value !== null ? $value : $this->checkValue($fValue, $fKey);
     }
 }
