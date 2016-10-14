@@ -15,22 +15,23 @@ class PagSeguroClient extends PagSeguroConfig
      * @return bool|mixed|\SimpleXMLElement
      */
     public function sendTransaction(array $parameters, $url = null, $post = true)
-    {        
+    {
         if ($url === null) {
             $url = $this->url['transactions'];
         }
 
-        $parameters = formatParameters($parameters);        
+        $parameters = formatParameters($parameters);
 
         if (!$post) {
             $url .= '?'.$parameters;
             $parameters = null;
-        }        
+        }
 
         return executeCurl($parameters, $url);
     }
 
-    public function formatParameters($parameters) {
+    public function formatParameters($parameters)
+    {
         $data = '';
 
         foreach ($parameters as $key => $value) {
@@ -40,7 +41,8 @@ class PagSeguroClient extends PagSeguroConfig
         return rtrim($data, '&');
     }
 
-    public function executeCurl($parameters, $url) {
+    public function executeCurl($parameters, $url)
+    {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, ['application/x-www-form-urlencoded; charset=ISO-8859-1']);
@@ -59,7 +61,8 @@ class PagSeguroClient extends PagSeguroConfig
         return formatResult($result, $curl);
     }
 
-    public function formatResult($result, $curl) {
+    public function formatResult($result, $curl)
+    {
         if ($result === false) {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
             throw new PagSeguroException(curl_error($curl), curl_errno($curl));
