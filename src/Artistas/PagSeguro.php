@@ -40,6 +40,13 @@ class PagSeguro extends PagSeguroClient
     private $items = [];
 
     /**
+     * Número de Itens da compra.
+     *
+     * @var integer
+     */
+    private $itemsCount = 0;
+
+    /**
      * Valor adicional para a compra.
      *
      * @var float
@@ -267,18 +274,22 @@ class PagSeguro extends PagSeguroClient
      */
     public function setItems(array $items)
     {
-        $cont = 1;
+        $cont = 0;
+        $fItems = [];
         foreach ($items as $item) {
-            $fItems['items'][$cont++] = [
-              'itemId'          => $this->sanitize($item, 'itemId'),
-              'itemDescription' => $this->sanitize($item, 'itemDescription'),
-              'itemAmount'      => $this->sanitizeMoney($item, 'itemAmount'),
-              'itemQuantity'    => $this->sanitizeNumber($item, 'itemQuantity'),
-            ];
-        }
+            $cont++;
 
+            $fItems = array_merge($fItems, [
+              'itemId'.$cont          => $this->sanitize($item, 'itemId'),
+              'itemDescription'.$cont => $this->sanitize($item, 'itemDescription'),
+              'itemAmount'.$cont      => $this->sanitizeMoney($item, 'itemAmount'),
+              'itemQuantity'.$cont    => $this->sanitizeNumber($item, 'itemQuantity'),
+            ]);            
+        }        
+
+        $this->itemsCount = $cont;
         $this->validateItems($fItems);
-        $this->items = $fItems;
+        $this->items = $fItems;        
 
         return $this;
     }
@@ -293,23 +304,14 @@ class PagSeguro extends PagSeguroClient
         $laravel = app();
         $version = $laravel::VERSION;
 
-        if (substr($version, 0, 3) >= '5.2') {
-            $rules = [
-              'items.*.itemId'              => 'required|max:100',
-              'items.*.itemDescription'     => 'required|max:100',
-              'items.*.itemAmount'          => 'required|numeric|between:0.00,9999999.00',
-              'items.*.itemQuantity'        => 'required|integer|between:1,999',
-            ];
-        } else {
-            $rules = [];
-            foreach ($items['items'] as $key => $item) {
-                $rules = array_merge($rules, [
-                  'items.'.$key.'.itemId'              => 'required|max:100',
-                  'items.'.$key.'.itemDescription'     => 'required|max:100',
-                  'items.'.$key.'.itemAmount'          => 'required|numeric|between:0.00,9999999.00',
-                  'items.'.$key.'.itemQuantity'        => 'required|integer|between:1,999',
-                ]);
-            }
+        $rules = [];
+        for($cont = 1; $cont < $this->itemsCount; $cont++) {
+            $rules = array_merge($rules, [
+              'itemId'.$cont          => 'required|max:100',
+              'itemDescription'.$cont => 'required|max:100',
+              'itemAmount'.$cont      => 'required|numeric|between:0.00,9999999.00',
+              'itemQuantity'.$cont    => 'required|integer|between:1,999',
+            ]);
         }
 
         $this->validate($items, $rules);
