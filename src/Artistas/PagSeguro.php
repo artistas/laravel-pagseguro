@@ -107,8 +107,6 @@ class PagSeguro extends PagSeguroClient
      * Valida os dados contidos na array de informações do comprador.
      *
      * @param array $senderInfo
-     *
-     * @throws \Artistas\PagSeguro\PagSeguroException
      */
     private function validateSenderInfo(array $senderInfo)
     {
@@ -122,10 +120,7 @@ class PagSeguro extends PagSeguroClient
           'senderCNPJ'     => 'required_without:senderCPF|digits:14',
         ];
 
-        $validator = $this->validator->make($senderInfo, $rules);
-        if ($validator->fails()) {
-            throw new PagSeguroException($validator->messages()->first());
-        }
+        $this->validate($senderInfo, $rules);
     }
 
     /**
@@ -137,12 +132,12 @@ class PagSeguro extends PagSeguroClient
      */
     public function setCreditCardHolder(array $creditCardHolder)
     {
-        $creditCardHolderPhone = $this->sanitizeNumber($creditCardHolder, 'creditCardHolderPhone');        
+        $cardHolderPhone = $this->sanitizeNumber($creditCardHolder, 'creditCardHolderPhone');        
 
         $creditCardHolder = [
           'creditCardHolderName'          => $this->fallbackValue($this->sanitize($creditCardHolder, 'creditCardHolderName'), $this->senderInfo, 'senderName'),
-          'creditCardHolderAreaCode'      => $this->fallbackValue(substr($creditCardHolderPhone, 0, 2), $this->senderInfo, 'senderAreaCode'),
-          'creditCardHolderPhone'         => $this->fallbackValue(substr($creditCardHolderPhone, 2), $this->senderInfo, 'senderPhone'),
+          'creditCardHolderAreaCode'      => $this->fallbackValue(substr($cardHolderPhone, 0, 2), $this->senderInfo, 'senderAreaCode'),
+          'creditCardHolderPhone'         => $this->fallbackValue(substr($cardHolderPhone, 2), $this->senderInfo, 'senderPhone'),
           'creditCardHolderCPF'           => $this->fallbackValue($this->sanitizeNumber($creditCardHolder, 'creditCardHolderCPF'), $this->senderInfo, 'senderCPF'),
           'creditCardHolderBirthDate'     => $this->sanitize($creditCardHolder, 'creditCardHolderBirthDate'),
         ];
@@ -157,8 +152,6 @@ class PagSeguro extends PagSeguroClient
      * Valida os dados contidos na array de informações do portador do cartão de crédito.
      *
      * @param array $creditCardHolder
-     *
-     * @throws \Artistas\PagSeguro\PagSeguroException
      */
     private function validateCreditCardHolder(array $creditCardHolder)
     {
@@ -170,10 +163,7 @@ class PagSeguro extends PagSeguroClient
           'creditCardHolderBirthDate'    => 'required',
         ];
 
-        $validator = $this->validator->make($creditCardHolder, $rules);
-        if ($validator->fails()) {
-            throw new PagSeguroException($validator->messages()->first());
-        }
+        $this->validate($creditCardHolder, $rules);
     }
 
     /**
@@ -206,8 +196,6 @@ class PagSeguro extends PagSeguroClient
      * Valida os dados contidos na array de endereço do comprador.
      *
      * @param array $shippingAddress
-     *
-     * @throws \Artistas\PagSeguro\PagSeguroException
      */
     private function validateShippingAddress(array $shippingAddress)
     {
@@ -221,11 +209,7 @@ class PagSeguro extends PagSeguroClient
           'shippingAddressState'      => 'required|min:2|max:2',
         ];
 
-        $validator = $this->validator->make($shippingAddress, $rules);
-
-        if ($validator->fails()) {
-            throw new PagSeguroException($validator->messages()->first());
-        }
+        $this->validate($shippingAddress, $rules);
     }
 
     /**
@@ -258,8 +242,6 @@ class PagSeguro extends PagSeguroClient
      * Valida os dados contidos na array de endereço do comprador.
      *
      * @param array $billingAddress
-     *
-     * @throws \Artistas\PagSeguro\PagSeguroException
      */
     private function validateBillingAddress(array $billingAddress)
     {
@@ -273,11 +255,7 @@ class PagSeguro extends PagSeguroClient
           'billingAddressState'      => 'required|min:2|max:2',
         ];
 
-        $validator = $this->validator->make($billingAddress, $rules);
-
-        if ($validator->fails()) {
-            throw new PagSeguroException($validator->messages()->first());
-        }
+        $this->validate($billingAddress, $rules);
     }
 
     /**
@@ -289,9 +267,9 @@ class PagSeguro extends PagSeguroClient
      */
     public function setItems(array $items)
     {
-        $i = 1;
+        $cont = 1;
         foreach ($items as $item) {
-            $fItems['items'][$i++] = [
+            $fItems['items'][$cont++] = [
               'itemId'          => $this->sanitize($item, 'itemId'),
               'itemDescription' => $this->sanitize($item, 'itemDescription'),
               'itemAmount'      => $this->sanitizeMoney($item, 'itemAmount'),
@@ -309,8 +287,6 @@ class PagSeguro extends PagSeguroClient
      * Valida os dados contidos na array de itens.
      *
      * @param array $items
-     *
-     * @throws \Artistas\PagSeguro\PagSeguroException
      */
     private function validateItems($items)
     {
@@ -336,11 +312,7 @@ class PagSeguro extends PagSeguroClient
             }
         }
 
-        $validator = $this->validator->make($items, $rules);
-
-        if ($validator->fails()) {
-            throw new PagSeguroException($validator->messages()->first());
-        }
+        $this->validate($items, $rules);
     }
 
     /**
@@ -395,8 +367,6 @@ class PagSeguro extends PagSeguroClient
      * Valida os dados contidos no array de frete.
      *
      * @param array $shippingInfo
-     *
-     * @throws \Artistas\PagSeguro\PagSeguroException
      */
     private function validateShippingInfo(array $shippingInfo)
     {
@@ -405,11 +375,7 @@ class PagSeguro extends PagSeguroClient
           'shippingCost'          => 'required|numeric|between:0.00,9999999.00',
         ];
 
-        $validator = $this->validator->make($shippingInfo, $rules);
-
-        if ($validator->fails()) {
-            throw new PagSeguroException($validator->messages()->first());
-        }
+        $this->validate($shippingInfo, $rules);
     }
 
     /**
@@ -436,21 +402,6 @@ class PagSeguro extends PagSeguroClient
 
         $this->validatePaymentSettings($paymentSettings);
 
-        $items = collect($this->items['items'])->flatMap(function ($values, $parentKey) {
-            $laravel = app();
-            $version = $laravel::VERSION;
-
-            if (substr($version, 0, 3) >= '5.3') {
-                return collect($values)->mapWithKeys(function ($value, $key) use ($parentKey) {
-                    return [$key.$parentKey => $value];
-                });
-            }
-
-            return collect($values)->flatMap(function ($value, $key) use ($parentKey) {
-                return [$key.$parentKey => $value];
-            });
-        })->toArray();
-
         $config = [
           'email'           => $this->email,
           'token'           => $this->token,
@@ -462,7 +413,7 @@ class PagSeguro extends PagSeguroClient
           'notificationURL' => $this->notificationURL,
         ];
 
-        $data = array_filter(array_merge($config, $paymentSettings, $this->senderInfo, $this->shippingAddress, $items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
+        $data = array_filter(array_merge($config, $paymentSettings, $this->senderInfo, $this->shippingAddress, $this->items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
 
         return $this->sendTransaction($data);
     }
@@ -470,11 +421,10 @@ class PagSeguro extends PagSeguroClient
     /**
      * Valida os dados de pagamento.
      *
-     * @param array $formattedPaymentSettings
+     * @param array $paymentSettings          
      *
-     * @throws \Artistas\PagSeguro\PagSeguroException
      */
-    private function validatePaymentSettings($formattedPaymentSettings)
+    private function validatePaymentSettings(array $paymentSettings)
     {
         $rules = [
           'paymentMethod'                          => 'required',
@@ -485,17 +435,13 @@ class PagSeguro extends PagSeguroClient
           'noInterestInstallmentQuantity'          => 'integer|between:1,18',
         ];
 
-        $validator = $this->validator->make($formattedPaymentSettings, $rules);
-
-        if ($validator->fails()) {
-            throw new PagSeguroException($validator->messages()->first());
-        }
+        $this->validate($paymentSettings, $rules);
 
         $this->validateSenderInfo($this->senderInfo);
         $this->validateShippingAddress($this->shippingAddress);
         $this->validateItems($this->items);
 
-        if ($formattedPaymentSettings['paymentMethod'] === 'creditCard') {
+        if ($paymentSettings['paymentMethod'] === 'creditCard') {
             $this->validateCreditCardHolder($this->creditCardHolder);
             $this->validateBillingAddress($this->billingAddress);
         }
@@ -505,6 +451,29 @@ class PagSeguro extends PagSeguroClient
         }
     }
 
+    /**
+     * Valida os dados.
+     *
+     * @param array $data
+     * @param array $rules
+     *
+     * @throws \Artistas\PagSeguro\PagSeguroException
+     */
+    private function validate($data, $rules) {
+      $validator = $this->validator->make($data, $rules);
+
+      if ($validator->fails()) {
+          throw new PagSeguroException($validator->messages()->first());
+      }
+    }
+
+    /**
+     * Retorna a transação da notoficação.
+     *
+     * @param string $notificationCode
+     *
+     * @return \SimpleXMLElement
+     */
     public function notification($notificationCode)
     {
         return $this->sendTransaction([

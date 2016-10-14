@@ -137,4 +137,79 @@ class PagSeguroClient extends PagSeguroConfig
     {
         return $this->session->has('pagseguro.session') ? $this->session->get('pagseguro.session') : $this->startSession();
     }
+
+    /**
+     * Verifica a existência de um valor.
+     *
+     * @param mixed $value
+     * @param string $key
+     *
+     * @return null|mixed
+     */
+    protected function checkValue($value, $key = null) {
+        if ($value !== null) {
+            if ($key !== null) {
+                return isset($value[$key]) ? $value[$key] : null;
+            }
+
+            return $value;
+        }        
+    
+        return null;
+    }
+
+    /**
+     * Verifica a existência de um valor.
+     *
+     * @param mixed $value
+     * @param string $key
+     * @param string $regex
+     * @param string $replace
+     *
+     * @return null|mixed
+     */
+    protected function sanitize($value, $key = null, $regex = '/\s+/', $replace = ' ') {
+        $value = $this->checkValue($value, $key);
+
+        return $value === null ? $value : trim(preg_replace($regex, $replace, $value));
+    }
+
+    /**
+     * Verifica a existência de um valor.
+     *
+     * @param mixed $value
+     * @param string $key
+     *
+     * @return null|mixed
+     */
+    protected function sanitizeNumber($value, $key = null) {
+        return $this->sanitize($value, $key, '/\D/', '');
+    }
+
+    /**
+     * Verifica a existência de um valor.
+     *
+     * @param mixed $value
+     * @param string $key
+     *
+     * @return null|number
+     */
+    protected function sanitizeMoney($value, $key = null) {
+        $value = $this->checkValue($value, $key);
+
+        return $value === null ? $value : number_format($value, 2, '.', '');  
+    }
+
+    /**
+     * Verifica a existência de um valor.
+     *
+     * @param mixed $value
+     * @param mixed $fValue
+     * @param string $fKey
+     *
+     * @return null|mixed
+     */
+    protected function fallbackValue($value, $fValue, $fKey) {
+        return $value !== null ? $value : $this->checkValue($fValue, $fKey);
+    }
 }
