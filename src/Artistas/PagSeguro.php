@@ -137,7 +137,7 @@ class PagSeguro extends PagSeguroClient
      */
     public function setCreditCardHolder(array $creditCardHolder)
     {
-        $creditCardHolderPhone = $this->sanitizeNumber($creditCardHolder, 'creditCardHolderPhone');        
+        $creditCardHolderPhone = $this->sanitizeNumber($creditCardHolder, 'creditCardHolderPhone');
 
         $creditCardHolder = [
           'creditCardHolderName'          => $this->fallbackValue($this->sanitize($creditCardHolder, 'creditCardHolderName'), $this->senderInfo, 'senderName'),
@@ -236,7 +236,7 @@ class PagSeguro extends PagSeguroClient
      * @return $this
      */
     public function setBillingAddress(array $billingAddress)
-    {                         
+    {
         $billingAddress = [
           'billingAddressStreet'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressStreet'), $this->shippingAddress, 'shippingAddressStreet'),
           'billingAddressNumber'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressNumber'), $this->shippingAddress, 'shippingAddressNumber'),

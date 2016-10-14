@@ -124,35 +124,38 @@ class PagSeguroConfig
         return $this->url;
     }
 
-    protected function checkValue($value, $key = null) {
+    protected function checkValue($value, $key = null)
+    {
         if ($value !== null) {
             if ($key !== null) {
                 return isset($value[$key]) ? $value[$key] : null;
             }
 
             return $value;
-        }        
-    
-        return null;
+        }
     }
 
-    protected function sanitize($value, $key = null, $regex = '/\s+/', $replace = ' ') {
+    protected function sanitize($value, $key = null, $regex = '/\s+/', $replace = ' ')
+    {
         $value = $this->checkValue($value, $key);
 
         return $value === null ? $value : trim(preg_replace($regex, $replace, $value));
     }
 
-    protected function sanitizeNumber($value, $key = null) {
+    protected function sanitizeNumber($value, $key = null)
+    {
         return $this->sanitize($value, $key, '/\D/', '');
     }
 
-    protected function sanitizeMoney($value, $key = null) {
+    protected function sanitizeMoney($value, $key = null)
+    {
         $value = $this->checkValue($value, $key);
 
-        return $value === null ? $value : number_format($value, 2, '.', '');  
+        return $value === null ? $value : number_format($value, 2, '.', '');
     }
 
-    protected function fallbackValue($value, $fValue, $fKey) {
+    protected function fallbackValue($value, $fValue, $fKey)
+    {
         return $value !== null ? $value : $this->checkValue($fValue, $fKey);
     }
 }
