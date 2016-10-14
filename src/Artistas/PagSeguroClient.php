@@ -14,45 +14,55 @@ class PagSeguroClient extends PagSeguroConfig
      *
      * @return bool|mixed|\SimpleXMLElement
      */
-    public function sendTransaction(array $parameters, $url = null, $method = 'POST')
-    {
+    public function sendTransaction(array $parameters, $url = null, $post = true)
+    {        
         if ($url === null) {
             $url = $this->url['transactions'];
         }
 
+        $parameters = formatParameters($parameters);        
+
+        if (!$post) {
+            $url .= '?'.$parameters;
+            $parameters = null;
+        }        
+
+        return executeCurl($parameters, $url);
+    }
+
+    public function formatParameters($parameters) {
         $data = '';
+
         foreach ($parameters as $key => $value) {
             $data .= $key.'='.$value.'&';
         }
-        $data = rtrim($data, '&');
 
-        if ($method === 'GET') {
-            $url .= '?'.$data;
+        return rtrim($data, '&');
+    }
+
+    public function executeCurl($parameters, $url) {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['application/x-www-form-urlencoded; charset=ISO-8859-1']);
+
+        if ($parameters !== null) {
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters);
         }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['application/x-www-form-urlencoded; charset=ISO-8859-1']);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, !$this->sandbox);
 
-        if ($method === 'POST') {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        }
+        $result = curl_exec($curl);
+        curl_close($curl);
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        return formatResult($result, $curl);
+    }
 
-        if ($this->sandbox) {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        } else {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        }
-
-        $result = curl_exec($ch);
-        curl_close($ch);
-
+    public function formatResult($result, $curl) {
         if ($result === false) {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
-            throw new PagSeguroException(curl_error($ch), curl_errno($ch));
+            throw new PagSeguroException(curl_error($curl), curl_errno($curl));
         }
         if ($result === 'Unauthorized' || $result === 'Forbidden') {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
@@ -96,10 +106,6 @@ class PagSeguroClient extends PagSeguroConfig
      */
     public function getSession()
     {
-        if ($this->session->has('pagseguro.session')) {
-            return $this->session->get('pagseguro.session');
-        } else {
-            return $this->startSession();
-        }
+        return $this->session->has('pagseguro.session') ? $this->session->get('pagseguro.session') : $this->startSession();
     }
 }
