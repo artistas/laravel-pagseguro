@@ -42,7 +42,7 @@ class PagSeguro extends PagSeguroClient
     /**
      * Número de Itens da compra.
      *
-     * @var integer
+     * @var int
      */
     private $itemsCount = 0;
 
@@ -284,12 +284,12 @@ class PagSeguro extends PagSeguroClient
               'itemDescription'.$cont => $this->sanitize($item, 'itemDescription'),
               'itemAmount'.$cont      => $this->sanitizeMoney($item, 'itemAmount'),
               'itemQuantity'.$cont    => $this->sanitizeNumber($item, 'itemQuantity'),
-            ]);            
-        }        
+            ]);
+        }
 
         $this->itemsCount = $cont;
         $this->validateItems($fItems);
-        $this->items = $fItems;        
+        $this->items = $fItems;
 
         return $this;
     }
@@ -305,7 +305,7 @@ class PagSeguro extends PagSeguroClient
         $version = $laravel::VERSION;
 
         $rules = [];
-        for($cont = 1; $cont < $this->itemsCount; $cont++) {
+        for ($cont = 1; $cont < $this->itemsCount; $cont++) {
             $rules = array_merge($rules, [
               'itemId'.$cont          => 'required|max:100',
               'itemDescription'.$cont => 'required|max:100',
