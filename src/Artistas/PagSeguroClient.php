@@ -9,7 +9,7 @@ class PagSeguroClient extends PagSeguroConfig
      *
      * @param array  $parameters
      * @param string $url        Padrão $this->url['transactions']
-     * @param bool $post
+     * @param bool   $post
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
      *
@@ -32,9 +32,9 @@ class PagSeguroClient extends PagSeguroConfig
     }
 
     /**
-     * Formata os parametros
+     * Formata os parametros.
      *
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return string
      */
@@ -117,7 +117,7 @@ class PagSeguroClient extends PagSeguroConfig
      * @return string
      */
     public function startSession()
-    {        
+    {
         $result = $this->sendTransaction([
           'email' => $this->email,
           'token' => $this->token,

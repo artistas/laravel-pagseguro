@@ -220,7 +220,7 @@ class PagSeguro extends PagSeguroClient
      * @return $this
      */
     public function setBillingAddress(array $billingAddress)
-    {                         
+    {
         $billingAddress = [
           'billingAddressStreet'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressStreet'), $this->shippingAddress, 'shippingAddressStreet'),
           'billingAddressNumber'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressNumber'), $this->shippingAddress, 'shippingAddressNumber'),

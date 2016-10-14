@@ -122,5 +122,5 @@ class PagSeguroConfig
     public function getUrl()
     {
         return $this->url;
-    }    
+    }
 }
