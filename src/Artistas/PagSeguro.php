@@ -132,7 +132,7 @@ class PagSeguro extends PagSeguroClient
      */
     public function setCreditCardHolder(array $creditCardHolder)
     {
-        $cardHolderPhone = $this->sanitizeNumber($creditCardHolder, 'creditCardHolderPhone');        
+        $cardHolderPhone = $this->sanitizeNumber($creditCardHolder, 'creditCardHolderPhone');
 
         $creditCardHolder = [
           'creditCardHolderName'          => $this->fallbackValue($this->sanitize($creditCardHolder, 'creditCardHolderName'), $this->senderInfo, 'senderName'),
@@ -421,8 +421,7 @@ class PagSeguro extends PagSeguroClient
     /**
      * Valida os dados de pagamento.
      *
-     * @param array $paymentSettings          
-     *
+     * @param array $paymentSettings
      */
     private function validatePaymentSettings(array $paymentSettings)
     {
@@ -459,12 +458,13 @@ class PagSeguro extends PagSeguroClient
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
      */
-    private function validate($data, $rules) {
-      $validator = $this->validator->make($data, $rules);
+    private function validate($data, $rules)
+    {
+        $validator = $this->validator->make($data, $rules);
 
-      if ($validator->fails()) {
-          throw new PagSeguroException($validator->messages()->first());
-      }
+        if ($validator->fails()) {
+            throw new PagSeguroException($validator->messages()->first());
+        }
     }
 
     /**
