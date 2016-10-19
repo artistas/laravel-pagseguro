@@ -71,9 +71,9 @@ class PagSeguroClient extends PagSeguroConfig
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, !$this->sandbox);
 
-        $result = curl_exec($curl);        
-        $result = $this->formatResult($result, $curl);   
-        curl_close($curl);     
+        $result = curl_exec($curl);
+        $result = $this->formatResult($result, $curl);
+        curl_close($curl);
 
         return $result;
     }
