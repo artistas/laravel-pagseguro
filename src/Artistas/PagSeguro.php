@@ -462,7 +462,7 @@ class PagSeguro extends PagSeguroClient
         $validator = $this->validator->make($data, $rules);
 
         if ($validator->fails()) {
-            throw new PagSeguroException($validator->messages()->first(), 1004);
+            throw new PagSeguroException($validator->messages()->first(), 1003);
         }
     }
 
