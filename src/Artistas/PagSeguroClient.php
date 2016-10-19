@@ -71,10 +71,11 @@ class PagSeguroClient extends PagSeguroConfig
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, !$this->sandbox);
 
-        $result = curl_exec($curl);
-        curl_close($curl);
+        $result = curl_exec($curl);        
+        $result = $this->formatResult($result, $curl);   
+        curl_close($curl);     
 
-        return $this->formatResult($result, $curl);
+        return $result;
     }
 
     /**
@@ -89,23 +90,30 @@ class PagSeguroClient extends PagSeguroConfig
      */
     private function formatResult($result, $curl)
     {
+        $getInfo = curl_getinfo($curl);
+
+        if (isset($getInfo['http_code']) && $getInfo['http_code'] == '503') {
+            $this->log->error('Serviço em manutenção.', ['Retorno:' => $result]);
+            throw new PagSeguroException('Serviço em manutenção.', 1000);
+        }
         if ($result === false) {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
             throw new PagSeguroException(curl_error($curl), curl_errno($curl));
         }
         if ($result === 'Unauthorized' || $result === 'Forbidden') {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
-            throw new PagSeguroException($result.': Não foi possível estabelecer uma conexão com o PagSeguro.', 1);
+            throw new PagSeguroException($result.': Não foi possível estabelecer uma conexão com o PagSeguro.', 1001);
         }
         if ($result === 'Not Found') {
             $this->log->error('Notificação/Transação não encontrada', ['Retorno:' => $result]);
-            throw new PagSeguroException($result.': Não foi possível encontrar a notificação/transação no PagSeguro.', 1);
+            throw new PagSeguroException($result.': Não foi possível encontrar a notificação/transação no PagSeguro.', 1002);
         }
 
         $result = simplexml_load_string($result);
 
         if (isset($result->error) && isset($result->error->message)) {
-            throw new PagSeguroException($result->error->message, 1);
+            $this->log->error($result->error->message, ['Retorno:' => $result]);
+            throw new PagSeguroException($result->error->message, (int) $result->error->code);
         }
 
         return $result;
