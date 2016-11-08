@@ -5,7 +5,7 @@ var brand;
 var token;
 var installments;
 
-PagSeguroDirectPayment.setSessionId('{{ PagSeguro::getSession() }}');
+PagSeguroDirectPayment.setSessionId('{{ PagSeguro::startSession() }}');
 getPaymentMethods();
 
 function getPaymentMethods() {
