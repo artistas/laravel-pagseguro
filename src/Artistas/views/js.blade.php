@@ -72,18 +72,34 @@ function getCardBrand(bin) {
 }
 
 function getInstallments() {
-  PagSeguroDirectPayment.getInstallments({
-    amount: amount,
-    brand: brand !== undefined ? brand['name'] : null,
-    success: function(response) {
-      installments = response['installments'][brand['name']];
-      constructInstallmentsForm();
-    },
-    error: function(response) {
-      var error = first(response['errors']);
-        displayError(translateErrors(error));
-    }
-  });
+  if(maxInstallmentNoInterest !== undefined) {
+    PagSeguroDirectPayment.getInstallments({
+      amount: amount,
+      brand: brand !== undefined ? brand['name'] : null,
+      maxInstallmentNoInterest: maxInstallmentNoInterest,
+      success: function(response) {
+        installments = response['installments'][brand['name']];
+        constructInstallmentsForm();
+      },
+      error: function(response) {
+        var error = first(response['errors']);
+          displayError(translateErrors(error));
+      }
+    });
+  } else {
+    PagSeguroDirectPayment.getInstallments({
+      amount: amount,
+      brand: brand !== undefined ? brand['name'] : null,      
+      success: function(response) {
+        installments = response['installments'][brand['name']];
+        constructInstallmentsForm();
+      },
+      error: function(response) {
+        var error = first(response['errors']);
+          displayError(translateErrors(error));
+      }
+    });
+  }
 }
 
 function getCreditCardToken(cardNumber, cvv, expirationMonth, expirationYear) {
