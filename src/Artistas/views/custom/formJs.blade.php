@@ -1,6 +1,7 @@
 <script type="text/javascript">
 /* Parametros */
 var amount=500.00;
+var maxInstallmentNoInterest;
 
 function constructOnlineDebit(availabelOnlineDebit) {
   var html;
