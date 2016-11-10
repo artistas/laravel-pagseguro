@@ -69,6 +69,7 @@ class PagSeguroClient extends PagSeguroConfig
         }
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_ENCODING, 'ISO-8859-1');
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, !$this->sandbox);
 
         $result = curl_exec($curl);
@@ -179,7 +180,7 @@ class PagSeguroClient extends PagSeguroConfig
     {
         $value = $this->checkValue($value, $key);
 
-        return $value === null ? $value : trim(preg_replace($regex, $replace, $value));
+        return $value === null ? null : utf8_decode(trim(preg_replace($regex, $replace, $value)));
     }
 
     /**
