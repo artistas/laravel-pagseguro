@@ -90,7 +90,7 @@ class PagSeguro extends PagSeguroClient
      */
     public function setSenderInfo(array $senderInfo)
     {
-        $senderEmail = $this->sandbox ? 'teste@sandbox.pagseguro.com.br' : $senderInfo['senderEmail'];
+        $senderEmail = $this->sandbox ? 'teste@sandbox.pagseguro.com.br' : $this->sanitize($senderInfo, 'senderEmail');
 
         $senderPhone = $this->sanitizeNumber($senderInfo, 'senderPhone');
 

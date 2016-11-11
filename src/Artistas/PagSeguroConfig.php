@@ -17,13 +17,6 @@ class PagSeguroConfig
     protected $session;
 
     /**
-     * Config instance.
-     *
-     * @var object
-     */
-    protected $config;
-
-    /**
      * Log instance.
      *
      * @var object
@@ -78,10 +71,9 @@ class PagSeguroConfig
      * @param $log
      * @param $validator
      */
-    public function __construct(Session $session, Config $config, Log $log, Validator $validator)
+    public function __construct(Session $session, Log $log, Validator $validator)
     {
         $this->session = $session;
-        $this->config = $config;
         $this->log = $log;
         $this->validator = $validator;
         $this->setEnvironment();
@@ -93,10 +85,10 @@ class PagSeguroConfig
      */
     private function setEnvironment()
     {
-        $this->sandbox = $this->config->get('pagseguro.sandbox');
-        $this->token = $this->config->get('pagseguro.token');
-        $this->email = $this->config->get('pagseguro.email');
-        $this->notificationURL = $this->config->get('pagseguro.notificationURL');
+        $this->sandbox = env('PAGSEGURO_SANDBOX', true);
+        $this->email = env('PAGSEGURO_EMAIL', '');
+        $this->token = env('PAGSEGURO_TOKEN', '');
+        $this->notificationURL = env('PAGSEGURO_NOTIFICATION', '');
     }
 
     /**
