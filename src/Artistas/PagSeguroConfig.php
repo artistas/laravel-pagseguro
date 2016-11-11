@@ -2,7 +2,6 @@
 
 namespace Artistas\PagSeguro;
 
-use Illuminate\Config\Repository as Config;
 use Illuminate\Log\Writer as Log;
 use Illuminate\Session\SessionManager as Session;
 use Illuminate\Validation\Factory as Validator;
