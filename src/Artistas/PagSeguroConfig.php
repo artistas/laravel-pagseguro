@@ -61,7 +61,7 @@ class PagSeguroConfig
      * @param $validator
      */
     public function __construct(Log $log, Validator $validator)
-    {        
+    {
         $this->log = $log;
         $this->validator = $validator;
         $this->setEnvironment();
