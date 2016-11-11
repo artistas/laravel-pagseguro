@@ -127,24 +127,10 @@ class PagSeguroClient extends PagSeguroConfig
      */
     public function startSession()
     {
-        $result = $this->sendTransaction([
+        return (string) $this->sendTransaction([
           'email' => $this->email,
           'token' => $this->token,
-        ], $this->url['session']);
-
-        $this->session->put('pagseguro.session', (string) $result->id);
-
-        return (string) $result->id;
-    }
-
-    /**
-     * Pega a sessão ou gera uma nova.
-     *
-     * @return string
-     */
-    public function getSession()
-    {
-        return $this->session->has('pagseguro.session') ? $this->session->get('pagseguro.session') : $this->startSession();
+        ], $this->url['session'])->id;
     }
 
     /**

@@ -3,18 +3,10 @@
 namespace Artistas\PagSeguro;
 
 use Illuminate\Log\Writer as Log;
-use Illuminate\Session\SessionManager as Session;
 use Illuminate\Validation\Factory as Validator;
 
 class PagSeguroConfig
 {
-    /**
-     * Session instance.
-     *
-     * @var object
-     */
-    protected $session;
-
     /**
      * Log instance.
      *
@@ -65,14 +57,11 @@ class PagSeguroConfig
     protected $url = [];
 
     /**
-     * @param $session
-     * @param $config
      * @param $log
      * @param $validator
      */
-    public function __construct(Session $session, Log $log, Validator $validator)
-    {
-        $this->session = $session;
+    public function __construct(Log $log, Validator $validator)
+    {        
         $this->log = $log;
         $this->validator = $validator;
         $this->setEnvironment();
