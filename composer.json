@@ -1,6 +1,6 @@
 {
     "name": "artistas/laravel-pagseguro",
-    "description": "PagSeguro Checkout Transparente no Laravel 5.1, 5.2, 5.3",
+    "description": "PagSeguro Checkout Transparente no Laravel 5.*",
     "type": "library",
     "license": "MIT",
     "keywords": ["laravel", "pagseguro", "transparente"],
