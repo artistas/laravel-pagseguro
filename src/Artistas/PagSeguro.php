@@ -459,6 +459,8 @@ class PagSeguro extends PagSeguroClient
      */
     private function validate($data, $rules)
     {
+        $data = array_filter($data);
+
         $validator = $this->validator->make($data, $rules);
 
         if ($validator->fails()) {
