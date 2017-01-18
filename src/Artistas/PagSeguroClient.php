@@ -58,13 +58,13 @@ class PagSeguroClient extends PagSeguroConfig
      * @return \SimpleXMLElement
      */
     private function executeCurl($parameters, $url)
-    {        
+    {
         $headers = [
             'Accept: application/xml',
-            'Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1',            
+            'Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1',
         ];
-        
-        $curl = curl_init();        
+
+        $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
