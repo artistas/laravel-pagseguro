@@ -80,6 +80,7 @@ class PagSeguroClient extends PagSeguroConfig
         if ($url === null) {
             $url = $this->url['transactions'];
         }
+        $url .= '?email='.$this->email.'&token='.$this->token;
 
         array_walk_recursive($parameters, function (&$value, $key) {
             $value = utf8_encode($value);
