@@ -41,7 +41,7 @@ class PagSeguroClient extends PagSeguroConfig
      *
      * @param array  $parameters
      * @param string $url        Padrão $this->url['transactions']
-     * @param string  $method
+     * @param string $method
      * @param array  $headers
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
@@ -54,12 +54,12 @@ class PagSeguroClient extends PagSeguroConfig
             $url = $this->url['transactions'];
         }
 
-        $xml = new \SimpleXMLElement('<root/>');        
-        array_walk_recursive($parameters, function($value, $key) use($xml) {               
-            $xml->addChild($key,utf8_encode($value));
+        $xml = new \SimpleXMLElement('<root/>');
+        array_walk_recursive($parameters, function ($value, $key) use ($xml) {
+            $xml->addChild($key, utf8_encode($value));
         });
-        $parameters = $xml->asXml();        
-        
+        $parameters = $xml->asXml();
+
         return $this->executeCurl($parameters, $url, ['Content-Type: application/xml; charset=UTF-8']);
     }
 
@@ -68,7 +68,7 @@ class PagSeguroClient extends PagSeguroConfig
      *
      * @param array  $parameters
      * @param string $url        Padrão $this->url['transactions']
-     * @param string  $method
+     * @param string $method
      * @param array  $headers
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
@@ -81,20 +81,20 @@ class PagSeguroClient extends PagSeguroConfig
             $url = $this->url['transactions'];
         }
 
-        array_walk_recursive($parameters, function(&$value, $key) {               
+        array_walk_recursive($parameters, function (&$value, $key) {
             $value = utf8_encode($value);
-        });                        
-        $parameters = json_encode($parameters);        
-        
+        });
+        $parameters = json_encode($parameters);
+
         return $this->executeCurl($parameters, $url, ['Content-Type: application/json; charset=UTF-8']);
     }
 
     /**
      * Executa o Curl.
      *
-     * @param array|string  $parameters
-     * @param string $url
-     * @param array  $headers
+     * @param array|string $parameters
+     * @param string       $url
+     * @param array        $headers
      *
      * @return \SimpleXMLElement
      */
@@ -109,7 +109,7 @@ class PagSeguroClient extends PagSeguroConfig
             curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters);
         }
 
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);        
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, !$this->sandbox);
 
         $result = curl_exec($curl);
