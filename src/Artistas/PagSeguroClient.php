@@ -5,71 +5,111 @@ namespace Artistas\PagSeguro;
 class PagSeguroClient extends PagSeguroConfig
 {
     /**
-     * Envia a transação.
+     * Envia a transação HTML.
      *
      * @param array  $parameters
      * @param string $url        Padrão $this->url['transactions']
      * @param bool   $post
+     * @param array  $headers
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
      *
      * @return \SimpleXMLElement
      */
-    protected function sendTransaction(array $parameters, $url = null, $post = true)
+    protected function sendTransaction(array $parameters, $url = null, $post = true, array $headers = null)
     {
         if ($url === null) {
             $url = $this->url['transactions'];
         }
 
-        $parameters = $this->formatParameters($parameters);
+        $data = '';
+        foreach ($parameters as $key => $value) {
+            $data .= $key.'='.$value.'&';
+        }
+        $parameters = rtrim($data, '&');
 
         if (!$post) {
             $url .= '?'.$parameters;
             $parameters = null;
         }
 
-        return $this->executeCurl($parameters, $url);
+        return $this->executeCurl($parameters, $url, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1']);
     }
 
     /**
-     * Formata os parametros.
+     * Envia a transação XML.
      *
-     * @param array $parameters
+     * @param array  $parameters
+     * @param string $url        Padrão $this->url['transactions']
+     * @param string  $method
+     * @param array  $headers
      *
-     * @return string
+     * @throws \Artistas\PagSeguro\PagSeguroException
+     *
+     * @return \SimpleXMLElement
      */
-    private function formatParameters($parameters)
+    protected function sendXmlTransaction(array $parameters, $url = null, $method = 'POST', array $headers = null)
     {
-        $data = '';
-
-        foreach ($parameters as $key => $value) {
-            $data .= $key.'='.$value.'&';
+        if ($url === null) {
+            $url = $this->url['transactions'];
         }
 
-        return rtrim($data, '&');
+        $xml = new \SimpleXMLElement('<root/>');        
+        array_walk_recursive($parameters, function($value, $key) use($xml) {               
+            $xml->addChild($key,utf8_encode($value));
+        });
+        $parameters = $xml->asXml();        
+        
+        return $this->executeCurl($parameters, $url, ['Content-Type: application/xml; charset=UTF-8']);
+    }
+
+    /**
+     * Envia a transação JSON.
+     *
+     * @param array  $parameters
+     * @param string $url        Padrão $this->url['transactions']
+     * @param string  $method
+     * @param array  $headers
+     *
+     * @throws \Artistas\PagSeguro\PagSeguroException
+     *
+     * @return \SimpleXMLElement
+     */
+    protected function sendJsonTransaction(array $parameters, $url = null, $method = 'POST', array $headers = null)
+    {
+        if ($url === null) {
+            $url = $this->url['transactions'];
+        }
+
+        array_walk_recursive($parameters, function(&$value, $key) {               
+            $value = utf8_encode($value);
+        });                        
+        $parameters = json_encode($parameters);        
+        
+        return $this->executeCurl($parameters, $url, ['Content-Type: application/json; charset=UTF-8']);
     }
 
     /**
      * Executa o Curl.
      *
-     * @param array  $parameters
+     * @param array|string  $parameters
      * @param string $url
+     * @param array  $headers
      *
      * @return \SimpleXMLElement
      */
-    private function executeCurl($parameters, $url)
+    private function executeCurl($parameters, $url, array $headers)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1']);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         if ($parameters !== null) {
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters);
         }
 
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_ENCODING, 'ISO-8859-1');
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);        
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, !$this->sandbox);
 
         $result = curl_exec($curl);
