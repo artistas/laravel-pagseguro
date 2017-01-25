@@ -152,13 +152,13 @@ class PagSeguroClient extends PagSeguroConfig
     }
 
     /**
-    * Valida os dados.
-    *
-    * @param array $data
-    * @param array $rules
-    *
-    * @throws \Artistas\PagSeguro\PagSeguroException
-    */
+     * Valida os dados.
+     *
+     * @param array $data
+     * @param array $rules
+     *
+     * @throws \Artistas\PagSeguro\PagSeguroException
+     */
     protected function validate($data, $rules)
     {
         $data = array_filter($data);
