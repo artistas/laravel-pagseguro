@@ -450,25 +450,6 @@ class PagSeguro extends PagSeguroClient
     }
 
     /**
-     * Valida os dados.
-     *
-     * @param array $data
-     * @param array $rules
-     *
-     * @throws \Artistas\PagSeguro\PagSeguroException
-     */
-    private function validate($data, $rules)
-    {
-        $data = array_filter($data);
-
-        $validator = $this->validator->make($data, $rules);
-
-        if ($validator->fails()) {
-            throw new PagSeguroException($validator->messages()->first(), 1003);
-        }
-    }
-
-    /**
      * Retorna a transação da notoficação.
      *
      * @param string $notificationCode

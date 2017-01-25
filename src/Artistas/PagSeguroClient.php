@@ -22,6 +22,8 @@ class PagSeguroClient extends PagSeguroConfig
             $url = $this->url['transactions'];
         }
 
+        $parameters = array_filter($parameters);
+
         $data = '';
         foreach ($parameters as $key => $value) {
             $data .= $key.'='.$value.'&';
@@ -34,33 +36,6 @@ class PagSeguroClient extends PagSeguroConfig
         }
 
         return $this->executeCurl($parameters, $url, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1']);
-    }
-
-    /**
-     * Envia a transação XML.
-     *
-     * @param array  $parameters
-     * @param string $url        Padrão $this->url['transactions']
-     * @param string $method
-     * @param array  $headers
-     *
-     * @throws \Artistas\PagSeguro\PagSeguroException
-     *
-     * @return \SimpleXMLElement
-     */
-    protected function sendXmlTransaction(array $parameters, $url = null, $method = 'POST', array $headers = null)
-    {
-        if ($url === null) {
-            $url = $this->url['transactions'];
-        }
-
-        $xml = new \SimpleXMLElement('<root/>');
-        array_walk_recursive($parameters, function ($value, $key) use ($xml) {
-            $xml->addChild($key, utf8_encode($value));
-        });
-        $parameters = $xml->asXml();
-
-        return $this->executeCurl($parameters, $url, ['Content-Type: application/xml; charset=UTF-8']);
     }
 
     /**
@@ -81,6 +56,8 @@ class PagSeguroClient extends PagSeguroConfig
             $url = $this->url['transactions'];
         }
         $url .= '?email='.$this->email.'&token='.$this->token;
+
+        $parameters = array_filter($parameters);
 
         array_walk_recursive($parameters, function (&$value, $key) {
             $value = utf8_encode($value);
@@ -175,6 +152,25 @@ class PagSeguroClient extends PagSeguroConfig
     }
 
     /**
+    * Valida os dados.
+    *
+    * @param array $data
+    * @param array $rules
+    *
+    * @throws \Artistas\PagSeguro\PagSeguroException
+    */
+    protected function validate($data, $rules)
+    {
+        $data = array_filter($data);
+
+        $validator = $this->validator->make($data, $rules);
+
+        if ($validator->fails()) {
+            throw new PagSeguroException($validator->messages()->first(), 1003);
+        }
+    }
+
+    /**
      * Verifica a existência de um valor.
      *
      * @param mixed  $value
@@ -194,7 +190,7 @@ class PagSeguroClient extends PagSeguroConfig
     }
 
     /**
-     * Verifica a existência de um valor.
+     * Limpa um valor removendo espaços duplos.
      *
      * @param mixed  $value
      * @param string $key
@@ -211,7 +207,7 @@ class PagSeguroClient extends PagSeguroConfig
     }
 
     /**
-     * Verifica a existência de um valor.
+     * Limpa um valor deixando apenas números.
      *
      * @param mixed  $value
      * @param string $key
@@ -224,7 +220,7 @@ class PagSeguroClient extends PagSeguroConfig
     }
 
     /**
-     * Verifica a existência de um valor.
+     * Limpa um valor deixando no formato de moeda.
      *
      * @param mixed  $value
      * @param string $key
@@ -239,7 +235,7 @@ class PagSeguroClient extends PagSeguroConfig
     }
 
     /**
-     * Verifica a existência de um valor.
+     * Verifica a existência de um valor, e utiliza outro caso necessário.
      *
      * @param mixed  $value
      * @param mixed  $fValue
