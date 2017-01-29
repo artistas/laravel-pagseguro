@@ -88,12 +88,12 @@ class PagSeguroConfig
 
         $url = [
             'preApprovalRequest'            => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/pre-approvals/request',
-            'preApproval'       => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/pre-approvals',
-            'preApprovalCancel'  => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/pre-approvals/cancel/',
-            'session'            => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/sessions',
-            'transactions'       => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/transactions',
-            'notifications'      => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v3/transactions/notifications/',
-            'javascript'         => 'https://stc.'.$sandbox.'pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js',
+            'preApproval'                   => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/pre-approvals',
+            'preApprovalCancel'             => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/pre-approvals/cancel/',
+            'session'                       => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/sessions',
+            'transactions'                  => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/transactions',
+            'notifications'                 => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v3/transactions/notifications/',
+            'javascript'                    => 'https://stc.'.$sandbox.'pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js',
         ];
 
         $this->url = $url;
