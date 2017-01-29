@@ -26,6 +26,13 @@ class PagSeguroRecorrente extends PagSeguroClient
     private $senderAddress = [];
 
     /**
+     * Endereço de cobrança do comprador.
+     *
+     * @var array
+     */
+    private $billingAddress = [];
+
+    /**
      * Identificador da compra.
      *
      * @var string
@@ -143,21 +150,6 @@ class PagSeguroRecorrente extends PagSeguroClient
         ];
 
         $this->validateSenderInfo($senderInfo);
-
-        if (!empty($senderInfo['senderCPF'])) {
-            $senderInfo['documents'][0] = [
-                'type'  => 'CPF',
-                'value' => $senderInfo['senderCPF'],
-            ];
-        } else {
-            $senderInfo['documents'][0] = [
-                'type'  => 'CNPJ',
-                'value' => $senderInfo['senderCNPJ'],
-            ];
-        }
-
-        unset($senderInfo['senderCPF']);
-        unset($senderInfo['senderCNPJ']);
         $this->senderInfo = $senderInfo;
 
         return $this;
@@ -274,23 +266,149 @@ class PagSeguroRecorrente extends PagSeguroClient
     }
 
     /**
+     * Define o endereço do comprador.
+     *
+     * @param array $billingAddress
+     *
+     * @return $this
+     */
+    public function setBillingAddress(array $billingAddress)
+    {
+        $billingAddress = [
+          'street'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressStreet'), $this->senderAddress, 'street'),
+          'number'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressNumber'), $this->senderAddress, 'number'),
+          'complement' => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressComplement'), $this->senderAddress, 'complement'),
+          'district'   => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressDistrict'), $this->senderAddress, 'district'),
+          'postalCode' => $this->fallbackValue($this->sanitizeNumber($billingAddress, 'billingAddressPostalCode'), $this->senderAddress, 'postalCode'),
+          'city'       => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressCity'), $this->senderAddress, 'city'),
+          'state'      => strtoupper($this->fallbackValue($this->checkValue($billingAddress, 'billingAddressState'), $this->senderAddress, 'state')),
+          'country'    => 'BRA',
+        ];
+
+        $this->validateBillingAddress($billingAddress);
+        $this->billingAddress = $billingAddress;
+
+        return $this;
+    }
+
+    /**
+     * Valida os dados contidos na array de endereço de cobrança do comprador.
+     *
+     * @param array $billingAddress
+     */
+    private function validateBillingAddress(array $billingAddress)
+    {
+        $rules = [
+          'street'     => 'required|max:80',
+          'number'     => 'required|max:20',
+          'complement' => 'max:40',
+          'district'   => 'required|max:60',
+          'postalCode' => 'required|digits:8',
+          'city'       => 'required|min:2|max:60',
+          'state'      => 'required|min:2|max:2',
+        ];
+
+        $this->validate($billingAddress, $rules);
+    }
+
+    /**
      * Cria um pagamento recorrente.
      *
      * @param array $paymentSettings
      *
-     * @return $this
+     * @return mixed
      */
     public function sendPreApproval(array $paymentSettings)
     {
+        if (empty($this->billingAddress)) {
+            $this->setBillingAddress([]);
+        }
+        $this->validatePaymentSettings($paymentSettings);
+        
+        $data = $this->formatPreApprovalData($paymentSettings);        
+
+        return $this->sendJsonTransaction($data, $this->url['preApproval']);
+    }
+
+    /**
+     * Valida os dados de pagamento.
+     *
+     * @param array $paymentSettings
+     */
+    private function validatePaymentSettings(array $paymentSettings)
+    {
+        $rules = [
+          'creditCardToken' => 'required',
+        ];
+
+        $this->validate($paymentSettings, $rules);
+
+        $this->validateSenderInfo($this->senderInfo);
+        $this->validateCreditCardHolder($this->creditCardHolder);
+        $this->validateSenderAddress($this->senderAddress);        
+        $this->validateBillingAddress($this->billingAddress);
+    }
+
+    /**
+     * Formata os dados para enviar
+     *
+     * @param array $paymentSettings
+     *
+     * @return array
+     */
+    private function formatPreApprovalData(array $paymentSettings) {
+        $this->senderInfo['phone'] = [
+            'areaCode' => $this->senderInfo['senderAreaCode'],
+            'number' => $this->senderInfo['senderPhone'],
+        ];
+
+        $this->creditCardHolder['phone'] = [
+            'areaCode' => $this->creditCardHolder['creditCardHolderAreaCode'],
+            'number' => $this->creditCardHolder['creditCardHolderPhone'],
+        ];
+
+        if (! empty($this->senderInfo['senderCPF'])) {
+            $this->senderInfo['documents'][0] = [
+                'type'  => 'CPF',
+                'value' => $this->senderInfo['senderCPF'],
+            ];
+
+            unset($this->senderInfo['senderCPF']);
+        } else {
+            $this->senderInfo['documents'][0] = [
+                'type'  => 'CNPJ',
+                'value' => $this->senderInfo['senderCNPJ'],
+            ];
+
+            unset($this->senderInfo['senderCNPJ']);
+        }      
+
+        $this->creditCardHolder['documents'][0] = [
+            'type'  => 'CPF',
+            'value' => $this->creditCardHolder['creditCardHolderCPF'],
+        ];
+
+        unset($this->creditCardHolder['creditCardHolderCPF']); 
+        unset($this->senderInfo['senderAreaCode']);
+        unset($this->senderInfo['senderPhone']);    
+        unset($this->creditCardHolder['creditCardHolderAreaCode']);
+        unset($this->creditCardHolder['creditCardHolderPhone']);
+
         $data = [
             'reference'=> $this->reference,
             'plan'     => $this->plan,
             'sender'   => $this->senderInfo,
+            'paymentMethod' => [
+                'type' => 'CREDITCARD',
+                'creditCard' => [
+                    'token' => $paymentSettings['creditCardToken'],
+                    'holder' => $this->creditCardHolder,
+                ]
+            ]
         ];
         $data['sender']['address'] = $this->senderAddress;
+        $data['paymentMethod']['creditCard']['holder']['billingAddress'] = $this->billingAddress;
 
-        dd($data);
-
-        return $this->sendJsonTransaction($array, $this->url['pre-approval']);
+        return $data;
     }
 }

@@ -22,7 +22,7 @@ class PagSeguroClient extends PagSeguroConfig
             $url = $this->url['transactions'];
         }
 
-        $parameters = array_filter($parameters);
+        $parameters = $this->array_filter_recursive($parameters);    
 
         $data = '';
         foreach ($parameters as $key => $value) {
@@ -35,7 +35,8 @@ class PagSeguroClient extends PagSeguroConfig
             $parameters = null;
         }
 
-        return $this->executeCurl($parameters, $url, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1']);
+        $result = $this->executeCurl($parameters, $url, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1']);
+        return $this->formatResult($result);
     }
 
     /**
@@ -57,14 +58,15 @@ class PagSeguroClient extends PagSeguroConfig
         }
         $url .= '?email='.$this->email.'&token='.$this->token;
 
-        $parameters = array_filter($parameters);
+        $parameters = $this->array_filter_recursive($parameters);        
 
         array_walk_recursive($parameters, function (&$value, $key) {
             $value = utf8_encode($value);
         });
         $parameters = json_encode($parameters);
 
-        return $this->executeCurlJson($parameters, $url, ['Accept: application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1', 'Content-Type: application/json; charset=UTF-8']);
+        $result = $this->executeCurl($parameters, $url, ['Accept: application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1', 'Content-Type: application/json; charset=UTF-8']);
+        return $this->formatResultJson($result);
     }
 
     /**
@@ -91,7 +93,17 @@ class PagSeguroClient extends PagSeguroConfig
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, !$this->sandbox);
 
         $result = curl_exec($curl);
-        $result = $this->formatResult($result, $curl);
+        
+        $getInfo = curl_getinfo($curl);
+        if (isset($getInfo['http_code']) && $getInfo['http_code'] == '503') {
+            $this->log->error('Serviço em manutenção.', ['Retorno:' => $result]);
+            throw new PagSeguroException('Serviço em manutenção.', 1000);
+        }
+        if ($result === false) {
+            $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
+            throw new PagSeguroException(curl_error($curl), curl_errno($curl));
+        }
+
         curl_close($curl);
 
         return $result;
@@ -101,24 +113,13 @@ class PagSeguroClient extends PagSeguroConfig
      * Formata o resultado e trata erros.
      *
      * @param array  $result
-     * @param object $curl
      *
      * @throws \Artistas\PagSeguro\PagSeguroException
      *
      * @return \SimpleXMLElement
      */
-    private function formatResult($result, $curl)
-    {
-        $getInfo = curl_getinfo($curl);
-
-        if (isset($getInfo['http_code']) && $getInfo['http_code'] == '503') {
-            $this->log->error('Serviço em manutenção.', ['Retorno:' => $result]);
-            throw new PagSeguroException('Serviço em manutenção.', 1000);
-        }
-        if ($result === false) {
-            $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
-            throw new PagSeguroException(curl_error($curl), curl_errno($curl));
-        }
+    private function formatResult($result)
+    {        
         if ($result === 'Unauthorized' || $result === 'Forbidden') {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
             throw new PagSeguroException($result.': Não foi possível estabelecer uma conexão com o PagSeguro.', 1001);
@@ -133,6 +134,39 @@ class PagSeguroClient extends PagSeguroConfig
         if (isset($result->error) && isset($result->error->message)) {
             $this->log->error($result->error->message, ['Retorno:' => $result]);
             throw new PagSeguroException($result->error->message, (int) $result->error->code);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Formata o resultado e trata erros.
+     *
+     * @param array  $result
+     *
+     * @throws \Artistas\PagSeguro\PagSeguroException
+     *
+     * @return mixed
+     */
+    private function formatResultJson($result)
+    {        
+        if ($result === 'Unauthorized' || $result === 'Forbidden') {
+            $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
+            throw new PagSeguroException($result.': Não foi possível estabelecer uma conexão com o PagSeguro.', 1001);
+        }
+        if ($result === 'Not Found') {
+            $this->log->error('Notificação/Transação não encontrada', ['Retorno:' => $result]);
+            throw new PagSeguroException($result.': Não foi possível encontrar a notificação/transação no PagSeguro.', 1002);
+        }
+
+        $result = json_decode($result);              
+
+        if (isset($result->error) && $result->error === true) {
+            $errors = $result->errors;
+            foreach($errors as $code => $message) {
+                $this->log->error($message, ['Retorno:' => $result]);
+                throw new PagSeguroException($message, (int) $code);
+            }           
         }
 
         return $result;
@@ -180,7 +214,7 @@ class PagSeguroClient extends PagSeguroConfig
      */
     protected function checkValue($value, $key = null)
     {
-        if ($value !== null) {
+        if ($value != null) {
             if ($key !== null) {
                 return isset($value[$key]) ? $value[$key] : null;
             }
@@ -203,7 +237,7 @@ class PagSeguroClient extends PagSeguroConfig
     {
         $value = $this->checkValue($value, $key);
 
-        return $value === null ? null : utf8_decode(trim(preg_replace($regex, $replace, $value)));
+        return $value == null ? null : utf8_decode(trim(preg_replace($regex, $replace, $value)));
     }
 
     /**
@@ -231,7 +265,7 @@ class PagSeguroClient extends PagSeguroConfig
     {
         $value = $this->checkValue($value, $key);
 
-        return $value === null ? $value : number_format($value, 2, '.', '');
+        return $value == null ? $value : number_format($value, 2, '.', '');
     }
 
     /**
@@ -245,6 +279,26 @@ class PagSeguroClient extends PagSeguroConfig
      */
     protected function fallbackValue($value, $fValue, $fKey)
     {
-        return $value !== null ? $value : $this->checkValue($fValue, $fKey);
+        return $value != null ? $value : $this->checkValue($fValue, $fKey);
     }
+
+    /**
+     * Aplica um array_filter recursivamente em um array.
+     *
+     * @param array  $input
+     *
+     * @return array
+     */
+    protected function array_filter_recursive(array $input) 
+    { 
+        foreach ($input as &$value) 
+        { 
+        if (is_array($value)) 
+        { 
+            $value = $this->array_filter_recursive($value); 
+        } 
+        } 
+
+        return array_filter($input); 
+    } 
 }
