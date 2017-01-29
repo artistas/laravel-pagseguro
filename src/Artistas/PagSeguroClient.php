@@ -64,7 +64,7 @@ class PagSeguroClient extends PagSeguroConfig
         });
         $parameters = json_encode($parameters);
 
-        return $this->executeCurl($parameters, $url, ['Content-Type: application/json; charset=UTF-8']);
+        return $this->executeCurlJson($parameters, $url, ['Accept: application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1','Content-Type: application/json; charset=UTF-8']);
     }
 
     /**

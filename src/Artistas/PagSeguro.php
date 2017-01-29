@@ -380,7 +380,7 @@ class PagSeguro extends PagSeguroClient
     /**
      * Envia a transação de checkout.
      *
-     * @param array $paymentOptions
+     * @param array $paymentSettings
      *
      * @return mixed
      */
