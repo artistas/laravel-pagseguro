@@ -165,10 +165,12 @@ class PagSeguroClient extends PagSeguroConfig
 
         if (isset($result->error) && $result->error === true) {
             $errors = $result->errors;
-            foreach ($errors as $code => $message) {
-                $this->log->error($message, ['Retorno:' => $result]);
-                throw new PagSeguroException($message, (int) $code);
-            }
+
+            $message = reset($errors);
+            $code = key($errors);
+
+            $this->log->error($message, ['Retorno:' => $result]);
+            throw new PagSeguroException($message, (int) $code);
         }
 
         return $result;
