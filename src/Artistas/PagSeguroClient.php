@@ -188,8 +188,8 @@ class PagSeguroClient extends PagSeguroConfig
           'token' => $this->token,
         ], $this->url['session'])->id;
     }
-    
-     /**
+
+    /**
      * Retorna a transação da notoficação.
      *
      * @param string $notificationCode
