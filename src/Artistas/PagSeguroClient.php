@@ -169,7 +169,7 @@ class PagSeguroClient extends PagSeguroConfig
             $message = reset($errors);
             $code = key($errors);
 
-            $this->log->error($message, ['Retorno:' => $result]);
+            $this->log->error($message, ['Retorno:' => json_encode($result)]);
             throw new PagSeguroException($message, (int) $code);
         }
 
