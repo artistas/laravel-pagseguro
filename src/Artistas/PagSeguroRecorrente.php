@@ -51,7 +51,7 @@ class PagSeguroRecorrente extends PagSeguroClient
      *
      * @param array $preApprovalRequest
      *
-     * @return $this
+     * @return \SimpleXMLElement
      */
     public function sendPreApprovalRequest(array $preApprovalRequest)
     {
@@ -327,7 +327,7 @@ class PagSeguroRecorrente extends PagSeguroClient
 
         $data = $this->formatPreApprovalData($paymentSettings);
 
-        return $this->sendJsonTransaction($data, $this->url['preApproval']);
+        return (string) $this->sendJsonTransaction($data, $this->url['preApproval'])->code;
     }
 
     /**
@@ -411,5 +411,19 @@ class PagSeguroRecorrente extends PagSeguroClient
         $data['paymentMethod']['creditCard']['holder']['billingAddress'] = $this->billingAddress;
 
         return $data;
+    }
+    
+    /**
+     * Cancela um pagamento recorrente.
+     *
+     * @param string $preApprovalCode
+     *
+     * @return \SimpleXMLElement
+     */
+    public function cancelPreApproval($preApprovalCode){
+        return $this->sendTransaction([
+            'email' => $this->email,
+            'token' => $this->token,
+        ], $this->url['preApprovalCancel'].$preApprovalCode, false);
     }
 }
