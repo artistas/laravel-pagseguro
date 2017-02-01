@@ -1,9 +1,9 @@
 {
     "name": "artistas/laravel-pagseguro",
-    "description": "PagSeguro Checkout Transparente no Laravel 5.*",
+    "description": "PagSeguro Checkout Transparente e Pagamento Recorrente(Assinaturas) no Laravel 5.*",
     "type": "library",
     "license": "MIT",
-    "keywords": ["laravel", "pagseguro", "transparente"],
+    "keywords": ["laravel", "pagseguro", "transparente", "recorrente", "assinaturas"],
     "authors": [
         {
             "name": "Fernando Henrique Bandeira",
