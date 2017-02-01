@@ -412,7 +412,7 @@ class PagSeguroRecorrente extends PagSeguroClient
 
         return $data;
     }
-    
+
     /**
      * Cancela um pagamento recorrente.
      *
@@ -420,7 +420,8 @@ class PagSeguroRecorrente extends PagSeguroClient
      *
      * @return \SimpleXMLElement
      */
-    public function cancelPreApproval($preApprovalCode){
+    public function cancelPreApproval($preApprovalCode)
+    {
         return $this->sendTransaction([
             'email' => $this->email,
             'token' => $this->token,
