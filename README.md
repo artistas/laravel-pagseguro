@@ -1,5 +1,5 @@
 # Laravel PagSeguro 
-### Checkout Transparente
+### Checkout Transparente e Pagamento Recorrente(Assinaturas)
 
 [![Developer](https://img.shields.io/badge/Developer-fernandobandeira-red.svg)](https://github.com/fernandobandeira)
 [![Latest Stable Version](https://poser.pugx.org/artistas/laravel-pagseguro/v/stable)](https://packagist.org/packages/artistas/laravel-pagseguro)
@@ -50,6 +50,7 @@ $pagseguro = PagSeguro::setReference('2')
 ]);
 ```
 
-Com apenas este código já é possível realizar um pagamento via boleto. Com excessão dos preços que devem ser passados da forma especificada, os dados não precisam ter uma formatação específica, desde que tenham todas as informações necessárias.
+###Contribuições
+[![Developer](https://img.shields.io/badge/Contributor-ernandos-blue.svg)](https://github.com/ernandos)
 
-A Biblioteca possui algumas validações por padrão para não precisar esperar o retorno do PagSeguro caso algum dado não esteja informado corretamente, o retorno dos erros pode ser capturado com um ```try/catch``` na excessão ```PagSeguroException``` mais detalhes estão descritos na [Wiki](https://github.com/artistas/laravel-pagseguro/wiki).
+[![Developer](https://img.shields.io/badge/Contributor-vanessasouto-blue.svg)](https://github.com/vanessasoutoc)
