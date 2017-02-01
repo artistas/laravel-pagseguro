@@ -188,6 +188,21 @@ class PagSeguroClient extends PagSeguroConfig
           'token' => $this->token,
         ], $this->url['session'])->id;
     }
+    
+     /**
+     * Retorna a transação da notoficação.
+     *
+     * @param string $notificationCode
+     *
+     * @return \SimpleXMLElement
+     */
+    public function notification($notificationCode)
+    {
+        return $this->sendTransaction([
+          'email' => $this->email,
+          'token' => $this->token,
+        ], $this->url['notifications'].$notificationCode, false);
+    }
 
     /**
      * Valida os dados.
