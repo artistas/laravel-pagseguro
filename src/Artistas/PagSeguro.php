@@ -448,19 +448,4 @@ class PagSeguro extends PagSeguroClient
             $this->validateShippingInfo($this->shippingInfo);
         }
     }
-
-    /**
-     * Retorna a transação da notoficação.
-     *
-     * @param string $notificationCode
-     *
-     * @return \SimpleXMLElement
-     */
-    public function notification($notificationCode)
-    {
-        return $this->sendTransaction([
-          'email' => $this->email,
-          'token' => $this->token,
-        ], $this->url['notifications'].$notificationCode, false);
-    }
 }
