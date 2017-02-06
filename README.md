@@ -8,6 +8,7 @@
 </p>
 
 Visite a [Wiki](https://github.com/artistas/laravel-pagseguro/wiki) para verificar os detalhes de como utilizar esta Package.
+
 Qualquer problema, dúvida ou sugestão sinta-se livre para abrir uma issue ou enviar um PR.
 
 ```php
