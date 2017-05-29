@@ -3,6 +3,7 @@
 <p align="center">
 <a href="https://www.codacy.com/app/fernando-bandeira/laravel-pagseguro?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=artistas/laravel-pagseguro&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/2b049d7be509420c810493c828eb943d" alt="Codacy Badge"></a>
 <a href="https://packagist.org/packages/artistas/laravel-pagseguro"><img src="https://poser.pugx.org/artistas/laravel-pagseguro/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/artistas/laravel-pagseguro"><img src="https://poser.pugx.org/artistas/laravel-pagseguro/d/monthly" alt="Monthly Downloads"></a>
 <a href="https://packagist.org/packages/artistas/laravel-pagseguro"><img src="https://poser.pugx.org/artistas/laravel-pagseguro/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://laravel.com"><img src="https://img.shields.io/badge/laravel-5.*-ff69b4.svg?style=flat-square" alt="License"></a>
 </p>
