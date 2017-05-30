@@ -90,6 +90,7 @@ class PagSeguroConfig
             'preApprovalRequest'            => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/pre-approvals/request',
             'preApproval'                   => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/pre-approvals',
             'preApprovalCancel'             => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/pre-approvals/cancel/',
+            'preApprovalNotifications'      => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/pre-approvals/notifications/',
             'session'                       => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/sessions',
             'transactions'                  => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v2/transactions',
             'notifications'                 => 'https://ws.'.$sandbox.'pagseguro.uol.com.br/v3/transactions/notifications/',

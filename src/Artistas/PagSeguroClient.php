@@ -190,18 +190,25 @@ class PagSeguroClient extends PagSeguroConfig
     }
 
     /**
-     * Retorna a transação da notoficação.
+     * Retorna a transação da notificação.
      *
      * @param string $notificationCode
      *
      * @return \SimpleXMLElement
      */
-    public function notification($notificationCode)
+    public function notification($notificationCode, $notificationType = 'transaction')
     {
-        return $this->sendTransaction([
-          'email' => $this->email,
-          'token' => $this->token,
-        ], $this->url['notifications'].$notificationCode, false);
+        if ($notificationType == 'transaction') {
+            return $this->sendTransaction([
+              'email' => $this->email,
+              'token' => $this->token,
+            ], $this->url['notifications'].$notificationCode, false);
+        } elseif ($notificationType == 'preApproval') {
+            return $this->sendTransaction([
+              'email' => $this->email,
+              'token' => $this->token,
+            ], $this->url['preApprovalNotifications'].$notificationCode, false);
+        }
     }
 
     /**
