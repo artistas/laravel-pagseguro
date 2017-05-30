@@ -190,7 +190,7 @@ class PagSeguroClient extends PagSeguroConfig
     }
 
     /**
-     * Retorna a transação da notoficação.
+     * Retorna a transação da notificação.
      *
      * @param string $notificationCode
      *
