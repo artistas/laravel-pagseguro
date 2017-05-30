@@ -198,16 +198,17 @@ class PagSeguroClient extends PagSeguroConfig
      */
     public function notification($notificationCode, $notificationType = 'transaction')
     {
-        if($notificationType == 'transaction')
+        if ($notificationType == 'transaction') {
             return $this->sendTransaction([
               'email' => $this->email,
               'token' => $this->token,
             ], $this->url['notifications'].$notificationCode, false);
-        else if($notificationType == 'preApproval')
+        elseif ($notificationType == 'preApproval') {
             return $this->sendTransaction([
               'email' => $this->email,
               'token' => $this->token,
             ], $this->url['preApprovalNotifications'].$notificationCode, false);
+        }
     }
 
     /**
