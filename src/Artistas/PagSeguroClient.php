@@ -203,7 +203,7 @@ class PagSeguroClient extends PagSeguroConfig
               'email' => $this->email,
               'token' => $this->token,
             ], $this->url['notifications'].$notificationCode, false);
-        elseif ($notificationType == 'preApproval') {
+        else if ($notificationType == 'preApproval') {
             return $this->sendTransaction([
               'email' => $this->email,
               'token' => $this->token,
