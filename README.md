@@ -57,9 +57,9 @@ catch(\Artistas\PagSeguro\PagSeguroException $e) {
 ```
 
 #### Créditos
-Criador @fernandobandeira
+Criador fernandobandeira
 
-Contribuidores @cassianogf, @ernjs
+Contribuidores cassianogf, ernjs
 
-PagSeguro Recorrente (Inicial): @vanessasoutoc
+PagSeguro Recorrente (Inicial): vanessasoutoc
 
