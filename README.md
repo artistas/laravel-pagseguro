@@ -55,3 +55,9 @@ catch(\Artistas\PagSeguro\PagSeguroException $e) {
     $e->getMessage(); //mensagem do erro
 }
 ```
+
+#### Créditos
+Criador @fernandobandeira
+Contribuidores @cassianogf, @ernjs
+PagSeguro Recorrente (Inicial): @vanessasoutoc
+
