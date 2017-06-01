@@ -437,6 +437,6 @@ class PagSeguroRecorrente extends PagSeguroClient
      */
     public function paymentOrders($preApprovalCode)
     {
-        return $this->sendJsonTransaction([], $this->url['preApproval'].'/'. $preApprovalCode . '/payment-orders', 'GET');
+        return $this->sendJsonTransaction([], $this->url['preApproval'].'/'.$preApprovalCode.'/payment-orders', 'GET');
     }
 }
