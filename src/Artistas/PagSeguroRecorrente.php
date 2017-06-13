@@ -353,6 +353,7 @@ class PagSeguroRecorrente extends PagSeguroClient
     }
 
     /**
+     * Altera o método de pagamento de um pagamento recorrente.
      *
      * @param array $paymentSettings
      *
