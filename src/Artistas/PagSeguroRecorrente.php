@@ -47,6 +47,14 @@ class PagSeguroRecorrente extends PagSeguroClient
     private $plan;
 
     /**
+     * Identificador do tipo de método de pagamento.
+     *
+     * @var string
+     */
+    private $type;
+
+
+    /**
      * Define os dados do plano.
      *
      * @param array $preApprovalRequest
@@ -107,6 +115,20 @@ class PagSeguroRecorrente extends PagSeguroClient
     public function setReference($reference)
     {
         $this->reference = $this->sanitize($reference);
+
+        return $this;
+    }
+
+    /**
+     * Define o tipo do método de pagamento.
+     *
+     * @param string $plan
+     *
+     * @return $this
+     */
+    public function setType($type)
+    {
+        $this->type = $this->sanitize($type);
 
         return $this;
     }
@@ -331,6 +353,24 @@ class PagSeguroRecorrente extends PagSeguroClient
     }
 
     /**
+     *
+     * @param array $paymentSettings
+     *
+     * @return mixed
+     */
+    public function sendPreApprovalPaymentMethod(array $paymentSettings)
+    {
+        if (empty($this->billingAddress)) {
+            $this->setBillingAddress([]);
+        }
+        $this->validatePaymentSettings($paymentSettings);
+
+        $data = $this->formatPreApprovalPaymentMethodData($paymentSettings);
+
+        return (string) $this->sendJsonTransaction($data, $this->url['preApproval'] . '/' . $this->plan . '/payment-method', 'PUT');
+    }
+
+    /**
      * Valida os dados de pagamento.
      *
      * @param array $paymentSettings
@@ -409,6 +449,70 @@ class PagSeguroRecorrente extends PagSeguroClient
         ];
         $data['sender']['address'] = $this->senderAddress;
         $data['paymentMethod']['creditCard']['holder']['billingAddress'] = $this->billingAddress;
+
+        return $data;
+    }
+
+
+    /**
+     * Formata os dados para enviar a alteração do método de pagamento.
+     *
+     * @param array $paymentSettings
+     *
+     * @return array
+     */
+    private function formatPreApprovalPaymentMethodData(array $paymentSettings)
+    {
+        $this->senderInfo['phone'] = [
+            'areaCode' => $this->senderInfo['senderAreaCode'],
+            'number'   => $this->senderInfo['senderPhone'],
+        ];
+
+        $this->creditCardHolder['phone'] = [
+            'areaCode' => $this->creditCardHolder['creditCardHolderAreaCode'],
+            'number'   => $this->creditCardHolder['creditCardHolderPhone'],
+        ];
+
+        $this->creditCardHolder['billingAddress'] = $this->billingAddress;
+
+        if (!empty($this->senderInfo['senderCPF'])) {
+            $this->senderInfo['documents'][0] = [
+                'type'  => 'CPF',
+                'value' => $this->senderInfo['senderCPF'],
+            ];
+
+            unset($this->senderInfo['senderCPF']);
+        } else {
+            $this->senderInfo['documents'][0] = [
+                'type'  => 'CNPJ',
+                'value' => $this->senderInfo['senderCNPJ'],
+            ];
+
+            unset($this->senderInfo['senderCNPJ']);
+        }
+
+        $this->creditCardHolder['documents'][0] = [
+            'type'  => 'CPF',
+            'value' => $this->creditCardHolder['creditCardHolderCPF'],
+        ];
+
+        unset($this->creditCardHolder['creditCardHolderCPF']);
+        unset($this->senderInfo['senderAreaCode']);
+        unset($this->senderInfo['senderPhone']);
+        unset($this->creditCardHolder['creditCardHolderAreaCode']);
+        unset($this->creditCardHolder['creditCardHolderPhone']);
+
+        $data = [
+            'type'          => $this->type,
+            'sender'        => [
+                'ip'         => $this->senderInfo['ip'],
+                'hash'       => $this->senderInfo['hash'],
+            ],
+            'creditCard'    => [
+                'token'          => $paymentSettings['creditCardToken'],
+                'holder'         => $this->creditCardHolder,
+            ],
+        ];
 
         return $data;
     }
