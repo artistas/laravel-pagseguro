@@ -368,7 +368,7 @@ class PagSeguroRecorrente extends PagSeguroClient
 
         $data = $this->formatPreApprovalPaymentMethodData($paymentSettings);
 
-        return (string) $this->sendJsonTransaction($data, $this->url['preApproval'] . '/' . $this->plan . '/payment-method', 'PUT');
+        return (string) $this->sendJsonTransaction($data, $this->url['preApproval'].'/'.$this->plan.'/payment-method', 'PUT');
     }
 
     /**

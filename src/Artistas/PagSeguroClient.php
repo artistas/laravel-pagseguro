@@ -30,12 +30,12 @@ class PagSeguroClient extends PagSeguroConfig
         }
         $parameters = rtrim($data, '&');
 
-        $method = "POST";
+        $method = 'POST';
         
         if (!$post) {
             $url .= '?'.$parameters;
             $parameters = null;
-            $method = "GET";
+            $method = 'GET';
         }
 
         $result = $this->executeCurl($parameters, $url, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1'], $method);
@@ -93,10 +93,10 @@ class PagSeguroClient extends PagSeguroConfig
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
-        if ($method == "POST") {
+        if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, true);
-        } else if ($method == "PUT") {
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+        } else if ($method == 'PUT') {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
         }
 
         if ($parameters !== null) {
