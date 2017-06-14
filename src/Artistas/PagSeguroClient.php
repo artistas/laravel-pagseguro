@@ -31,7 +31,7 @@ class PagSeguroClient extends PagSeguroConfig
         $parameters = rtrim($data, '&');
 
         $method = 'POST';
-        
+
         if (!$post) {
             $url .= '?'.$parameters;
             $parameters = null;
@@ -95,7 +95,7 @@ class PagSeguroClient extends PagSeguroConfig
 
         if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, true);
-        } else if ($method == 'PUT') {
+        } elseif ($method == 'PUT') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
         }
 

@@ -53,7 +53,6 @@ class PagSeguroRecorrente extends PagSeguroClient
      */
     private $type;
 
-
     /**
      * Define os dados do plano.
      *
