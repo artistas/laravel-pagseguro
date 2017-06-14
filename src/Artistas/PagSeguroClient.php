@@ -38,7 +38,6 @@ class PagSeguroClient extends PagSeguroConfig
             $method = "GET";
         }
 
-
         $result = $this->executeCurl($parameters, $url, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1'], $method);
 
         return $this->formatResult($result);
@@ -76,8 +75,6 @@ class PagSeguroClient extends PagSeguroConfig
 
         $result = $this->executeCurl($parameters, $url, ['Accept: application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1', 'Content-Type: application/json; charset=UTF-8'], $method);
 
-        \Log::alert($result);
-
         return $this->formatResultJson($result);
     }
 
@@ -95,9 +92,6 @@ class PagSeguroClient extends PagSeguroConfig
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-
-
 
         if ($method == "POST") {
             curl_setopt($curl, CURLOPT_POST, true);
