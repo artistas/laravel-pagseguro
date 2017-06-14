@@ -453,7 +453,6 @@ class PagSeguroRecorrente extends PagSeguroClient
         return $data;
     }
 
-
     /**
      * Formata os dados para enviar a alteração do método de pagamento.
      *
