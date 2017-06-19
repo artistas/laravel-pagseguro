@@ -30,12 +30,15 @@ class PagSeguroClient extends PagSeguroConfig
         }
         $parameters = rtrim($data, '&');
 
+        $method = 'POST';
+
         if (!$post) {
             $url .= '?'.$parameters;
             $parameters = null;
+            $method = 'GET';
         }
 
-        $result = $this->executeCurl($parameters, $url, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1']);
+        $result = $this->executeCurl($parameters, $url, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1'], $method);
 
         return $this->formatResult($result);
     }
@@ -70,7 +73,7 @@ class PagSeguroClient extends PagSeguroConfig
             $parameters = null;
         }
 
-        $result = $this->executeCurl($parameters, $url, ['Accept: application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1', 'Content-Type: application/json; charset=UTF-8']);
+        $result = $this->executeCurl($parameters, $url, ['Accept: application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1', 'Content-Type: application/json; charset=UTF-8'], $method);
 
         return $this->formatResultJson($result);
     }
@@ -84,14 +87,19 @@ class PagSeguroClient extends PagSeguroConfig
      *
      * @return \SimpleXMLElement
      */
-    private function executeCurl($parameters, $url, array $headers)
+    private function executeCurl($parameters, $url, array $headers, $method)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
-        if ($parameters !== null) {
+        if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, true);
+        } elseif ($method == 'PUT') {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+        }
+
+        if ($parameters !== null) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters);
         }
 
