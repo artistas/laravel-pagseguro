@@ -73,10 +73,10 @@ class PagSeguroConfig
      */
     private function setEnvironment()
     {
-        $this->sandbox = env('PAGSEGURO_SANDBOX', true);
-        $this->email = env('PAGSEGURO_EMAIL', '');
-        $this->token = env('PAGSEGURO_TOKEN', '');
-        $this->notificationURL = env('PAGSEGURO_NOTIFICATION', '');
+        $this->sandbox = config('pagseguro.sandbox', true);
+        $this->email = config('pagseguro.email', '');
+        $this->token = config('pagseguro.token', '');
+        $this->notificationURL = config('pagseguro.notificationURL', '');
     }
 
     /**
