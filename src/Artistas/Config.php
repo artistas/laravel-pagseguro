@@ -41,5 +41,4 @@ return [
     */
     'notificationURL' => env('PAGSEGURO_NOTIFICATION', ''),
 
-
 ];
