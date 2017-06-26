@@ -24,7 +24,8 @@ class PagSeguroServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-        __DIR__.'/Config.php' => config_path('pagseguro.php'), ],
+            __DIR__.'/Config.php' => config_path('pagseguro.php'), 
+        ],
         'config');
     }
 }
