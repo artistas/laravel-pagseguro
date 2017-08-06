@@ -542,4 +542,16 @@ class PagSeguroRecorrente extends PagSeguroClient
     {
         return $this->sendJsonTransaction([], $this->url['preApproval'].'/'.$preApprovalCode.'/payment-orders', 'GET');
     }
+
+        /**
+     * Consulta um pagamento recorrente.
+     *
+     * @param string $preApprovalCode
+     *
+     * @return \SimpleXMLElement
+     */
+    public function showPreApproval($preApprovalCode)
+    {
+        return $this->sendJsonTransaction([], $this->url['preApproval'].'/'.$preApprovalCode, 'GET');
+    }
 }
