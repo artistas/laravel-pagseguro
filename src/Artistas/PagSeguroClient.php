@@ -111,10 +111,12 @@ class PagSeguroClient extends PagSeguroConfig
         $getInfo = curl_getinfo($curl);
         if (isset($getInfo['http_code']) && $getInfo['http_code'] == '503') {
             $this->log->error('Serviço em manutenção.', ['Retorno:' => $result]);
+
             throw new PagSeguroException('Serviço em manutenção.', 1000);
         }
         if ($result === false) {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
+
             throw new PagSeguroException(curl_error($curl), curl_errno($curl));
         }
 
@@ -136,10 +138,12 @@ class PagSeguroClient extends PagSeguroConfig
     {
         if ($result === 'Unauthorized' || $result === 'Forbidden') {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
+
             throw new PagSeguroException($result.': Não foi possível estabelecer uma conexão com o PagSeguro.', 1001);
         }
         if ($result === 'Not Found') {
             $this->log->error('Notificação/Transação não encontrada', ['Retorno:' => $result]);
+
             throw new PagSeguroException($result.': Não foi possível encontrar a notificação/transação no PagSeguro.', 1002);
         }
 
@@ -147,6 +151,7 @@ class PagSeguroClient extends PagSeguroConfig
 
         if (isset($result->error) && isset($result->error->message)) {
             $this->log->error($result->error->message, ['Retorno:' => $result]);
+
             throw new PagSeguroException($result->error->message, (int) $result->error->code);
         }
 
@@ -166,10 +171,12 @@ class PagSeguroClient extends PagSeguroConfig
     {
         if ($result === 'Unauthorized' || $result === 'Forbidden') {
             $this->log->error('Erro ao enviar a transação', ['Retorno:' => $result]);
+
             throw new PagSeguroException($result.': Não foi possível estabelecer uma conexão com o PagSeguro.', 1001);
         }
         if ($result === 'Not Found') {
             $this->log->error('Notificação/Transação não encontrada', ['Retorno:' => $result]);
+
             throw new PagSeguroException($result.': Não foi possível encontrar a notificação/transação no PagSeguro.', 1002);
         }
 
@@ -182,6 +189,7 @@ class PagSeguroClient extends PagSeguroConfig
             $code = key($errors);
 
             $this->log->error($message, ['Retorno:' => json_encode($result)]);
+
             throw new PagSeguroException($message, (int) $code);
         }
 
