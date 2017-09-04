@@ -302,7 +302,7 @@ class PagSeguro extends PagSeguroClient
     private function validateItems($items)
     {
         $rules = [];
-        for ($cont = 1; $cont < $this->itemsCount; $cont++) {
+        for ($cont = 1; $cont <= $this->itemsCount; $cont++) {
             $rules = array_merge($rules, [
               'itemId'.$cont          => 'required|max:100',
               'itemDescription'.$cont => 'required|max:100',
