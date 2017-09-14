@@ -5,5 +5,5 @@ Route::get('/pagseguro/session', function () {
 });
 
 Route::get('/pagseguro/javascript', function () {
-    return file_get_contents(\PagSeguro::getUrl()['javascript']);
+    return response()->make(file_get_contents(\PagSeguro::getUrl()['javascript']), '200')->header('Content-Type', 'text/javascript');
 });
