@@ -418,6 +418,22 @@ class PagSeguro extends PagSeguroClient
     }
 
     /**
+     * Cancela uma transação.
+     *
+     * @param string $transactionCode
+     *
+     * @return mixed
+     */
+    public function cancelTransaction($transactionCode)
+    {
+        return $this->sendTransaction([
+            'email' =>      $this->email,
+            'token' =>      $this->token,
+            'transactionCode' => $transactionCode,
+        ], $this->url['cancelTransaction']);
+    }
+
+    /**
      * Valida os dados de pagamento.
      *
      * @param array $paymentSettings
