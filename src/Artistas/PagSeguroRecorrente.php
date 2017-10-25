@@ -47,6 +47,13 @@ class PagSeguroRecorrente extends PagSeguroClient
     private $plan;
 
     /**
+     * Código da pré-aprovação.
+     *
+     * @var string
+     */
+    private $preApprovalCode;
+
+    /**
      * Identificador do tipo de método de pagamento.
      *
      * @var string
@@ -142,6 +149,20 @@ class PagSeguroRecorrente extends PagSeguroClient
     public function setPlan($plan)
     {
         $this->plan = $this->sanitize($plan);
+
+        return $this;
+    }
+
+    /**
+     * Define um code de uma pré-aprovação no pagseguro.
+     *
+     * @param string $plan
+     *
+     * @return $this
+     */
+    public function setPreApprovalCode($preApprovalCode)
+    {
+        $this->preApprovalCode = $this->sanitize($preApprovalCode);
 
         return $this;
     }
@@ -337,7 +358,7 @@ class PagSeguroRecorrente extends PagSeguroClient
      *
      * @param array $paymentSettings
      *
-     * @return mixed
+     * @return string
      */
     public function sendPreApproval(array $paymentSettings)
     {
@@ -356,7 +377,7 @@ class PagSeguroRecorrente extends PagSeguroClient
      *
      * @param array $paymentSettings
      *
-     * @return mixed
+     * @return string
      */
     public function sendPreApprovalPaymentMethod(array $paymentSettings)
     {
@@ -367,7 +388,7 @@ class PagSeguroRecorrente extends PagSeguroClient
 
         $data = $this->formatPreApprovalPaymentMethodData($paymentSettings);
 
-        return (string) $this->sendJsonTransaction($data, $this->url['preApproval'].'/'.$this->plan.'/payment-method', 'PUT');
+        return (string) $this->sendJsonTransaction($data, $this->url['preApproval'].'/'.$this->preApprovalCode.'/payment-method', 'PUT');
     }
 
     /**
