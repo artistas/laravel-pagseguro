@@ -210,13 +210,13 @@ class PagSeguro extends PagSeguroClient
     private function validateShippingAddress(array $shippingAddress)
     {
         $rules = [
-          'shippingAddressStreet'     => 'required_if,shippingAddressRequired,true|max:80',
-          'shippingAddressNumber'     => 'required_if,shippingAddressRequired,true|max:20',
-          'shippingAddressComplement' => 'max:40',
-          'shippingAddressDistrict'   => 'required_if,shippingAddressRequired,true|max:60',
-          'shippingAddressPostalCode' => 'required_if,shippingAddressRequired,true|digits:8',
-          'shippingAddressCity'       => 'required_if,shippingAddressRequired,true|min:2|max:60',
-          'shippingAddressState'      => 'required_if,shippingAddressRequired,true|min:2|max:2',
+            'shippingAddressStreet'     => 'required_if:shippingAddressRequired,true|max:80',
+            'shippingAddressNumber'     => 'required_if:shippingAddressRequired,true|max:20',
+            'shippingAddressComplement' => 'max:40',
+            'shippingAddressDistrict'   => 'required_if:shippingAddressRequired,true|max:60',
+            'shippingAddressPostalCode' => 'required_if:shippingAddressRequired,true|digits:8',
+            'shippingAddressCity'       => 'required_if:shippingAddressRequired,true|min:2|max:60',
+            'shippingAddressState'      => 'required_if:shippingAddressRequired,true|min:2|max:2',
         ];
 
         $this->validate($shippingAddress, $rules);
