@@ -2,7 +2,7 @@
 
 namespace Artistas\PagSeguro;
 
-use Illuminate\Log\Writer as Log;
+use Psr\Log\LoggerInterface as Log;
 use Illuminate\Validation\Factory as Validator;
 
 class PagSeguroConfig
