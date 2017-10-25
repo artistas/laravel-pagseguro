@@ -192,7 +192,7 @@ class PagSeguro extends PagSeguroClient
           'shippingAddressPostalCode' => $this->sanitizeNumber($shippingAddress, 'shippingAddressPostalCode'),
           'shippingAddressCity'       => $this->sanitize($shippingAddress, 'shippingAddressCity'),
           'shippingAddressState'      => strtoupper($this->checkValue($shippingAddress, 'shippingAddressState')),
-          'shippingAddressCountry'    => 'BRA',          
+          'shippingAddressCountry'    => 'BRA',
         ];
 
         $this->validateShippingAddress($shippingAddress);
