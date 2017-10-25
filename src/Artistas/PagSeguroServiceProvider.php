@@ -19,7 +19,7 @@ class PagSeguroServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        if (!method_exists($this->app, 'routesAreCached')) {            
+        if (!method_exists($this->app, 'routesAreCached')) {
             require __DIR__.'/routes.php';
 
             return; // lumen
