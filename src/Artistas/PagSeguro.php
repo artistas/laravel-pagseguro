@@ -24,7 +24,7 @@ class PagSeguro extends PagSeguroClient
      * @var array
      */
     private $shippingAddress = [
-        'shippingAddressRequired' => false,
+        'shippingAddressRequired' => 'false',
     ];
 
     /**
@@ -192,8 +192,7 @@ class PagSeguro extends PagSeguroClient
           'shippingAddressPostalCode' => $this->sanitizeNumber($shippingAddress, 'shippingAddressPostalCode'),
           'shippingAddressCity'       => $this->sanitize($shippingAddress, 'shippingAddressCity'),
           'shippingAddressState'      => strtoupper($this->checkValue($shippingAddress, 'shippingAddressState')),
-          'shippingAddressCountry'    => 'BRA',
-          'shippingAddressRequired'   => true,
+          'shippingAddressCountry'    => 'BRA',          
         ];
 
         $this->validateShippingAddress($shippingAddress);
@@ -209,14 +208,18 @@ class PagSeguro extends PagSeguroClient
      */
     private function validateShippingAddress(array $shippingAddress)
     {
+        if (isset($shippingAddress['shippingAddressRequired'])) {
+            return;
+        }
+
         $rules = [
-            'shippingAddressStreet'     => 'required_if:shippingAddressRequired,true|max:80',
-            'shippingAddressNumber'     => 'required_if:shippingAddressRequired,true|max:20',
+            'shippingAddressStreet'     => 'required|max:80',
+            'shippingAddressNumber'     => 'required|max:20',
             'shippingAddressComplement' => 'max:40',
-            'shippingAddressDistrict'   => 'required_if:shippingAddressRequired,true|max:60',
-            'shippingAddressPostalCode' => 'required_if:shippingAddressRequired,true|digits:8',
-            'shippingAddressCity'       => 'required_if:shippingAddressRequired,true|min:2|max:60',
-            'shippingAddressState'      => 'required_if:shippingAddressRequired,true|min:2|max:2',
+            'shippingAddressDistrict'   => 'required|max:60',
+            'shippingAddressPostalCode' => 'required|digits:8',
+            'shippingAddressCity'       => 'required|min:2|max:60',
+            'shippingAddressState'      => 'required|min:2|max:2',
         ];
 
         $this->validate($shippingAddress, $rules);
