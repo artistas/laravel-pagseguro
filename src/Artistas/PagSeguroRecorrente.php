@@ -577,7 +577,7 @@ class PagSeguroRecorrente extends PagSeguroClient
     }
 
     /**
-     * Dá desconto na próxima cobrança recorrente
+     * Dá desconto na próxima cobrança recorrente.
      *
      * @param array $discountSettings
      *
@@ -586,8 +586,8 @@ class PagSeguroRecorrente extends PagSeguroClient
     public function sendDiscount(array $discountSettings)
     {
         $discountSettings = [
-          'type'     => $this->sanitize($discountSettings, 'type'),
-          'value'     => $this->sanitize($discountSettings, 'value')
+          'type'      => $this->sanitize($discountSettings, 'type'),
+          'value'     => $this->sanitize($discountSettings, 'value'),
         ];
 
         $this->validateDiscountSettings($discountSettings);
@@ -596,7 +596,7 @@ class PagSeguroRecorrente extends PagSeguroClient
         return (string) $this->sendJsonTransaction($data, $this->url['preApproval'].'/'.$this->plan.'/discount', 'PUT');
     }
 
-     /**
+    /**
      * Valida os dados contidos na array de desconto na próxima cobrança.
      *
      * @param array $discountSettings
@@ -612,7 +612,7 @@ class PagSeguroRecorrente extends PagSeguroClient
     }
 
     /**
-     * Formata os dados para enviar o desconto no próximo pagamento
+     * Formata os dados para enviar o desconto no próximo pagamento.
      *
      * @param array $discountSettings
      *
@@ -623,7 +623,7 @@ class PagSeguroRecorrente extends PagSeguroClient
         $data = [
             'type'  => $discountSettings['type'],
             // Formato: Decimal, com duas casas decimais separadas por ponto, maior que 0.00
-            'value' => number_format($discountSettings['value'], 2, '.', '') 
+            'value' => number_format($discountSettings['value'], 2, '.', ''),
         ];
 
         return $data;
