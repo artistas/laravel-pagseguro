@@ -581,7 +581,7 @@ class PagSeguroRecorrente extends PagSeguroClient
      *
      * @param array $discountSettings
      *
-     * @return mixed
+     * @return string
      */
     public function sendDiscount(array $discountSettings)
     {
@@ -593,7 +593,7 @@ class PagSeguroRecorrente extends PagSeguroClient
         $this->validateDiscountSettings($discountSettings);
         $data = $this->formatDiscountMethodData($discountSettings);
 
-        return (string) $this->sendJsonTransaction($data, $this->url['preApproval'].'/'.$this->plan.'/discount', 'PUT');
+        return (string) $this->sendJsonTransaction($data, $this->url['preApproval'].'/'.$this->preApprovalCode.'/discount', 'PUT');
     }
 
     /**
@@ -622,7 +622,6 @@ class PagSeguroRecorrente extends PagSeguroClient
     {
         $data = [
             'type'  => $discountSettings['type'],
-            // Formato: Decimal, com duas casas decimais separadas por ponto, maior que 0.00
             'value' => number_format($discountSettings['value'], 2, '.', ''),
         ];
 
