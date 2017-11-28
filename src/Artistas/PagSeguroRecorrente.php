@@ -627,4 +627,16 @@ class PagSeguroRecorrente extends PagSeguroClient
 
         return $data;
     }
+    
+    /**
+     * Retentativa de pagamento - Permite a retentativa de uma cobrança não paga ou não processada. 
+     *
+     * @param string $orderCode
+     *
+     * @return \SimpleXMLElement
+     */
+    public function sendRetentative(string $orderCode)
+    {
+        return $this->sendJsonTransaction([], $this->url['preApproval'] . '/' . $this->preApprovalCode . '/payment-orders/' . $orderCode . '/payment');
+    }
 }
