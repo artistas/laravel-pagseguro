@@ -57,9 +57,9 @@ catch(\Artistas\PagSeguro\PagSeguroException $e) {
 ```
 
 #### Créditos
-Criador fernandobandeira
+Criador: [fernandobandeira](https://github.com/fernandobandeira)
 
-Contribuidores cassianogf, ernjs
+[Contribuidores](https://github.com/artistas/laravel-pagseguro/graphs/contributors)
 
-PagSeguro Recorrente (Inicial): vanessasoutoc
+PagSeguro Recorrente (Inicial): [vanessasoutoc](https://github.com/vanessasoutoc)
 
