@@ -82,6 +82,7 @@ class PagSeguroRecorrente extends PagSeguroClient
             'preApprovalExpirationValue'        => $this->sanitizeNumber($preApprovalRequest, 'preApprovalExpirationValue'),
             'preApprovalExpirationUnit'         => $this->sanitize($preApprovalRequest, 'preApprovalExpirationUnit'),
             'maxUses'                           => $this->sanitizeNumber($preApprovalRequest, 'maxUses'),
+            'reference'                         => $this->reference,
         ];
 
         $this->validatePreApprovalRequest($preApprovalRequest);
