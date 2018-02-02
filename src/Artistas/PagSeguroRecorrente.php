@@ -67,13 +67,6 @@ class PagSeguroRecorrente extends PagSeguroClient
      *
      * @return \SimpleXMLElement
      */
-    /**
-     * Define os dados do plano.
-     *
-     * @param array $preApprovalRequest
-     *
-     * @return \SimpleXMLElement
-     */
     public function sendPreApprovalRequest(array $preApprovalRequest)
     {
         $preApprovalRequest = [
