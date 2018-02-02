@@ -67,6 +67,13 @@ class PagSeguroRecorrente extends PagSeguroClient
      *
      * @return \SimpleXMLElement
      */
+    /**
+     * Define os dados do plano.
+     *
+     * @param array $preApprovalRequest
+     *
+     * @return \SimpleXMLElement
+     */
     public function sendPreApprovalRequest(array $preApprovalRequest)
     {
         $preApprovalRequest = [
@@ -82,6 +89,7 @@ class PagSeguroRecorrente extends PagSeguroClient
             'preApprovalExpirationValue'        => $this->sanitizeNumber($preApprovalRequest, 'preApprovalExpirationValue'),
             'preApprovalExpirationUnit'         => $this->sanitize($preApprovalRequest, 'preApprovalExpirationUnit'),
             'maxUses'                           => $this->sanitizeNumber($preApprovalRequest, 'maxUses'),
+            'reference'                         => $this->sanitize($preApprovalRequest, 'preApprovalReference')
         ];
 
         $this->validatePreApprovalRequest($preApprovalRequest);
