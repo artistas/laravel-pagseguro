@@ -4,6 +4,17 @@ namespace Artistas\PagSeguro;
 
 class PagSeguroController
 {
+    /** @var \Artistas\PagSeguro\PagSeguroClient */
+    private $pagseguro;
+
+    /**
+     * Instancia as dependências.
+     */
+    public function __construct()
+    {
+        $this->pagseguro = app('pagseguro');
+    }
+
     /**
      * Gera um token de sessão para realizar transações.
      *
@@ -11,7 +22,7 @@ class PagSeguroController
      */
     public function session()
     {
-        return PagSeguroFacade::startSession();
+        return $this->pagseguro->startSession();
     }
 
     /**
@@ -21,7 +32,7 @@ class PagSeguroController
      */
     public function javascript()
     {
-        $scriptContent = file_get_contents(PagSeguroFacade::getUrl()['javascript']);
+        $scriptContent = file_get_contents($this->pagseguro->getUrl()['javascript']);
 
         return response()->make($scriptContent, '200')
             ->header('Content-Type', 'text/javascript');
