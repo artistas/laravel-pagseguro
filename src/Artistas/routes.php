@@ -1,9 +1,5 @@
 <?php
 
-Route::get('/pagseguro/session', function () {
-    return \PagSeguro::startSession();
-});
+Route::get('/pagseguro/session', '\Artisas\PagSeguro\PagseguroController@session');
 
-Route::get('/pagseguro/javascript', function () {
-    return response()->make(file_get_contents(\PagSeguro::getUrl()['javascript']), '200')->header('Content-Type', 'text/javascript');
-});
+Route::get('/pagseguro/javascript', '\Artistas\PagSeguro\PagseguroController@javascript');
