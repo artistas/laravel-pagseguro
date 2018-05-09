@@ -16,7 +16,7 @@ class PagSeguroClient extends PagSeguroConfig
      *
      * @return \SimpleXMLElement
      */
-    protected function sendTransaction(array $parameters, $url = null, $post = true, array $headers = null)
+    protected function sendTransaction(array $parameters, $url = null, $post = true, array $headers = ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1'])
     {
         if ($url === null) {
             $url = $this->url['transactions'];
@@ -38,7 +38,7 @@ class PagSeguroClient extends PagSeguroConfig
             $method = 'GET';
         }
 
-        $result = $this->executeCurl($parameters, $url, ['Content-Type: application/x-www-form-urlencoded; charset=ISO-8859-1'], $method);
+        $result = $this->executeCurl($parameters, $url, $headers, $method);
 
         return $this->formatResult($result);
     }
@@ -55,7 +55,7 @@ class PagSeguroClient extends PagSeguroConfig
      *
      * @return \SimpleXMLElement
      */
-    protected function sendJsonTransaction(array $parameters, $url = null, $method = 'POST', array $headers = null)
+    protected function sendJsonTransaction(array $parameters, $url = null, $method = 'POST', array $headers = ['Accept: application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1', 'Content-Type: application/json; charset=UTF-8'])
     {
         if ($url === null) {
             $url = $this->url['transactions'];
@@ -73,7 +73,7 @@ class PagSeguroClient extends PagSeguroConfig
             $parameters = null;
         }
 
-        $result = $this->executeCurl($parameters, $url, ['Accept: application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1', 'Content-Type: application/json; charset=UTF-8'], $method);
+        $result = $this->executeCurl($parameters, $url, $headers, $method);
 
         return $this->formatResultJson($result);
     }
@@ -82,10 +82,12 @@ class PagSeguroClient extends PagSeguroConfig
      * Executa o Curl.
      *
      * @param array|string $parameters
-     * @param string       $url
-     * @param array        $headers
+     * @param string $url
+     * @param array $headers
      *
+     * @param $method
      * @return \SimpleXMLElement
+     * @throws PagSeguroException
      */
     private function executeCurl($parameters, $url, array $headers, $method)
     {
@@ -200,6 +202,7 @@ class PagSeguroClient extends PagSeguroConfig
      * Inicia a Session do PagSeguro.
      *
      * @return string
+     * @throws PagSeguroException
      */
     public function startSession()
     {
@@ -214,7 +217,9 @@ class PagSeguroClient extends PagSeguroConfig
      *
      * @param string $notificationCode
      *
+     * @param string $notificationType
      * @return \SimpleXMLElement
+     * @throws PagSeguroException
      */
     public function notification($notificationCode, $notificationType = 'transaction')
     {
