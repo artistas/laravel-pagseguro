@@ -82,12 +82,13 @@ class PagSeguroClient extends PagSeguroConfig
      * Executa o Curl.
      *
      * @param array|string $parameters
-     * @param string $url
-     * @param array $headers
-     *
+     * @param string       $url
+     * @param array        $headers
      * @param $method
-     * @return \SimpleXMLElement
+     *
      * @throws PagSeguroException
+     *
+     * @return \SimpleXMLElement
      */
     private function executeCurl($parameters, $url, array $headers, $method)
     {
@@ -201,8 +202,9 @@ class PagSeguroClient extends PagSeguroConfig
     /**
      * Inicia a Session do PagSeguro.
      *
-     * @return string
      * @throws PagSeguroException
+     *
+     * @return string
      */
     public function startSession()
     {
@@ -216,10 +218,11 @@ class PagSeguroClient extends PagSeguroConfig
      * Retorna a transação da notificação.
      *
      * @param string $notificationCode
-     *
      * @param string $notificationType
-     * @return \SimpleXMLElement
+     *
      * @throws PagSeguroException
+     *
+     * @return \SimpleXMLElement
      */
     public function notification($notificationCode, $notificationType = 'transaction')
     {

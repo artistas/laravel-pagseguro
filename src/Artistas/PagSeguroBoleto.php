@@ -58,9 +58,9 @@ class PagSeguroBoleto extends PagSeguroClient
      *
      * @param array $customerInfo
      *
-     * @return PagSeguroBoleto
-     *
      * @throws \Artistas\PagSeguro\PagSeguroException
+     *
+     * @return PagSeguroBoleto
      */
     public function setCustomerInfo(array $customerInfo)
     {
@@ -70,17 +70,17 @@ class PagSeguroBoleto extends PagSeguroClient
 
         $this->custumer['customer'] = [
             'name'      => $this->sanitize($customerInfo, 'name'),
-            'email'     => $customerEmail
+            'email'     => $customerEmail,
         ];
 
         $this->custumer['customer']['document'] = [
-            'type'   => !empty($this->sanitizeNumber($customerInfo, 'customerCPF')) ?  'CPF' : 'CNPJ',
-            'value'  => !empty($this->sanitizeNumber($customerInfo, 'customerCPF')) ? $this->sanitizeNumber($customerInfo, 'customerCPF') : $this->sanitizeNumber($customerInfo, 'customerCNPJ')
+            'type'   => !empty($this->sanitizeNumber($customerInfo, 'customerCPF')) ? 'CPF' : 'CNPJ',
+            'value'  => !empty($this->sanitizeNumber($customerInfo, 'customerCPF')) ? $this->sanitizeNumber($customerInfo, 'customerCPF') : $this->sanitizeNumber($customerInfo, 'customerCNPJ'),
         ];
 
         $this->custumer['customer']['phone'] = [
             'areaCode'  => substr($customerPhone, 0, 2),
-            'number'    => substr($customerPhone, 2)
+            'number'    => substr($customerPhone, 2),
         ];
 
         $this->validateCustomerInfo($this->custumer['customer']);
@@ -97,13 +97,9 @@ class PagSeguroBoleto extends PagSeguroClient
      */
     private function validateCustomerInfo(array $customerInfo)
     {
-
-        if($customerInfo['document']['type'] == "CPF")
-        {
+        if ($customerInfo['document']['type'] == 'CPF') {
             $type = 'required|digits:11';
-        }
-        else
-        {
+        } else {
             $type = 'required|digits:14';
         }
 
@@ -123,9 +119,9 @@ class PagSeguroBoleto extends PagSeguroClient
      *
      * @param array $customerAddress
      *
-     * @return PagSeguroBoleto
-     *
      * @throws \Artistas\PagSeguro\PagSeguroException
+     *
+     * @return PagSeguroBoleto
      */
     public function setCustomerAddress(array $customerAddress)
     {
@@ -136,7 +132,7 @@ class PagSeguroBoleto extends PagSeguroClient
             'district'   => $this->sanitize($customerAddress, 'district'),
             'postalCode' => $this->sanitizeNumber($customerAddress, 'postalCode'),
             'city'       => $this->sanitize($customerAddress, 'city'),
-            'state'      => strtoupper($this->checkValue($customerAddress, 'state'))
+            'state'      => strtoupper($this->checkValue($customerAddress, 'state')),
         ];
 
         $this->validateCustomerAddress($this->custumer['address']);
@@ -153,7 +149,6 @@ class PagSeguroBoleto extends PagSeguroClient
      */
     private function validateCustomerAddress(array $customerAddress)
     {
-
         $rules = [
             'street'     => 'required|max:80',
             'number'     => 'required|max:20',
@@ -254,17 +249,17 @@ class PagSeguroBoleto extends PagSeguroClient
     /**
      * Envia o boleto para o pagseguro.
      *
-     * @return \SimpleXMLElement
      * @throws \Artistas\PagSeguro\PagSeguroException
      *
+     * @return \SimpleXMLElement
      */
     public function send()
     {
-        if(empty($this->firstDueDate)){
+        if (empty($this->firstDueDate)) {
             self::setFirstDueDate(\Carbon\Carbon::now()->addDays(3));
         }
 
-        if(empty($this->numberOfPayments)){
+        if (empty($this->numberOfPayments)) {
             self::setNumberOfPayments(1);
         }
 
@@ -285,7 +280,7 @@ class PagSeguroBoleto extends PagSeguroClient
 
         $data = array_filter(array_merge($config, ['customer' => $custumerArray]));
 
-        return $this->sendJsonTransaction($data, $this->url['boletos'], "POST", ['Accept: application/json;charset=ISO-8859-1', 'Content-type: application/json;charset=ISO-8859-1']);
+        return $this->sendJsonTransaction($data, $this->url['boletos'], 'POST', ['Accept: application/json;charset=ISO-8859-1', 'Content-type: application/json;charset=ISO-8859-1']);
     }
 
     /**
