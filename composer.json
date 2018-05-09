@@ -27,7 +27,8 @@
             ],
             "aliases": {
                 "PagSeguro": "Artistas\\PagSeguro\\PagSeguroFacade",
-                "PagSeguroRecorrente": "Artistas\\PagSeguro\\PagSeguroRecorrenteFacade"
+                "PagSeguroRecorrente": "Artistas\\PagSeguro\\PagSeguroRecorrenteFacade",
+                "PagSeguroBoletoFacade": "Artistas\\PagSeguro\\PagSeguroBoletoFacade"
             }
         }
     }
