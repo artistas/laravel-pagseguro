@@ -630,6 +630,24 @@ class PagSeguroRecorrente extends PagSeguroClient
     }
 
     /**
+     * Formata os dados para editar um plano ativo
+     * 
+     * @param array $editPaymentRecorrente
+     * 
+     * @return array
+    */
+
+    private function formatEditPaymentRecorrente(array $editPaymentRecorrente)
+    {
+        $data = [
+            'updateSubscriptions' => $editPaymentRecorrente['updateSubscriptions'],
+            'amountPerPayment' => number_format($editPaymentRecorrente['amountPerPayment'], 2, '.', ''),
+        ];
+
+        return $data;
+    }
+
+    /**
      * Retentativa de pagamento - Permite a retentativa de uma cobrança não paga ou não processada.
      *
      * @param string $orderCode
@@ -639,5 +657,14 @@ class PagSeguroRecorrente extends PagSeguroClient
     public function sendRetentative(string $orderCode)
     {
         return $this->sendJsonTransaction([], $this->url['preApproval'].'/'.$this->preApprovalCode.'/payment-orders/'.$orderCode.'/payment');
+    }
+
+    // Edição de Plano - Permite editar um plano já ativo
+    public function editPaymentRecorrente(array $editPaymentRecorrente){
+
+        $data = $this->formatEditPaymentRecorrente($editPaymentRecorrente);
+
+        return (string) $this->sendJsonTransaction($data, $this->url['preApproval'].'/request/'.$this->preApprovalCode.'/payment', 'PUT');
+
     }
 }
