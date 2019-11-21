@@ -422,9 +422,9 @@ class PagSeguro extends PagSeguroClient
 
         return $this->sendTransaction($data);
     }
-    
+
     /**
-     * Consulta uma transação
+     * Consulta uma transação.
      *
      * @param strim $transactionCode
      *
