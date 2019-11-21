@@ -422,6 +422,24 @@ class PagSeguro extends PagSeguroClient
 
         return $this->sendTransaction($data);
     }
+    
+    /**
+     * Consulta uma transação
+     *
+     * @param strim $transactionCode
+     *
+     * @return mixed
+     */
+    public function consultTransaction($transactionCode)
+    {
+        $result = $this->sendTransaction([
+            'email'     => $this->email,
+            'token'     => $this->token,
+            'reference' => $reference,
+        ], $this->url['consultTransaction'], false);
+
+        return $result->transactions->transaction;
+    }
 
     /**
      * Cancela uma transação.
