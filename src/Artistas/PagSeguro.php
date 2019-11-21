@@ -424,13 +424,13 @@ class PagSeguro extends PagSeguroClient
     }
 
     /**
-     * Consulta uma transação.
+     * Consulta uma transação pelo código de referencia.
      *
-     * @param strim $transactionCode
+     * @param string $reference
      *
      * @return mixed
      */
-    public function consultTransaction($transactionCode)
+    public function consultTransactionByReference($reference)
     {
         $result = $this->sendTransaction([
             'email'     => $this->email,
