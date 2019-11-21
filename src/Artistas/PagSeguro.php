@@ -436,7 +436,7 @@ class PagSeguro extends PagSeguroClient
             'email'     => $this->email,
             'token'     => $this->token,
             'reference' => $reference,
-        ], $this->url['consultTransaction'], false);
+        ], $this->url['transactions'], false);
 
         return $result->transactions->transaction;
     }
