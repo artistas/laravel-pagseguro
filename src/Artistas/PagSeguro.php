@@ -440,6 +440,21 @@ class PagSeguro extends PagSeguroClient
 
         return $result->transactions->transaction;
     }
+    
+    /**
+     * Consulta uma notificação.
+     *
+     * @param string $notificationCode
+     *
+     * @return mixed
+     */
+    public function consultNotification($notificationCode)
+    {
+        return $this->sendTransaction([
+            'email'     => $this->email,
+            'token'     => $this->token
+        ], $this->url['notifications'] . $notificationCode, false);
+    }
 
     /**
      * Cancela uma transação.
