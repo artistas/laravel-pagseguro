@@ -440,7 +440,7 @@ class PagSeguro extends PagSeguroClient
 
         return $result->transactions->transaction;
     }
-    
+
     /**
      * Consulta uma notificação.
      *
@@ -452,8 +452,8 @@ class PagSeguro extends PagSeguroClient
     {
         return $this->sendTransaction([
             'email'     => $this->email,
-            'token'     => $this->token
-        ], $this->url['notifications'] . $notificationCode, false);
+            'token'     => $this->token,
+        ], $this->url['notifications'].$notificationCode, false);
     }
 
     /**
