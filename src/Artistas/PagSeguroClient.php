@@ -209,8 +209,8 @@ class PagSeguroClient extends PagSeguroConfig
     public function startSession()
     {
         return (string) $this->sendTransaction([
-          'email' => $this->email,
-          'token' => $this->token,
+            'email' => $this->email,
+            'token' => $this->token,
         ], $this->url['session'])->id;
     }
 
@@ -228,13 +228,13 @@ class PagSeguroClient extends PagSeguroConfig
     {
         if ($notificationType == 'transaction') {
             return $this->sendTransaction([
-              'email' => $this->email,
-              'token' => $this->token,
+                'email' => $this->email,
+                'token' => $this->token,
             ], $this->url['notifications'].$notificationCode, false);
         } elseif ($notificationType == 'preApproval') {
             return $this->sendTransaction([
-              'email' => $this->email,
-              'token' => $this->token,
+                'email' => $this->email,
+                'token' => $this->token,
             ], $this->url['preApprovalNotifications'].$notificationCode, false);
         }
     }

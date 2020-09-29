@@ -97,13 +97,13 @@ class PagSeguro extends PagSeguroClient
         $senderPhone = $this->sanitizeNumber($senderInfo, 'senderPhone');
 
         $senderInfo = [
-          'senderName'     => $this->sanitize($senderInfo, 'senderName'),
-          'senderAreaCode' => substr($senderPhone, 0, 2),
-          'senderPhone'    => substr($senderPhone, 2),
-          'senderEmail'    => $senderEmail,
-          'senderHash'     => $this->checkValue($senderInfo, 'senderHash'),
-          'senderCNPJ'     => $this->sanitizeNumber($senderInfo, 'senderCNPJ'),
-          'senderCPF'      => $this->sanitizeNumber($senderInfo, 'senderCPF'),
+            'senderName'     => $this->sanitize($senderInfo, 'senderName'),
+            'senderAreaCode' => substr($senderPhone, 0, 2),
+            'senderPhone'    => substr($senderPhone, 2),
+            'senderEmail'    => $senderEmail,
+            'senderHash'     => $this->checkValue($senderInfo, 'senderHash'),
+            'senderCNPJ'     => $this->sanitizeNumber($senderInfo, 'senderCNPJ'),
+            'senderCPF'      => $this->sanitizeNumber($senderInfo, 'senderCPF'),
         ];
 
         $this->validateSenderInfo($senderInfo);
@@ -120,13 +120,13 @@ class PagSeguro extends PagSeguroClient
     private function validateSenderInfo(array $senderInfo)
     {
         $rules = [
-          'senderName'     => 'required|max:50',
-          'senderAreaCode' => 'required|digits:2',
-          'senderPhone'    => 'required|digits_between:8,9',
-          'senderEmail'    => 'required|email|max:60',
-          'senderHash'     => 'required',
-          'senderCPF'      => 'required_without:senderCNPJ|digits:11',
-          'senderCNPJ'     => 'required_without:senderCPF|digits:14',
+            'senderName'     => 'required|max:50',
+            'senderAreaCode' => 'required|digits:2',
+            'senderPhone'    => 'required|digits_between:8,9',
+            'senderEmail'    => 'required|email|max:60',
+            'senderHash'     => 'required',
+            'senderCPF'      => 'required_without:senderCNPJ|digits:11',
+            'senderCNPJ'     => 'required_without:senderCPF|digits:14',
         ];
 
         $this->validate($senderInfo, $rules);
@@ -144,11 +144,11 @@ class PagSeguro extends PagSeguroClient
         $cardHolderPhone = $this->sanitizeNumber($creditCardHolder, 'creditCardHolderPhone');
 
         $creditCardHolder = [
-          'creditCardHolderName'          => $this->fallbackValue($this->sanitize($creditCardHolder, 'creditCardHolderName'), $this->senderInfo, 'senderName'),
-          'creditCardHolderAreaCode'      => $this->fallbackValue(substr($cardHolderPhone, 0, 2), $this->senderInfo, 'senderAreaCode'),
-          'creditCardHolderPhone'         => $this->fallbackValue(substr($cardHolderPhone, 2), $this->senderInfo, 'senderPhone'),
-          'creditCardHolderCPF'           => $this->fallbackValue($this->sanitizeNumber($creditCardHolder, 'creditCardHolderCPF'), $this->senderInfo, 'senderCPF'),
-          'creditCardHolderBirthDate'     => $this->sanitize($creditCardHolder, 'creditCardHolderBirthDate'),
+            'creditCardHolderName'          => $this->fallbackValue($this->sanitize($creditCardHolder, 'creditCardHolderName'), $this->senderInfo, 'senderName'),
+            'creditCardHolderAreaCode'      => $this->fallbackValue(substr($cardHolderPhone, 0, 2), $this->senderInfo, 'senderAreaCode'),
+            'creditCardHolderPhone'         => $this->fallbackValue(substr($cardHolderPhone, 2), $this->senderInfo, 'senderPhone'),
+            'creditCardHolderCPF'           => $this->fallbackValue($this->sanitizeNumber($creditCardHolder, 'creditCardHolderCPF'), $this->senderInfo, 'senderCPF'),
+            'creditCardHolderBirthDate'     => $this->sanitize($creditCardHolder, 'creditCardHolderBirthDate'),
         ];
 
         $this->validateCreditCardHolder($creditCardHolder);
@@ -165,11 +165,11 @@ class PagSeguro extends PagSeguroClient
     private function validateCreditCardHolder(array $creditCardHolder)
     {
         $rules = [
-          'creditCardHolderName'         => 'required|max:50',
-          'creditCardHolderAreaCode'     => 'required|digits:2',
-          'creditCardHolderPhone'        => 'required|digits_between:8,9',
-          'creditCardHolderCPF'          => 'required|digits:11',
-          'creditCardHolderBirthDate'    => 'required',
+            'creditCardHolderName'         => 'required|max:50',
+            'creditCardHolderAreaCode'     => 'required|digits:2',
+            'creditCardHolderPhone'        => 'required|digits_between:8,9',
+            'creditCardHolderCPF'          => 'required|digits:11',
+            'creditCardHolderBirthDate'    => 'required',
         ];
 
         $this->validate($creditCardHolder, $rules);
@@ -185,14 +185,14 @@ class PagSeguro extends PagSeguroClient
     public function setShippingAddress(array $shippingAddress)
     {
         $shippingAddress = [
-          'shippingAddressStreet'     => $this->sanitize($shippingAddress, 'shippingAddressStreet'),
-          'shippingAddressNumber'     => $this->sanitize($shippingAddress, 'shippingAddressNumber'),
-          'shippingAddressComplement' => $this->sanitize($shippingAddress, 'shippingAddressComplement'),
-          'shippingAddressDistrict'   => $this->sanitize($shippingAddress, 'shippingAddressDistrict'),
-          'shippingAddressPostalCode' => $this->sanitizeNumber($shippingAddress, 'shippingAddressPostalCode'),
-          'shippingAddressCity'       => $this->sanitize($shippingAddress, 'shippingAddressCity'),
-          'shippingAddressState'      => strtoupper($this->checkValue($shippingAddress, 'shippingAddressState')),
-          'shippingAddressCountry'    => 'BRA',
+            'shippingAddressStreet'     => $this->sanitize($shippingAddress, 'shippingAddressStreet'),
+            'shippingAddressNumber'     => $this->sanitize($shippingAddress, 'shippingAddressNumber'),
+            'shippingAddressComplement' => $this->sanitize($shippingAddress, 'shippingAddressComplement'),
+            'shippingAddressDistrict'   => $this->sanitize($shippingAddress, 'shippingAddressDistrict'),
+            'shippingAddressPostalCode' => $this->sanitizeNumber($shippingAddress, 'shippingAddressPostalCode'),
+            'shippingAddressCity'       => $this->sanitize($shippingAddress, 'shippingAddressCity'),
+            'shippingAddressState'      => strtoupper($this->checkValue($shippingAddress, 'shippingAddressState')),
+            'shippingAddressCountry'    => 'BRA',
         ];
 
         $this->validateShippingAddress($shippingAddress);
@@ -235,14 +235,14 @@ class PagSeguro extends PagSeguroClient
     public function setBillingAddress(array $billingAddress)
     {
         $billingAddress = [
-          'billingAddressStreet'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressStreet'), $this->shippingAddress, 'shippingAddressStreet'),
-          'billingAddressNumber'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressNumber'), $this->shippingAddress, 'shippingAddressNumber'),
-          'billingAddressComplement' => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressComplement'), $this->shippingAddress, 'shippingAddressComplement'),
-          'billingAddressDistrict'   => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressDistrict'), $this->shippingAddress, 'shippingAddressDistrict'),
-          'billingAddressPostalCode' => $this->fallbackValue($this->sanitizeNumber($billingAddress, 'billingAddressPostalCode'), $this->shippingAddress, 'shippingAddressPostalCode'),
-          'billingAddressCity'       => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressCity'), $this->shippingAddress, 'shippingAddressCity'),
-          'billingAddressState'      => strtoupper($this->fallbackValue($this->checkValue($billingAddress, 'billingAddressState'), $this->shippingAddress, 'shippingAddressState')),
-          'billingAddressCountry'    => 'BRA',
+            'billingAddressStreet'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressStreet'), $this->shippingAddress, 'shippingAddressStreet'),
+            'billingAddressNumber'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressNumber'), $this->shippingAddress, 'shippingAddressNumber'),
+            'billingAddressComplement' => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressComplement'), $this->shippingAddress, 'shippingAddressComplement'),
+            'billingAddressDistrict'   => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressDistrict'), $this->shippingAddress, 'shippingAddressDistrict'),
+            'billingAddressPostalCode' => $this->fallbackValue($this->sanitizeNumber($billingAddress, 'billingAddressPostalCode'), $this->shippingAddress, 'shippingAddressPostalCode'),
+            'billingAddressCity'       => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressCity'), $this->shippingAddress, 'shippingAddressCity'),
+            'billingAddressState'      => strtoupper($this->fallbackValue($this->checkValue($billingAddress, 'billingAddressState'), $this->shippingAddress, 'shippingAddressState')),
+            'billingAddressCountry'    => 'BRA',
         ];
 
         $this->validateBillingAddress($billingAddress);
@@ -259,13 +259,13 @@ class PagSeguro extends PagSeguroClient
     private function validateBillingAddress(array $billingAddress)
     {
         $rules = [
-          'billingAddressStreet'     => 'required|max:80',
-          'billingAddressNumber'     => 'required|max:20',
-          'billingAddressComplement' => 'max:40',
-          'billingAddressDistrict'   => 'required|max:60',
-          'billingAddressPostalCode' => 'required|digits:8',
-          'billingAddressCity'       => 'required|min:2|max:60',
-          'billingAddressState'      => 'required|min:2|max:2',
+            'billingAddressStreet'     => 'required|max:80',
+            'billingAddressNumber'     => 'required|max:20',
+            'billingAddressComplement' => 'max:40',
+            'billingAddressDistrict'   => 'required|max:60',
+            'billingAddressPostalCode' => 'required|digits:8',
+            'billingAddressCity'       => 'required|min:2|max:60',
+            'billingAddressState'      => 'required|min:2|max:2',
         ];
 
         $this->validate($billingAddress, $rules);
@@ -286,10 +286,10 @@ class PagSeguro extends PagSeguroClient
             $cont++;
 
             $fItems = array_merge($fItems, [
-              'itemId'.$cont          => $this->sanitize($item, 'itemId'),
-              'itemDescription'.$cont => $this->sanitize($item, 'itemDescription'),
-              'itemAmount'.$cont      => $this->sanitizeMoney($item, 'itemAmount'),
-              'itemQuantity'.$cont    => $this->sanitizeNumber($item, 'itemQuantity'),
+                'itemId'.$cont          => $this->sanitize($item, 'itemId'),
+                'itemDescription'.$cont => $this->sanitize($item, 'itemDescription'),
+                'itemAmount'.$cont      => $this->sanitizeMoney($item, 'itemAmount'),
+                'itemQuantity'.$cont    => $this->sanitizeNumber($item, 'itemQuantity'),
             ]);
         }
 
@@ -310,10 +310,10 @@ class PagSeguro extends PagSeguroClient
         $rules = [];
         for ($cont = 1; $cont <= $this->itemsCount; $cont++) {
             $rules = array_merge($rules, [
-              'itemId'.$cont          => 'required|max:100',
-              'itemDescription'.$cont => 'required|max:100',
-              'itemAmount'.$cont      => 'required|numeric|between:0.00,9999999.00',
-              'itemQuantity'.$cont    => 'required|integer|between:1,999',
+                'itemId'.$cont          => 'required|max:100',
+                'itemDescription'.$cont => 'required|max:100',
+                'itemAmount'.$cont      => 'required|numeric|between:0.00,9999999.00',
+                'itemQuantity'.$cont    => 'required|integer|between:1,999',
             ]);
         }
 
@@ -358,8 +358,8 @@ class PagSeguro extends PagSeguroClient
     public function setShippingInfo(array $shippingInfo)
     {
         $shippingInfo = [
-          'shippingType'     => $this->sanitizeNumber($shippingInfo, 'shippingType'),
-          'shippingCost'     => $this->sanitizeMoney($shippingInfo, 'shippingCost'),
+            'shippingType'     => $this->sanitizeNumber($shippingInfo, 'shippingType'),
+            'shippingCost'     => $this->sanitizeMoney($shippingInfo, 'shippingCost'),
         ];
 
         $this->validateShippingInfo($shippingInfo);
@@ -376,8 +376,8 @@ class PagSeguro extends PagSeguroClient
     private function validateShippingInfo(array $shippingInfo)
     {
         $rules = [
-          'shippingType'          => 'required|integer|between:1,3',
-          'shippingCost'          => 'required|numeric|between:0.00,9999999.00',
+            'shippingType'          => 'required|integer|between:1,3',
+            'shippingCost'          => 'required|numeric|between:0.00,9999999.00',
         ];
 
         $this->validate($shippingInfo, $rules);
@@ -397,25 +397,25 @@ class PagSeguro extends PagSeguroClient
         }
 
         $paymentSettings = [
-          'paymentMethod'                 => $this->checkValue($paymentSettings, 'paymentMethod'),
-          'bankName'                      => $this->checkValue($paymentSettings, 'bankName'),
-          'creditCardToken'               => $this->checkValue($paymentSettings, 'creditCardToken'),
-          'installmentQuantity'           => $this->sanitizeNumber($paymentSettings, 'installmentQuantity'),
-          'installmentValue'              => $this->sanitizeMoney($paymentSettings, 'installmentValue'),
-          'noInterestInstallmentQuantity' => $this->sanitizeNumber($paymentSettings, 'noInterestInstallmentQuantity'),
+            'paymentMethod'                 => $this->checkValue($paymentSettings, 'paymentMethod'),
+            'bankName'                      => $this->checkValue($paymentSettings, 'bankName'),
+            'creditCardToken'               => $this->checkValue($paymentSettings, 'creditCardToken'),
+            'installmentQuantity'           => $this->sanitizeNumber($paymentSettings, 'installmentQuantity'),
+            'installmentValue'              => $this->sanitizeMoney($paymentSettings, 'installmentValue'),
+            'noInterestInstallmentQuantity' => $this->sanitizeNumber($paymentSettings, 'noInterestInstallmentQuantity'),
         ];
 
         $this->validatePaymentSettings($paymentSettings);
 
         $config = [
-          'email'           => $this->email,
-          'token'           => $this->token,
-          'paymentMode'     => 'default',
-          'receiverEmail'   => $this->email,
-          'currency'        => 'BRL',
-          'reference'       => $this->reference,
-          'extraAmount'     => $this->extraAmount,
-          'notificationURL' => $this->notificationURL,
+            'email'           => $this->email,
+            'token'           => $this->token,
+            'paymentMode'     => 'default',
+            'receiverEmail'   => $this->email,
+            'currency'        => 'BRL',
+            'reference'       => $this->reference,
+            'extraAmount'     => $this->extraAmount,
+            'notificationURL' => $this->notificationURL,
         ];
 
         $data = array_filter(array_merge($config, $paymentSettings, $this->senderInfo, $this->shippingAddress, $this->items, $this->creditCardHolder, $this->billingAddress, $this->shippingInfo));
@@ -447,12 +447,12 @@ class PagSeguro extends PagSeguroClient
     private function validatePaymentSettings(array $paymentSettings)
     {
         $rules = [
-          'paymentMethod'                          => 'required',
-          'bankName'                               => 'required_if:paymentMethod,eft',
-          'creditCardToken'                        => 'required_if:paymentMethod,creditCard',
-          'installmentQuantity'                    => 'required_if:paymentMethod,creditCard|integer|between:1,18',
-          'installmentValue'                       => 'required_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
-          'noInterestInstallmentQuantity'          => 'integer|between:1,18',
+            'paymentMethod'                          => 'required',
+            'bankName'                               => 'required_if:paymentMethod,eft',
+            'creditCardToken'                        => 'required_if:paymentMethod,creditCard',
+            'installmentQuantity'                    => 'required_if:paymentMethod,creditCard|integer|between:1,18',
+            'installmentValue'                       => 'required_if:paymentMethod,creditCard|numeric|between:0.00,9999999.00',
+            'noInterestInstallmentQuantity'          => 'integer|between:1,18',
         ];
 
         $this->validate($paymentSettings, $rules);

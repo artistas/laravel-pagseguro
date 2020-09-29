@@ -206,14 +206,14 @@ class PagSeguroRecorrente extends PagSeguroClient
     private function validateSenderInfo(array $senderInfo)
     {
         $rules = [
-          'name'           => 'required|max:50',
-          'ip'             => 'ip',
-          'senderAreaCode' => 'required|digits:2',
-          'senderPhone'    => 'required|digits_between:8,9',
-          'email'          => 'required|email|max:60',
-          'hash'           => 'required',
-          'senderCPF'      => 'required_without:senderCNPJ|digits:11',
-          'senderCNPJ'     => 'required_without:senderCPF|digits:14',
+            'name'           => 'required|max:50',
+            'ip'             => 'ip',
+            'senderAreaCode' => 'required|digits:2',
+            'senderPhone'    => 'required|digits_between:8,9',
+            'email'          => 'required|email|max:60',
+            'hash'           => 'required',
+            'senderCPF'      => 'required_without:senderCNPJ|digits:11',
+            'senderCNPJ'     => 'required_without:senderCPF|digits:14',
         ];
 
         $this->validate($senderInfo, $rules);
@@ -231,11 +231,11 @@ class PagSeguroRecorrente extends PagSeguroClient
         $cardHolderPhone = $this->sanitizeNumber($creditCardHolder, 'creditCardHolderPhone');
 
         $creditCardHolder = [
-          'name'                          => $this->fallbackValue($this->sanitize($creditCardHolder, 'creditCardHolderName'), $this->senderInfo, 'name'),
-          'creditCardHolderAreaCode'      => $this->fallbackValue(substr($cardHolderPhone, 0, 2), $this->senderInfo, 'senderAreaCode'),
-          'creditCardHolderPhone'         => $this->fallbackValue(substr($cardHolderPhone, 2), $this->senderInfo, 'senderPhone'),
-          'creditCardHolderCPF'           => $this->fallbackValue($this->sanitizeNumber($creditCardHolder, 'creditCardHolderCPF'), $this->senderInfo, 'senderCPF'),
-          'birthDate'                     => $this->sanitize($creditCardHolder, 'creditCardHolderBirthDate'),
+            'name'                          => $this->fallbackValue($this->sanitize($creditCardHolder, 'creditCardHolderName'), $this->senderInfo, 'name'),
+            'creditCardHolderAreaCode'      => $this->fallbackValue(substr($cardHolderPhone, 0, 2), $this->senderInfo, 'senderAreaCode'),
+            'creditCardHolderPhone'         => $this->fallbackValue(substr($cardHolderPhone, 2), $this->senderInfo, 'senderPhone'),
+            'creditCardHolderCPF'           => $this->fallbackValue($this->sanitizeNumber($creditCardHolder, 'creditCardHolderCPF'), $this->senderInfo, 'senderCPF'),
+            'birthDate'                     => $this->sanitize($creditCardHolder, 'creditCardHolderBirthDate'),
         ];
 
         $this->validateCreditCardHolder($creditCardHolder);
@@ -252,11 +252,11 @@ class PagSeguroRecorrente extends PagSeguroClient
     private function validateCreditCardHolder(array $creditCardHolder)
     {
         $rules = [
-          'name'                         => 'required|max:50',
-          'creditCardHolderAreaCode'     => 'required|digits:2',
-          'creditCardHolderPhone'        => 'required|digits_between:8,9',
-          'creditCardHolderCPF'          => 'required|digits:11',
-          'birthDate'                    => 'required',
+            'name'                         => 'required|max:50',
+            'creditCardHolderAreaCode'     => 'required|digits:2',
+            'creditCardHolderPhone'        => 'required|digits_between:8,9',
+            'creditCardHolderCPF'          => 'required|digits:11',
+            'birthDate'                    => 'required',
         ];
 
         $this->validate($creditCardHolder, $rules);
@@ -272,14 +272,14 @@ class PagSeguroRecorrente extends PagSeguroClient
     public function setSenderAddress(array $senderAddress)
     {
         $senderAddress = [
-          'street'     => $this->sanitize($senderAddress, 'senderAddressStreet'),
-          'number'     => $this->sanitize($senderAddress, 'senderAddressNumber'),
-          'complement' => $this->sanitize($senderAddress, 'senderAddressComplement'),
-          'district'   => $this->sanitize($senderAddress, 'senderAddressDistrict'),
-          'postalCode' => $this->sanitizeNumber($senderAddress, 'senderAddressPostalCode'),
-          'city'       => $this->sanitize($senderAddress, 'senderAddressCity'),
-          'state'      => strtoupper($this->checkValue($senderAddress, 'senderAddressState')),
-          'country'    => 'BRA',
+            'street'     => $this->sanitize($senderAddress, 'senderAddressStreet'),
+            'number'     => $this->sanitize($senderAddress, 'senderAddressNumber'),
+            'complement' => $this->sanitize($senderAddress, 'senderAddressComplement'),
+            'district'   => $this->sanitize($senderAddress, 'senderAddressDistrict'),
+            'postalCode' => $this->sanitizeNumber($senderAddress, 'senderAddressPostalCode'),
+            'city'       => $this->sanitize($senderAddress, 'senderAddressCity'),
+            'state'      => strtoupper($this->checkValue($senderAddress, 'senderAddressState')),
+            'country'    => 'BRA',
         ];
 
         $this->validateSenderAddress($senderAddress);
@@ -296,13 +296,13 @@ class PagSeguroRecorrente extends PagSeguroClient
     private function validateSenderAddress(array $senderAddress)
     {
         $rules = [
-          'street'     => 'required|max:80',
-          'number'     => 'required|max:20',
-          'complement' => 'max:40',
-          'district'   => 'required|max:60',
-          'postalCode' => 'required|digits:8',
-          'city'       => 'required|min:2|max:60',
-          'state'      => 'required|min:2|max:2',
+            'street'     => 'required|max:80',
+            'number'     => 'required|max:20',
+            'complement' => 'max:40',
+            'district'   => 'required|max:60',
+            'postalCode' => 'required|digits:8',
+            'city'       => 'required|min:2|max:60',
+            'state'      => 'required|min:2|max:2',
         ];
 
         $this->validate($senderAddress, $rules);
@@ -318,14 +318,14 @@ class PagSeguroRecorrente extends PagSeguroClient
     public function setBillingAddress(array $billingAddress)
     {
         $billingAddress = [
-          'street'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressStreet'), $this->senderAddress, 'street'),
-          'number'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressNumber'), $this->senderAddress, 'number'),
-          'complement' => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressComplement'), $this->senderAddress, 'complement'),
-          'district'   => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressDistrict'), $this->senderAddress, 'district'),
-          'postalCode' => $this->fallbackValue($this->sanitizeNumber($billingAddress, 'billingAddressPostalCode'), $this->senderAddress, 'postalCode'),
-          'city'       => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressCity'), $this->senderAddress, 'city'),
-          'state'      => strtoupper($this->fallbackValue($this->checkValue($billingAddress, 'billingAddressState'), $this->senderAddress, 'state')),
-          'country'    => 'BRA',
+            'street'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressStreet'), $this->senderAddress, 'street'),
+            'number'     => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressNumber'), $this->senderAddress, 'number'),
+            'complement' => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressComplement'), $this->senderAddress, 'complement'),
+            'district'   => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressDistrict'), $this->senderAddress, 'district'),
+            'postalCode' => $this->fallbackValue($this->sanitizeNumber($billingAddress, 'billingAddressPostalCode'), $this->senderAddress, 'postalCode'),
+            'city'       => $this->fallbackValue($this->sanitize($billingAddress, 'billingAddressCity'), $this->senderAddress, 'city'),
+            'state'      => strtoupper($this->fallbackValue($this->checkValue($billingAddress, 'billingAddressState'), $this->senderAddress, 'state')),
+            'country'    => 'BRA',
         ];
 
         $this->validateBillingAddress($billingAddress);
@@ -342,13 +342,13 @@ class PagSeguroRecorrente extends PagSeguroClient
     private function validateBillingAddress(array $billingAddress)
     {
         $rules = [
-          'street'     => 'required|max:80',
-          'number'     => 'required|max:20',
-          'complement' => 'max:40',
-          'district'   => 'required|max:60',
-          'postalCode' => 'required|digits:8',
-          'city'       => 'required|min:2|max:60',
-          'state'      => 'required|min:2|max:2',
+            'street'     => 'required|max:80',
+            'number'     => 'required|max:20',
+            'complement' => 'max:40',
+            'district'   => 'required|max:60',
+            'postalCode' => 'required|digits:8',
+            'city'       => 'required|min:2|max:60',
+            'state'      => 'required|min:2|max:2',
         ];
 
         $this->validate($billingAddress, $rules);
@@ -400,7 +400,7 @@ class PagSeguroRecorrente extends PagSeguroClient
     private function validatePaymentSettings(array $paymentSettings)
     {
         $rules = [
-          'creditCardToken' => 'required',
+            'creditCardToken' => 'required',
         ];
 
         $this->validate($paymentSettings, $rules);
@@ -587,8 +587,8 @@ class PagSeguroRecorrente extends PagSeguroClient
     public function sendDiscount(array $discountSettings)
     {
         $discountSettings = [
-          'type'      => $this->sanitize($discountSettings, 'type'),
-          'value'     => $this->sanitize($discountSettings, 'value'),
+            'type'      => $this->sanitize($discountSettings, 'type'),
+            'value'     => $this->sanitize($discountSettings, 'value'),
         ];
 
         $this->validateDiscountSettings($discountSettings);
@@ -605,8 +605,8 @@ class PagSeguroRecorrente extends PagSeguroClient
     private function validateDiscountSettings(array $discountSettings)
     {
         $rules = [
-          'type'  => 'required|in:DISCOUNT_PERCENT,DISCOUNT_AMOUNT',
-          'value' => 'required|numeric|min:0',
+            'type'  => 'required|in:DISCOUNT_PERCENT,DISCOUNT_AMOUNT',
+            'value' => 'required|numeric|min:0',
         ];
 
         $this->validate($discountSettings, $rules);
