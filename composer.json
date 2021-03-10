@@ -1,6 +1,6 @@
 {
     "name": "artistas/laravel-pagseguro",
-    "description": "PagSeguro Checkout Transparente e Pagamento Recorrente(Assinaturas) no Laravel 5.*, 6.* e 7.*",
+    "description": "PagSeguro Checkout Transparente e Pagamento Recorrente(Assinaturas) no Laravel 5.*, 6.*, 7.* e 8.*",
     "type": "library",
     "license": "MIT",
     "keywords": ["laravel", "pagseguro", "transparente", "recorrente", "assinaturas"],
@@ -18,7 +18,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.5.9",
-        "illuminate/support": "^5.2|^6.0|^7.0"
+        "illuminate/support": "^5.2|^6.0|^7.0|^8.0"
     },
     "extra": {
         "laravel": {
