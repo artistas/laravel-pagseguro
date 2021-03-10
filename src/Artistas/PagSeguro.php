@@ -424,6 +424,39 @@ class PagSeguro extends PagSeguroClient
     }
 
     /**
+     * Consulta uma transação pelo código de referencia.
+     *
+     * @param string $reference
+     *
+     * @return mixed
+     */
+    public function consultTransactionByReference($reference)
+    {
+        $result = $this->sendTransaction([
+            'email'     => $this->email,
+            'token'     => $this->token,
+            'reference' => $reference,
+        ], $this->url['transactions'], false);
+
+        return $result->transactions->transaction;
+    }
+
+    /**
+     * Consulta uma notificação.
+     *
+     * @param string $notificationCode
+     *
+     * @return mixed
+     */
+    public function consultNotification($notificationCode)
+    {
+        return $this->sendTransaction([
+            'email'     => $this->email,
+            'token'     => $this->token,
+        ], $this->url['notifications'].$notificationCode, false);
+    }
+
+    /**
      * Cancela uma transação.
      *
      * @param string $transactionCode
